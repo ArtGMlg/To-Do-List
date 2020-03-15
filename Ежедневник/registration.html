@@ -1,0 +1,65 @@
+<HTML>
+  <HEAD>
+    <TITLE>Регистрация</TITLE>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </HEAD>
+  <BODY>
+      <div class="form-group">
+        <label for="lastName">Фамилия</label>
+        <input type="text" class="form-control" id="lastName" aria-describedby="emailHelp" placeholder="Введите Фамилию">
+      </div>
+      <div class="form-group">
+        <label for="firstName">Имя</label>
+        <input type="text" class="form-control" id="firstName" aria-describedby="emailHelp" placeholder="Введите Имя">
+      </div>
+      <div class="form-group">
+        <label for="surName">Отчество</label>
+        <input type="text" class="form-control" id="surName" aria-describedby="emailHelp" placeholder="Введите Отчество">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">E-mail</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите E-mail">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Пароль</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Введите пароль">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPasswordConfirmation">Подтвердить пароль</label>
+        <input type="password" class="form-control" id="exampleInputPasswordConfirmation" placeholder="Подтвердите пароль">
+      </div>
+      <button type="submit" class="btn btn-primary" onclick="reg()" >Зарегистрироваться</button>
+	<SCRIPT>
+    function reg(){
+      if (document.getElementById("exampleInputPassword1").value!==document.getElementById("exampleInputPasswordConfirmation").value)
+        alert("Пароли не совпадают!") 
+      var user = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        surName: document.getElementById("surName").value,
+        email: document.getElementById("exampleInputEmail1").value,
+        password: document.getElementById("exampleInputPassword1").value,
+        passwordConfirmation: document.getElementById("exampleInputPasswordConfirmation").value
+      }
+
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/users/reg',
+        crossDomain: true,
+        data: user,
+        success: function(response) {
+          if(response.success) {
+            window.location.replace("log in.html");
+          } else {
+            alert(response.error);
+          }
+
+        }
+    });
+    }
+	</SCRIPT>
+  </BODY>
+</HTML>	

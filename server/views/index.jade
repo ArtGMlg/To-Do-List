@@ -1,0 +1,332 @@
+extends layout
+
+block content
+    // Page Wrapper
+    #wrapper
+      // Sidebar
+      ul#accordionSidebar.navbar-nav.bg-gradient-primary.sidebar.sidebar-dark.accordion
+        // Sidebar - Brand
+        a.sidebar-brand.d-flex.align-items-center.justify-content-center(href='index.html')
+          .sidebar-brand-icon.rotate-n-15
+            i.fas.fa-laugh-wink
+          .sidebar-brand-text.mx-3 Главная
+        // Divider
+        hr.sidebar-divider.my-0
+        // Nav Item - Dashboard
+        li.nav-item
+          a.nav-link(href='users.html')
+            i.fas.fa-user-friends
+            span Пользователи
+        // Divider
+        hr.sidebar-divider
+        // Nav Item - Dashboard
+        li.nav-item.active
+          a.nav-link(href='groups.html')
+            i.fas.fa-users
+            span Группы
+        // Nav Item - Pages Collapse Menu
+        // Nav Item - Utilities Collapse Menu
+        // Divider
+        hr.sidebar-divider
+        // Sidebar Toggler (Sidebar)
+        .text-center.d-none.d-md-inline
+          button#sidebarToggle.rounded-circle.border-0
+      // End of Sidebar
+      // Content Wrapper
+      #content-wrapper.d-flex.flex-column
+        // Main Content
+        #content
+          // Topbar
+          nav.navbar.navbar-expand.navbar-light.bg-white.topbar.mb-4.static-top.shadow
+            // Topbar Navbar
+            ul.navbar-nav.ml-auto
+              // Nav Item - User Information
+              span#usualButton(style='margin-top: 18px;')
+                button.btn.btn-outline-danger(type='button', data-toggle='modal', data-target='#logoutModal')
+                  | Выйти 
+                  i.fas.fa-sign-out-alt.fa-sm.fa-fw.mr-2.text-gray-400
+              span#mobileButton(style='margin-top: 18px;')
+                button.btn.btn-outline-danger(type='button', data-toggle='modal', data-target='#logoutModal')
+                  i.fas.fa-sign-out-alt.fa-sm.fa-fw.mr-2.text-gray-400
+          // End of Topbar
+          // Begin Page Content
+          .container-fluid
+            // Page Heading
+            .d-sm-flex.align-items-center.justify-content-between.mb-4
+              h1#groupTitle.h3.mb-0.text-gray-800
+              a.btn.btn-success.btn-icon-split(href='#', style='float: right; margin-left: auto;', data-toggle='modal', data-target='#taskModal')
+                span.icon.text-white-50
+                  i.fas.fas.fa-plus-circle
+                span.text Создать дело
+              a.btn.btn-danger.btn-icon-split(href='#', style='float: right; margin-left: 5px;', onclick='RemovePeople()')
+                span.icon.text-white-50
+                  i.fas.fa-trash
+                span.text Исключить людей
+            table#dataTable.table.table-bordered(width='100%', cellspacing='0')
+              thead
+                tr
+                  th
+                    .custom-control.custom-checkbox.small
+                      input#checkAll.custom-control-input.main-checkbox(onclick='checkAllUsers(this)', type='checkbox')
+                      label.custom-control-label(for='checkAll')
+                  th Имя
+                  th Фамилия
+                  th Отчество
+                  th Email
+              tbody#groupUsers
+          // /.container-fluid
+          // End of Main Content
+          // Footer
+          footer.sticky-footer.bg-white
+            .container.my-auto
+              .copyright.text-center.my-auto
+                span Copyright © Your Website 2019
+          // End of Footer
+          // End of Content Wrapper
+          // End of Page Wrapper
+          // Scroll to Top Button
+          a.scroll-to-top.rounded(href='#page-top')
+            i.fas.fa-angle-up
+          // Logout Modal
+          #logoutModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+            .modal-dialog(role='document')
+              .modal-content
+                .modal-header
+                  h5#exampleModalLabel.modal-title Уже уходите?
+                  button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') ?
+                .modal-body Возвращайтесь скорей :)
+                .modal-footer
+                  button.btn.btn-secondary(type='button', data-dismiss='modal') Отмена
+                  a.btn.btn-primary(onclick='logout()', href='login.html') Выйти
+          #taskModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+            .modal-dialog(role='document')
+              .modal-content
+                .modal-header
+                  h5#exampleModalLabel.modal-title Добавить дело
+                  button.close(type='button', data-dismiss='modal', aria-label='Close', onclick='restore()')
+                    span(aria-hidden='true') ?
+                .modal-body
+                  form
+                    .form-group
+                      label.col-form-label(for='to-do-tittle') Заголовок:
+                      input#to-do-tittle.form-control(type='text')
+                    .form-group
+                      label.col-form-label(for='to-do-description') Описание:
+                      textarea#to-do-description.form-control
+                    .form-group
+                      label.col-form-label(for='to-do-points') Количество баллов:
+                      input#to-do-points.form-control(type='text')
+                    .form-group
+                      .form-group
+                        label(for='to-do-time-hours') Часы:
+                        select#to-do-time-hours.form-control
+                          option 0
+                          option 1
+                          option 2
+                          option 3
+                          option 4
+                          option 5
+                          option 6
+                          option 7
+                          option 8
+                          option 9
+                          option 10
+                          option 11
+                          option 12
+                          option 13
+                          option 14
+                          option 15
+                          option 16
+                          option 17
+                          option 18
+                          option 19
+                          option 20
+                          option 21
+                          option 22
+                          option 23
+                      .form-group
+                        .form-group
+                          label(for='to-do-time-minutes') Минуты:
+                          select#to-do-time-minutes.form-control
+                            option 00
+                            option 01
+                            option 02
+                            option 03
+                            option 04
+                            option 05
+                            option 06
+                            option 07
+                            option 08
+                            option 09
+                            option 10
+                            option 11
+                            option 12
+                            option 13
+                            option 14
+                            option 15
+                            option 16
+                            option 17
+                            option 18
+                            option 19
+                            option 20
+                            option 21
+                            option 22
+                            option 23
+                            option 24
+                            option 25
+                            option 26
+                            option 27
+                            option 28
+                            option 29
+                            option 30
+                            option 31
+                            option 32
+                            option 33
+                            option 34
+                            option 35
+                            option 36
+                            option 37
+                            option 38
+                            option 39
+                            option 40
+                            option 41
+                            option 42
+                            option 43
+                            option 44
+                            option 45
+                            option 46
+                            option 47
+                            option 48
+                            option 49
+                            option 50
+                            option 51
+                            option 52
+                            option 53
+                            option 54
+                            option 55
+                            option 56
+                            option 57
+                            option 58
+                            option 59
+                        .form-group
+                          label(for='to-do-date') Дата
+                          input#to-do-date.form-control(type='date', name='date', placeholder='Дата', required='')
+                  .modal-footer
+                    button.btn.btn-secondary(type='button', data-dismiss='modal', onclick='restore()') Закрыть
+                    button#addNewToDoItemButton.btn.btn-primary(type='button', onclick='addToDoItem()') Добавить
+            // Bootstrap core JavaScript
+            script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+            // Core plugin JavaScript
+            script(src='vendor/jquery-easing/jquery.easing.min.js')
+            // Custom scripts for all pages
+            script(src='js/sb-admin-2.min.js')
+            // Page level plugins
+            script(src='vendor/chart.js/Chart.min.js')
+            // Page level custom scripts
+            script(src='js/demo/chart-area-demo.js')
+            script(src='js/demo/chart-pie-demo.js')
+            script(type='text/javascript').
+              var urlParams = new URLSearchParams(window.location.search);
+              var name = urlParams.get('name');
+              document.getElementById('groupTitle').innerText = name;
+              $.ajax({
+              url: "http://localhost:3000/groups/users/" + name,
+              type: 'GET',
+              crossDomain: true,
+              dataType: 'jsonp',
+              contentType: 'application/json; charset=utf-8',
+              success: function (users) {
+              drawGroupUsers(users);
+              }
+              });
+              function drawGroupUsers(users) {
+              var groupUsers = $('#groupUsers');
+              for(i = 0; i < users.length; i++){
+              groupUsers.append('<tr>'+
+              '<td>'+
+              '<div class="custom-control custom-checkbox small">'+
+              '<input type="checkbox" class="custom-control-input user-checkbox" onclick="checkUser(this)" id="'+users[i].email+'">'+
+              '<label class="custom-control-label" for="'+users[i].email+'"></label>'+
+              '</div>'+
+              '</td>' +
+              '<td>'+'<a href="./groupUser.html?email='+users[i].email+'&lastName='+users[i].lastName+'&firstName='+users[i].firstName+'">'+users[i].firstName+'</a>'+'</td>'+
+              '<td>'+users[i].lastName+'</td>'+
+              '<td>'+users[i].surName+'</td>'+
+              '<td>'+users[i].email+'</td>'+
+              '</tr>'
+              )}
+              };
+              function logout() {
+              localStorage.removeItem('admIsLogIn');
+              localStorage.removeItem('admUser');
+              };
+              function RemovePeople()  {
+              var people = $(".user-checkbox:checked");
+              var peopleIds = [];
+              for(i =0 ; i < people.length; i++) {
+              peopleIds.push(people[i].id);
+              }
+              $.ajax({
+              type: 'POST',
+              url: 'http://localhost:3000/groups/removeUsers',
+              crossDomain: true,
+              data: {
+              groupId: name,
+              peopleIds: JSON.stringify(peopleIds)
+              },
+              success: function(response) {
+              location.reload();
+              }
+              });
+              };
+              function checkAllUsers(cb){
+              var checked = $(".user-checkbox");
+              for(i=0; i < checked.length; i++){
+              checked[i].checked = cb.checked;
+              };
+              };
+              function checkUser(cb){
+              var checked = $(".user-checkbox");
+              var markAllChecked = true;
+              for (i=0; i < checked.length; i++){
+              if (checked[i].checked === false){
+              markAllChecked = false;
+              };
+              };
+              document.getElementById('checkAll').checked = markAllChecked;
+              };
+              function addToDoItem() {
+              if (!document.getElementById('to-do-tittle').value){
+              alert('Введите заголовок!');
+              return;
+              }
+              else if (!document.getElementById('to-do-points').value) {
+              alert('Введите количество баллов');
+              return;
+              }
+              var people = $(".user-checkbox:checked");
+              debugger
+              for(i=0; i<people.length; i++){
+              toDoItem = {
+              title: document.getElementById('to-do-tittle').value,
+              description: document.getElementById('to-do-description').value,
+              timeHours: document.getElementById('to-do-time-hours').value,
+              timeMinutes: document.getElementById('to-do-time-minutes').value,
+              points: document.getElementById('to-do-points').value,
+              date: document.getElementById('to-do-date').value,
+              userId: people[i].id,
+              status: "incomplite",
+              admin: JSON.parse(localStorage.getItem('admUser')).email
+              }
+              $.ajax({
+              type: 'POST',
+              url: 'http://localhost:3000/tasks/save',
+              crossDomain: true,
+              data: toDoItem,
+              success: function(response) {
+              $('#taskModal').modal('hide');
+              }
+              });
+              }
+              }

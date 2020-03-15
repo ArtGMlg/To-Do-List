@@ -1,0 +1,8 @@
+#to-do-list a.active small.text-muted {
+	color: #ffffff!important;
+}
+.float-right
+{
+	float: right;
+	margin-right: 10px;
+}

@@ -1,0 +1,71 @@
+<HTML>
+  <HEAD>
+    <TITLE>Авторизация</TITLE>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </HEAD>
+  <BODY>
+  <div class="form-group">
+    <label for="exampleInputEmail1">E-mail</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите E-mail">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Пароль</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Введите пароль">
+  </div>
+    <button type="submit" class="btn btn-primary" onclick="auth()">Войти</button>
+  <div>  
+    <a href="registration.html">Зарегистрироваться</a>
+  </div>
+	<SCRIPT>
+		function setCookie(name, value, options) {
+		  options = options || {};
+
+		  var expires = options.expires;
+
+		  if (typeof expires == "number" && expires) {
+		    var d = new Date();
+		    d.setTime(d.getTime() + expires * 1000);
+		    expires = options.expires = d;
+		  }
+		  if (expires && expires.toUTCString) {
+		    options.expires = expires.toUTCString();
+		  }
+
+		  value = encodeURIComponent(value);
+
+		  var updatedCookie = name + "=" + value;
+
+		  for (var propName in options) {
+		    updatedCookie += "; " + propName;
+		    var propValue = options[propName];
+		    if (propValue !== true) {
+		      updatedCookie += "=" + propValue;
+		    }
+		  }
+
+		  document.cookie = updatedCookie;
+		}
+		function auth(){
+			var user = {
+				userName: document.getElementById("exampleInputEmail1").value,
+				password: document.getElementById("exampleInputPassword1").value
+			}
+			$.ajax({
+			    url: "http://localhost:3000/users/login?userName=" + user.userName + "&password=" +  user.password,
+			    type: 'GET',
+			    crossDomain: true,
+			    dataType: 'jsonp',
+			    contentType: 'application/json; charset=utf-8',
+			    success: function (data) {
+			        localStorage.setItem('isLogIn', true);
+			        localStorage.setItem('user', JSON.stringify(data));
+	 				window.location = "main.html";
+			    }
+			});
+		}
+	</SCRIPT>
+  </BODY>
+</HTML>	

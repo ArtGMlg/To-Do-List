@@ -1,0 +1,398 @@
+{
+    "tasks": [
+        {
+            "id": "1",
+            "title": "Проснуться и почистить зубы",
+            "description": "Не перепутать зубные щетки и использовать хорошую зубную пасту.",
+            "timeHours": "7",
+            "timeMinutes": "00",
+            "points": "5",
+            "date": "2019-02-22",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "id": "2",
+            "title": "Приготовить завтрак",
+            "description": "Приготовить вкусный и полезный завтрак",
+            "timeHours": "7",
+            "timeMinutes": "15",
+            "points": "10",
+            "date": "2019-02-22",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "id": "3",
+            "title": "Сходить в школу",
+            "description": "Сходить в школу и получить хорошие оценки",
+            "timeHours": "9",
+            "timeMinutes": "30",
+            "points": "10",
+            "date": "2019-02-20",
+            "userId": "mail@mail.net",
+            "status": "complite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "title": "Лечь спать",
+            "description": "Чтобы хорошо выспаться и пойти в школу.",
+            "timeHours": "22",
+            "timeMinutes": "30",
+            "points": "1",
+            "date": "2019-03-08",
+            "id": "6",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "id": "3932bd10-4e1f-11e9-b815-c7df73fde34a",
+            "title": "Собрать рюкзак",
+            "description": "Собрать учебники, ручки, тетрадки, форму для физ. культуры.",
+            "timeHours": "7",
+            "timeMinutes": "30",
+            "points": "10",
+            "date": "2019-02-22",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "id": "a6266230-74a5-11e9-ad1b-e1565586f707",
+            "title": "Дело на завтра",
+            "description": "просто дело",
+            "timeHours": "10",
+            "timeMinutes": "17",
+            "points": "15",
+            "date": "2019-05-13",
+            "userId": "newmail@mail.ru",
+            "status": "incomplite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "title": "Ещё одно дело",
+            "description": "",
+            "timeHours": "12",
+            "timeMinutes": "19",
+            "points": "2",
+            "date": "2019-05-13",
+            "userId": "newmail@mail.ru",
+            "id": "c11a1a50-74a5-11e9-ad1b-e1565586f707",
+            "status": "incomplite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "title": "Дело",
+            "description": "Дело",
+            "timeHours": "11",
+            "timeMinutes": "08",
+            "points": "2",
+            "date": "2019-11-17",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "697a1180-092c-11ea-b4e4-f92131ce58aa"
+        },
+        {
+            "title": "общдело",
+            "description": "общдело",
+            "timeHours": "17",
+            "timeMinutes": "14",
+            "points": "1",
+            "date": "2019-11-17",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "f75d0bf0-092d-11ea-b4e4-f92131ce58aa"
+        },
+        {
+            "title": "общдело",
+            "description": "общдело",
+            "timeHours": "17",
+            "timeMinutes": "14",
+            "points": "1",
+            "date": "2019-11-17",
+            "userId": "mymail1@mail.ru",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "2afd9970-092e-11ea-b4e4-f92131ce58aa"
+        },
+        {
+            "title": "fff",
+            "description": "ff",
+            "timeHours": "19",
+            "timeMinutes": "17",
+            "points": "2",
+            "date": "2019-11-24",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "84b7f2c0-0ea2-11ea-bca2-ab4bfe312232"
+        },
+        {
+            "title": "Общее дело",
+            "description": "Дело ",
+            "timeHours": "12",
+            "timeMinutes": "16",
+            "points": "12",
+            "date": "2019-11-24",
+            "userId": "zigler@mail.net",
+            "admin": "zigler@mail.net",
+            "id": "8f302ac0-0ea6-11ea-8d31-b7b012ff7a30",
+            "status": "incomplite"
+        },
+        {
+            "title": "sas-smislam145",
+            "description": "jhgjh",
+            "timeHours": "16",
+            "timeMinutes": "14",
+            "points": "12",
+            "date": "2019-11-24",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "d357c590-0eac-11ea-83b6-c5a8c4838ff2",
+            "userId": "Artem@mail.ru"
+        },
+        {
+            "title": "sas-smislam145",
+            "description": "jhgjh",
+            "timeHours": "16",
+            "timeMinutes": "14",
+            "points": "12",
+            "date": "2019-11-24",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "d357c590-0eac-11ea-83b6-c5a8c4838ff2",
+            "userId": "Artem@mail.ru"
+        },
+        {
+            "title": "sas-smislam145",
+            "description": "jhgjh",
+            "timeHours": "16",
+            "timeMinutes": "14",
+            "points": "12",
+            "date": "2019-11-24",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "34bd3e50-0ead-11ea-ad2c-11ec1b7fe896",
+            "userId": "Artem@mail.ru"
+        },
+        {
+            "title": "sas-smislam145",
+            "description": "jhgjh",
+            "timeHours": "16",
+            "timeMinutes": "14",
+            "points": "12",
+            "date": "2019-11-24",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "34bd3e50-0ead-11ea-ad2c-11ec1b7fe896",
+            "userId": "Artem@mail.ru"
+        },
+        {
+            "title": "sas-smislam145",
+            "description": "jhgjh",
+            "timeHours": "16",
+            "timeMinutes": "14",
+            "points": "12",
+            "date": "2019-11-24",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "999596b0-0ead-11ea-add7-070b8b9b919f",
+            "userId": "Artem@mail.ru"
+        },
+        {
+            "title": "sas-smislam145",
+            "description": "jhgjh",
+            "timeHours": "16",
+            "timeMinutes": "14",
+            "points": "12",
+            "date": "2019-11-24",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "999596b0-0ead-11ea-add7-070b8b9b919f",
+            "userId": "Artem@mail.ru"
+        },
+        {
+            "title": "sas-smislam145",
+            "description": "jhgjh",
+            "timeHours": "16",
+            "timeMinutes": "14",
+            "points": "12",
+            "date": "2019-11-24",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "20e924b0-0eae-11ea-9688-7f035b0860fc",
+            "userId": "Artem@mail.ru"
+        },
+        {
+            "title": "sas-smislam145",
+            "description": "jhgjh",
+            "timeHours": "16",
+            "timeMinutes": "14",
+            "points": "12",
+            "date": "2019-11-24",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "20e924b0-0eae-11ea-9688-7f035b0860fc",
+            "userId": "Artem@mail.ru"
+        },
+        {
+            "title": "asc",
+            "description": "asc",
+            "timeHours": "16",
+            "timeMinutes": "14",
+            "points": "12",
+            "date": "2019-11-24",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "20b3a050-0eaf-11ea-b6f6-7111c40fa665",
+            "userId": "zigler@mail.net"
+        },
+        {
+            "title": "asc",
+            "description": "asc",
+            "timeHours": "16",
+            "timeMinutes": "14",
+            "points": "12",
+            "date": "2019-11-24",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "20b3a051-0eaf-11ea-b6f6-7111c40fa665",
+            "userId": "Artem@mail.ru"
+        },
+        {
+            "id": "bbf8a6a0-1422-11ea-af0c-ed80e53f1bf7",
+            "title": "Пообедать",
+            "description": "Подогреть суп в микроволновке",
+            "timeHours": "13",
+            "timeMinutes": "30",
+            "points": "5",
+            "date": "2019-02-22",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "id": "f45d8e80-3a78-11ea-8ba8-83fa28223591",
+            "title": "ПОчистить зубы",
+            "description": "-",
+            "timeHours": "11",
+            "timeMinutes": "15",
+            "points": "5",
+            "date": "2019-02-22",
+            "userId": "mail@mail.net",
+            "status": "complite",
+            "admin": "zigler@mail.net"
+        }
+    ],
+    "users": [
+        {
+            "firstName": "Игорь",
+            "lastName": "Циглер",
+            "surName": "Александрович",
+            "userName": "admin",
+            "password": "qwerty",
+            "email": "zigler@mail.net"
+        },
+        {
+            "firstName": "Евгений",
+            "lastName": "Литвинов",
+            "surName": "Александрович",
+            "email": "mail@mail.net",
+            "password": "145",
+            "passwordConfirmation": "145",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "firstName": "Стас",
+            "lastName": "Пархоменко",
+            "surName": "Павлович",
+            "email": "mymail1@mail.ru",
+            "password": "147",
+            "passwordConfirmation": "147",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "firstName": "Артём",
+            "lastName": "Мирошниченко",
+            "surName": "Олегович",
+            "email": "Artem@mail.ru",
+            "password": "123",
+            "passwordConfirmation": "123",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "firstName": "Никита",
+            "lastName": "Беребердин",
+            "surName": "Владимирович",
+            "email": "Nikitanot@mail.ru",
+            "password": "123456",
+            "passwordConfirmation": "123456",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "firstName": "Маргарита",
+            "lastName": "Понаморева",
+            "surName": "Михайловна",
+            "email": "mamsd@mad.com",
+            "password": "фыв",
+            "passwordConfirmation": "фыв",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "firstName": "Руслан",
+            "lastName": "Саитов",
+            "surName": "Тагирович",
+            "email": "abc@mail.ru",
+            "password": "123456",
+            "passwordConfirmation": "123456",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "firstName": "Евгений",
+            "lastName": "Занин",
+            "surName": "Александрович",
+            "email": "asd@mail.ru",
+            "password": "123",
+            "passwordConfirmation": "123",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "firstName": "Евгений",
+            "lastName": "Снапок",
+            "surName": "Вадимович",
+            "email": "newmail@mail.ru",
+            "password": "159",
+            "passwordConfirmation": "159",
+            "admin": "zigler@mail.net"
+        }
+    ],
+    "adminUsers": [
+        {
+            "firstName": "Циглер",
+            "lastName": "Игорь",
+            "surName": "Александрович",
+            "email": "zigler@mail.net",
+            "password": "newpassword",
+            "passwordConfirmation": "newpassword"
+        }
+    ],
+    "groups": [
+        {
+            "name": "k-16",
+            "users": "[\"zigler@mail.net\",\"mail@mail.net\",\"mymail1@mail.ru\",\"Artem@mail.ru\",\"Nikitanot@mail.ru\"]"
+        },
+        {
+            "name": "Преподаватели",
+            "users": "[\"zigler@mail.net\",\"mamsd@mad.com\"]"
+        },
+        {
+            "name": "Ученики",
+            "users": "[\"mail@mail.net\",\"mymail1@mail.ru\",\"Artem@mail.ru\",\"Nikitanot@mail.ru\"]"
+        }
+    ]
+}

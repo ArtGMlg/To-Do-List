@@ -1,0 +1,29 @@
+@media screen and (min-width:300px) and (max-width:927px) {
+ #usualButton{
+    display: none;
+  }
+  #mobileButton{
+	  margin-bottom: 15px;
+  }
+}
+
+@media screen and (min-width:928px){
+ #mobileButton{
+    display: none;
+  }
+  #usualButton{
+    margin-bottom: 15px;
+  }
+}
+.calendarWrapper{
+	position: relative;
+}
+.collapse{
+	position: absolute;
+}
+
+#from, #to {
+    width: 13%;
+    float: right;
+	margin-left:10px;
+}

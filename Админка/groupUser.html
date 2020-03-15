@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Дела ученика</title>
+
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
+
+  <script>
+    if (!localStorage.getItem('admIsLogIn')){
+   window.location = "login.html";
+};
+  </script>
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="groups.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Главная</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="users.html">
+          <i class="fas fa-user-friends"></i>
+          <span>Пользователи</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="groups.html">
+          <i class="fas fa-users"></i>
+          <span>Группы</span></a>
+      </li>
+	  
+	  <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Nav Item - Dashboard -->
+	  <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+          <i class="fas fa-chart-bar"></i>
+          <span>Статистика</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="stat.html">Группы</a>
+            <a class="collapse-item" href="usersStat.html">Пользователи</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      
+      <!-- Nav Item - Utilities Collapse Menu -->
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - User Information -->
+              <span style="margin-top: 18px;" id="usualButton">
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#logoutModal">Выйти <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i></button>
+              </span>
+              <span style="margin-top: 18px;" id="mobileButton">
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#logoutModal"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i></button>
+              </span>
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+		  <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('complite')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Выполненные</button>
+		  <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('incomplite')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Невыполненные</button>
+		  <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('all')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Все</button>
+		 
+		<div id="to">
+			<div class="input-group date">
+			  <input type="text" id="toInput" onChange="tasksFilter()" class="form-control">
+			  <div class="input-group-append">
+			  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+			  </div>
+			</div>
+		</div>
+		<div id="from">
+			<div class="input-group date">
+			  <input type="text" id="fromInput" onChange="tasksFilter()" class="form-control">
+			  <div class="input-group-append">
+			  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+			  </div>
+			</div>
+		</div>
+ 
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 id="userTitle" class="h3 mb-0 text-gray-800"></h1>
+          </div>
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th width="50px"> 
+					  </th>
+                      <th>Название</th>
+					  <th>Статус</th>
+					  <th>Срок сдачи</th>
+					  <th>Баллы</th>
+                    </tr>
+                  </thead>
+                  <tbody id="groupedUsersList">
+					
+                  </tbody>
+                </table>
+
+          
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+       <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Your Website 2019</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+	 
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+	 <nav aria-label="breadcrumb">
+</nav>
+<div class="list-group" id="to-do-list">
+</div>
+
+<div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel">Завершение задания</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="restore()">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="restore()">Отмена</button>
+        <button type="button" class="btn btn-primary" onclick="compliteToDoItemOnServer()">Завершить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить дело</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="restore()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="to-do-tittle" class="col-form-label">Заголовок:</label>
+            <input type="text" class="form-control" id="to-do-tittle">
+          </div>
+          <div class="form-group">
+            <label for="to-do-description" class="col-form-label">Описание:</label>
+            <textarea class="form-control" id="to-do-description"></textarea>
+          </div>
+		  <div class="form-group">
+            <label for="to-do-points" class="col-form-label">Количество баллов:</label>
+            <input type="text" class="form-control" id="to-do-points">
+          </div>
+		  <div class="form-group">
+            <div class="form-group">
+				<label for="to-do-time-hours">Часы:</label>
+				<select class="form-control" id="to-do-time-hours">
+				  <option>0</option>
+				  <option>1</option>
+				  <option>2</option>
+				  <option>3</option>
+				  <option>4</option>
+				  <option>5</option>
+				  <option>6</option>
+				  <option>7</option>
+				  <option>8</option>
+				  <option>9</option>
+				  <option>10</option>
+				  <option>11</option>
+				  <option>12</option>
+				  <option>13</option>
+				  <option>14</option>
+				  <option>15</option>
+				  <option>16</option>
+				  <option>17</option>
+				  <option>18</option>
+				  <option>19</option>
+				  <option>20</option>
+				  <option>21</option>
+				  <option>22</option>
+				  <option>23</option>
+				</select>
+			</div>
+            <div class="form-group">
+				<label for="to-do-time-minutes">Минуты:</label>
+				<select class="form-control" id="to-do-time-minutes">
+				  <option>00</option>
+				  <option>01</option>
+				  <option>02</option>
+				  <option>03</option>
+				  <option>04</option>
+				  <option>05</option>
+				  <option>06</option>
+				  <option>07</option>
+				  <option>08</option>
+				  <option>09</option>
+				  <option>10</option>
+				  <option>11</option>
+				  <option>12</option>
+				  <option>13</option>
+				  <option>14</option>
+				  <option>15</option>
+				  <option>16</option>
+				  <option>17</option>
+				  <option>18</option>
+				  <option>19</option>
+				  <option>20</option>
+				  <option>21</option>
+				  <option>22</option>
+				  <option>23</option>				  
+				  <option>24</option>
+				  <option>25</option>
+				  <option>26</option>
+				  <option>27</option>
+				  <option>28</option>
+				  <option>29</option>
+				  <option>30</option>
+				  <option>31</option>
+				  <option>32</option>
+				  <option>33</option>
+				  <option>34</option>
+				  <option>35</option>
+				  <option>36</option>
+				  <option>37</option>
+				  <option>38</option>
+				  <option>39</option>
+				  <option>40</option>
+				  <option>41</option>
+				  <option>42</option>
+				  <option>43</option>
+				  <option>44</option>
+				  <option>45</option>
+				  <option>46</option>
+				  <option>47</option>				  
+				  <option>48</option>
+				  <option>49</option>
+				  <option>50</option>
+				  <option>51</option>
+				  <option>52</option>
+				  <option>53</option>
+				  <option>54</option>
+				  <option>55</option>
+				  <option>56</option>
+				  <option>57</option>
+				  <option>58</option>
+				  <option>59</option>
+				</select>
+			</div>
+            <div class="form-group">
+            	<label for="to-do-date">Дата</label>
+				<input type="date" onchange='onDateChange()' class="form-control" id="to-do-date" name="date" placeholder="Дата" required>
+			</div>
+		  </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="restore()">Закрыть</button>
+          <button type="button" id="addNewToDoItemButton" class="btn btn-primary" onclick="addToDoItem()">Добавить</button>
+          <button type="button" id="updateToDoItemButton" class="btn btn-primary" onclick="updateToDoItemOnServer(this)">Обновить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+      <!-- End of Footer -->
+</div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Уже уходите?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">?</span>
+          </button>
+        </div>
+        <div class="modal-body">Возвращайтесь скорей :)</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Отмена</button>
+          <a class="btn btn-primary" onclick="logout()" href="login.html">Выйти</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
+  <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
+
+  <!-- Page level custom scripts
+  <script src="js/demo/chart-area-demo.js"></script>
+  <script src="js/demo/chart-pie-demo.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
+
+  <script type="text/javascript">
+	$('#from .input-group.date').datepicker({
+		language: "ru",
+		orientation: "bottom auto",
+		format: "yyyy-mm-dd"
+	});
+	$('#to .input-group.date').datepicker({
+		language: "ru",
+		orientation: "bottom auto",
+		format: "yyyy-mm-dd"
+	});
+	
+	var urlParams = new URLSearchParams(window.location.search);
+	var email = urlParams.get('email');
+	var lastName = urlParams.get('lastName');
+	var firstName = urlParams.get('firstName');
+	var allTasks = [];
+	
+	var userTitle = document.getElementById('userTitle');
+	userTitle.innerHTML=lastName +' '+ firstName;
+	
+	$.ajax({
+		url: "http://localhost:3000/tasks/get-by-email/"+email,
+		type: 'GET',
+		crossDomain: true,
+		dataType: 'jsonp',
+		contentType: 'application/json; charset=utf-8',
+		success: function (tasks) {
+			allTasks = tasks;
+			var sum = calculateSum(allTasks);
+			drawTasksList(allTasks, sum);
+		}
+	});
+	
+	function drawTasksList(tasks, sum) {
+		document.getElementById('groupedUsersList').innerHTML = "";
+		var groupedUsersList = $('#groupedUsersList');
+		for (i=0; i<tasks.length; i++){
+			groupedUsersList.append('<tr>'+
+                        '<td>'+
+                          '<div class="custom-control custom-checkbox small">'+
+                           '<input type="checkbox" class="custom-control-input task-checkbox" onclick="checkTask(this)" id="'+tasks[i].id+'">'+
+                           '<label class="custom-control-label" for="'+tasks[i].id+'"></label>'+
+                          '</div>'+
+                        '</td>' +
+                        '<td>'+tasks[i].title+'</td>'+
+						'<td>'+(tasks[i].status === 'complite'?"Выполнено":"Невыполнено")+'</td>'+
+						'<td>'+tasks[i].date+'</td>'+
+						'<td>'+tasks[i].points+'</td>'+
+                      '</tr>'
+      )}
+	  groupedUsersList.append(
+	  '<tr>'+
+	  '<td colspan="4">'+"Сумма баллов"+'</td>'+
+	  '<td>'+sum+'</td>'+
+	  '</tr>'
+	  );
+    };
+	
+	function checkTask(cb){
+		$.ajax({
+			url: "http://localhost:3000/tasks/check/"+cb.id + '?status=' + cb.checked ,
+			type: 'GET',
+			crossDomain: true,
+			dataType: 'jsonp',
+			contentType: 'application/json; charset=utf-8',
+			success: function () {
+				var checked = $(".task-checkbox");
+				var markAllChecked = true;
+				for (i=0; i < checked.length; i++){
+					if (checked[i].checked === false){
+						markAllChecked = false;
+					}
+				}
+				document.getElementById('checkAll').checked = markAllChecked;
+			}
+		});
+	
+	
+	};
+	
+	function tasksFilter(status) {
+		var date = document.getElementById('fromInput').value;
+		if (date) {
+			date = new Date(date);
+		} else {
+			date = new Date('2000-01-01');
+		}
+		date = date.getTime();
+		var date1 = document.getElementById('toInput').value;
+		if (date1) {
+			date1 = new Date(date1);
+		} else {
+			date1 = new Date();
+		}
+		date1 = date1.getTime();
+		rangedTasks = [];
+		for(i=0; i < allTasks.length; i++){
+			taskDate = new Date(allTasks[i].date)
+			taskDate = taskDate.getTime();
+			if(taskDate >=  date && taskDate <= date1){
+				rangedTasks.push(allTasks[i]);
+			};
+		};
+		if (status !== 'all'){
+			var activeTasks = []; 
+			if (status) {
+				for (i = 0; i< rangedTasks.length; i++){
+					if (rangedTasks[i].status === status){
+						activeTasks.push(rangedTasks[i]);
+					}
+				}
+			} else {
+				activeTasks = rangedTasks;
+			}
+			var sum = calculateSum(activeTasks);
+			drawTasksList(activeTasks, sum);
+		}else{
+			var sum = calculateSum(rangedTasks);
+			drawTasksList(rangedTasks, sum);
+		};
+	};
+	
+	function calculateSum(tasks){
+		var sum = 0;
+		for(i = 0; i < tasks.length; i++){
+			sum = sum + parseInt(tasks[i].points);
+		};
+		return sum;
+	};
+	
+    function logout() {
+      localStorage.removeItem('admIsLogIn');
+      localStorage.removeItem('admUser');
+    }; 
+  </script>
+
+</html>
+
