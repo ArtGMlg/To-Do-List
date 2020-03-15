@@ -20,6 +20,7 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
 
   <script>
     if (!localStorage.getItem('admIsLogIn')){
@@ -123,6 +124,22 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
+			<div id="to">
+				<div class="input-group date">
+				  <input type="text" id="toInput" onChange="statFilter()" class="form-control">
+				  <div class="input-group-append">
+				  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+				  </div>
+				</div>
+			</div>
+			<div id="from">
+				<div class="input-group date">
+				  <input type="text" id="fromInput" onChange="statFilter()" class="form-control">
+				  <div class="input-group-append">
+					<span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+				  </div>
+				</div>
+			</div>
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -224,11 +241,45 @@
 
   <!-- Page level custom scripts-->
   <script src="js/demo/chart-area-demo.js"></script>
-  <script src="js/demo/chart-pie-demo.js"></script> 
+  <script src="js/demo/chart-pie-demo.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
 
   <script type="text/javascript">
+    $('#from .input-group.date').datepicker({
+		language: "ru",
+		orientation: "bottom auto",
+		format: "yyyy-mm-dd"
+	});
+	$('#to .input-group.date').datepicker({
+		language: "ru",
+		orientation: "bottom auto",
+		format: "yyyy-mm-dd"
+	});
+	
+	function statFilter() {
+		var to = document.getElementById('toInput').value;
+		var from = document.getElementById('fromInput').value;
+		var userEmail = activeUserEmail;
+		
+		var user = {};
+		for (i = 0; i < allUsers.length; i++) {
+			if (userEmail === allUsers[i].email) {
+				user = allUsers[i];
+				break;
+			}
+		}
+		var userName = document.getElementById('dropdownMenuButton').value;
+		if(!activeUserEmail){
+			updateChart(from, to)
+		} else{
+			updateChart(from, to, user)
+		}		
+		
+	}
   var allUsers = [];
   var allTasks = [];
+  var activeUserEmail;
   $.ajax({
     url: "http://localhost:3000/users/get",
     type: 'GET',
@@ -260,9 +311,12 @@
 		}
 	};
 	function changeUser(userEmail){
+		var to = document.getElementById('toInput').value;
+		var from = document.getElementById('fromInput').value;
+		activeUserEmail = userEmail;
 		if(! userEmail){
 			$('#dropdownMenuButton').html("Все пользователи");
-			updateChart();
+			updateChart(from, to);
 			return
 		};
 		var user = {};
@@ -273,7 +327,7 @@
 			}
 		}
 		$('#dropdownMenuButton').html(user.lastName + " " + user.firstName[0] + "." + user.surName[0]+ ".");
-		updateChart(user);
+		updateChart(from, to, user);
 	};
 	
 	function groupIncludesUser(user, groupUsers){
@@ -286,9 +340,10 @@
 		return flag;
 	};
 	
-	function updateChart(user){
+	function updateChart(from, to, user){
 		if (!user ){ 
-			reciveInf(allTasks);
+			var rangedTasks = filterByDates(allTasks, from, to);
+			reciveInf(rangedTasks);
 			return;
 		}
 		
@@ -304,8 +359,34 @@
 		//		neededTasks.push(allTasks[i]);
 		//	};
 		//};
-        reciveInf(usersTasks);
+		var rangedTasks = filterByDates(usersTasks, from, to);
+        reciveInf(rangedTasks);
 	};
+		function filterByDates(tasks, from, to){
+			var rangedTasks = [];
+			var date = from;
+			if (date) {
+				date = new Date(date);
+			} else {
+				date = new Date('2000-01-01');
+			}
+			date = date.getTime();
+			var date1 = to;
+			if (date1) {
+				date1 = new Date(date1);
+			} else {
+				date1 = new Date();
+			}
+			date1 = date1.getTime();
+			for(i=0; i < tasks.length ; i++){
+				taskDate = new Date(tasks[i].date)
+				taskDate = taskDate.getTime();
+				if(taskDate >=  date && taskDate <= date1){
+					rangedTasks.push(tasks[i]);
+				};
+			};
+			return rangedTasks;
+		};
 	
     function logout() {
       localStorage.removeItem('admIsLogIn');
