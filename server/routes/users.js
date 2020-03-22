@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
+var _ = require('lodash');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -131,6 +132,29 @@ router.get('/get', function(req, res, next) {
     });
   };
   res.jsonp(usersForAdmin);
+});
+
+router.get('/getTop', function(req, res, next) {
+  res.setHeader('Content-Type', 'application/json');  
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+  var users = data.users;
+  var Tasks = data.tasks;
+  //console.log(users);
+  for (i = 0; i < users.length; i++) {
+    var userScore = 0;
+	for(j=0; j< Tasks.length; j++){
+		if(Tasks[j].status === "complite" && Tasks[j].userId === users[i].email){
+			userScore = userScore + 1;
+		};
+	};
+	users[i].score = userScore;
+  };
+  
+  var sortedUsers = _.sortBy(users, ['score']);
+  
+  res.jsonp(sortedUsers);
 });
 
 module.exports = router;

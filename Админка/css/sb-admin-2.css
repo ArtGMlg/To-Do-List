@@ -11641,21 +11641,24 @@ a:focus {
 }
 
 .bg-login-image {
-  background: url("./img/login.jpg");
+  background: url("../img/undraw_Login_v483.svg");
   background-position: center;
-  background-size: cover;
+  background-size: 50%;
+  background-repeat: no-repeat;
 }
 
 .bg-register-image {
-  background: url("https://source.unsplash.com/Mv9hjnEUHR4/600x800");
+  background: url("../img/undraw_profile_6l1l.svg");
   background-position: center;
-  background-size: cover;
+  background-size: 80%;
+  background-repeat: no-repeat;
 }
 
 .bg-password-image {
-  background: url("https://source.unsplash.com/oWTW-jNGl9I/600x800");
+  background: url("../img/undraw_forgot_password_gi2d.svg");
   background-position: center;
-  background-size: cover;
+  background-size: 80%;
+  background-repeat: no-repeat;
 }
 
 form.user .custom-checkbox.small label {
