@@ -150,7 +150,7 @@
         <!-- /.container-fluid -->
 		
 		<div class="row">
-			<div class="col-xl-4 col-lg-5">
+			<div class="col-xl-4 col-lg-5" id="chart">
 			  <div class="card shadow mb-4">
 				<!-- Card Header - Dropdown -->
 				<div class="card-header py-3">
@@ -182,10 +182,18 @@
 			  </div>
 			</div>
 			
-			<div class="col-xl-4 col-lg-5">
-				<ol id"top">
-					
-				</ol>
+			<div  class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4" id="topCard">
+          <div class="card-header py-3" style="height: 71px;">
+            <h6 class="m-0 font-weight-bold text-primary">Топ среди пользователей:</h6>
+          </div>
+          <div class="card-body">
+            <ol id="top">
+          
+            </ol>
+          </div>
+        </div>
+				
 			</div>
 		
 		</div>
@@ -297,22 +305,21 @@
     contentType: 'application/json; charset=utf-8',
     success: function (data) {
 		allUsers = data;
-        drawUsersList(data);
+      drawUsersList(data);
     }
   });
   
-    $.ajax({
+  $.ajax({
     url: "http://localhost:3000/users/getTop",
     type: 'GET',
     crossDomain: true,
     dataType: 'jsonp',
     contentType: 'application/json; charset=utf-8',
     success: function (data) {
-		console.log(data);
+		  console.log(data);
+      drawTopList(data);
     }
   });
-
-
   
 	$.ajax({
     url: "http://localhost:3000/tasks/get",
@@ -331,6 +338,12 @@
 			$('#dropdown').append('<a class="dropdown-item" href="#" onclick = "changeUser(\'' + users[i].email + '\')">' + users[i].lastName + " " + users[i].firstName[0] + "." + users[i].surName[0]+ "." + '</a>');
 		}
 	};
+
+  function drawTopList(data) {
+    for (var i = 0; i < 9; i++) {
+      $('#top').append('<li>' + data[i].lastName + " " + data[i].firstName[0] + "." + data[i].surName[0]+ "." + data[i].score);
+    }
+  };
 	
 	function changeUser(userEmail){
 	debugger;
