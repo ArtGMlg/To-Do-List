@@ -341,12 +341,11 @@
 
   function drawTopList(data) {
     for (var i = 0; i < 9; i++) {
-      $('#top').append('<li>' + data[i].lastName + " " + data[i].firstName[0] + "." + data[i].surName[0]+ "." + data[i].score);
+      $('#top').append('<li>' + data[i].lastName + " " + data[i].firstName[0] + "." + data[i].surName[0]+ ". &mdash; " +pluralize(data[i].score, ['балл', 'балла', 'баллов']));
     }
   };
 	
 	function changeUser(userEmail){
-	debugger;
 		var to = document.getElementById('toInput').value;
 		var from = document.getElementById('fromInput').value;
 		activeUserEmail = userEmail;
@@ -428,6 +427,11 @@
       localStorage.removeItem('admIsLogIn');
       localStorage.removeItem('admUser');
     };
+
+    function pluralize(count, words) {
+    var cases = [2, 0, 1, 1, 1, 2];
+    	return count + ' ' + words[ (count % 100 > 4 && count % 100 < 20) ? 2 : cases[ Math.min(count % 10, 5)] ];
+	};
   </script>
 
 </html>
