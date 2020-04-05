@@ -153,8 +153,9 @@ router.get('/getTop', function(req, res, next) {
   };
   
   var sortedUsers = _.sortBy(users, ['score']);
+  var revercedSort  = _.reverse(sortedUsers);
   
-  res.jsonp(sortedUsers);
+  res.jsonp(revercedSort);
 });
 
 module.exports = router;
