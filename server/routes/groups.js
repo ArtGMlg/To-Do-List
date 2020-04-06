@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
+var _ = require('lodash');
 
 router.post('/create', function(req, res, next) {
   var group = {
@@ -175,5 +176,43 @@ router.post('/removeUsers', function(req, res, next) {
   }));
   });
   
+});
+
+router.get('/getTop', function(req, res, next) {
+  res.setHeader('Content-Type', 'application/json');  
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+  var users = data.users;
+  var Tasks = data.tasks;
+  var groups = data.groups;
+  //console.log(users);
+  for (i = 0; i < users.length; i++) {
+    var userScore = 0;
+    for(j=0; j< Tasks.length; j++){
+      if(Tasks[j].status === "complite" && Tasks[j].userId === users[i].email){
+        userScore = userScore + 1;
+      };
+    };
+    users[i].score = userScore;
+  };
+
+  for (i = 0; i < groups.length; i++) {
+    var groupUsers = JSON.parse(groups[i].users);
+    var groupScore = 0;
+   for (j = 0; j < groupUsers.length; j++) {
+     for (x = 0; x < users.length; x++) {
+       if (groupUsers[j] === users[x].email) {
+         groupScore = groupScore + users[x].score;
+       };
+     };
+    };
+    groups[i].score = groupScore;
+  };
+
+  var sortedGroups = _.sortBy(groups, ['score']);
+  var revercedSort  = _.reverse(sortedGroups);
+  
+  res.jsonp(revercedSort);
 });
 module.exports = router;
