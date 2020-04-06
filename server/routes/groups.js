@@ -186,7 +186,6 @@ router.get('/getTop', function(req, res, next) {
   var users = data.users;
   var Tasks = data.tasks;
   var groups = data.groups;
-  //console.log(users);
   for (i = 0; i < users.length; i++) {
     var userScore = 0;
     for(j=0; j< Tasks.length; j++){
