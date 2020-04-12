@@ -31,3 +31,7 @@
     float: right;
 	margin-left:10px;
 }
+
+.scroll-container {
+  overflow-y: auto;
+}
