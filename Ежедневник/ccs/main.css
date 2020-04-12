@@ -1,0 +1,9 @@
+.form-group{
+  width: 25%;
+  margin: auto;
+}
+
+.form-control{
+  width: 250px;
+  margin-bottom: 15px;
+}
