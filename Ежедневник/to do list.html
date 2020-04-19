@@ -1,24 +1,32 @@
 <HTML>
 <HEAD>
-<TITLE>План на день</TITLE>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-<link rel="stylesheet" type="text/css" href="./ccs/toDoList.css">
+	<TITLE>План на день</TITLE>
+	<script>
+		if (!localStorage.getItem('isLogIn')) {
+			window.location="log in.html?redirectedFrom=to do list.html";
+		}
+	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+	<link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="./ccs/toDoList.css">
+	<link href="./fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 </HEAD>
 <BODY>
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="main.html">Главная</a></li>
-    <li class="breadcrumb-item active" aria-current="page" id="breadCrumbToDoList">Список дел</li>
-  </ol>
-</nav>
-<div class="list-group" id="to-do-list">
-</div>
-<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Добавить</button>
-
+	<nav aria-label="breadcrumb">
+	  <ol class="breadcrumb">
+	    <li class="breadcrumb-item"><a href="main.html">Главная</a></li>
+	    <li class="breadcrumb-item active" aria-current="page" id="breadCrumbToDoList">Список дел</li>
+	  </ol>
+	</nav>
+	<div id="buttonContainer">
+		<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Добавить</button>
+	</div>
+	<div class="list-group" id="to-do-list-incomplite"></div>
+	<div class="list-group" id="to-do-list-complite"></div>
+	
 <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

@@ -52,6 +52,7 @@
                     <div class="form-group">
                       <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Пароль">
                     </div>
+                    <div id="errorMessage" style="color: #f80000;"></div>
                     <div class="form-group">
                    <!--   <div class="custom-control custom-checkbox small">
                         <input type="checkbox" class="custom-control-input" id="customCheck">
@@ -69,8 +70,8 @@
                       <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
                     </a>-->
                   </form>
-                  <hr>
-                <!--  <div class="text-center">
+                  <!--  <hr>
+                <div class="text-center">
                     <a class="small" href="forgot-password.html">Forgot Password?</a>
                   </div>-->
                   <div class="text-center">
@@ -99,6 +100,18 @@
   <script src="js/sb-admin-2.min.js"></script>
 
   <script type="text/javascript">
+    document.querySelector('#exampleInputPassword').addEventListener('keypress', function (e) {
+	    if (e.key === 'Enter') {
+        this.blur();
+	      auth();
+	    }
+    });
+
+    $('.form-control').focus(function(){
+      $('.form-control').css('border-color', '');
+      $('#errorMessage').text('');
+    });
+
     function auth(){
       var adminUser = {
         admUserName: document.getElementById("exampleInputEmail").value,
@@ -114,6 +127,11 @@
               localStorage.setItem('admIsLogIn', true);
               localStorage.setItem('admUser', JSON.stringify(data));
           window.location = "groups.html";
+          },
+          error: function () {
+            $('#exampleInputEmail').css('border-color', '#f80000');
+            $('#exampleInputPassword').css('border-color', '#f80000');
+            $('#errorMessage').text('Неверное имя пользователя или пароль!');
           }
       });
     }

@@ -1,77 +1,117 @@
 <HTML>
   <HEAD>
+    <meta charset="utf-8">
     <TITLE>Авторизация</TITLE>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-  	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-  	<link rel="stylesheet" type="text/css" href="./ccs/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="./ccs/style.css">
   </HEAD>
   <BODY>
-    <div class="login-form">
-      <div style="margin-top: 25px;" class="form-group">
-        <label for="exampleInputEmail1">E-mail</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите E-mail">
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Пароль</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Введите пароль">
-      </div>
-      <div style="width: 25%; margin: auto;">
-        <button style="display: inline-block; margin-right: 15px;" type="submit" class="btn btn-primary" onclick="auth()">Войти</button>
-        <div style="display: inline-block; margin-right: 15px;">  
-          <a href="registration.html">Зарегистрироваться</a>
+    <div class="login-form" style="width: 90%; margin: auto;">
+      <div class="content-container">
+        <div style="padding-top: 25px;" class="form-group">
+          <label for="exampleInputEmail1">E-mail</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите E-mail">
         </div>
-    	</div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Пароль</label>
+          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Введите пароль">
+        </div>
+        <div id="errorMessage" style="color: #f80000; margin-bottom: 15px;"></div>
+        <div style="width: 100%; padding-bottom: 25px;">
+          <span style="display: inline-block; margin-right: 5px;"><button type="submit" class="btn btn-primary" onclick="auth()">Войти</button></span>
+          <span style="display: inline-block;">
+            <a class="btn btn-outline-primary" role="button" href="registration.html">Зарегистрироваться</a>
+          </span>
+        </div>
+      </div>
     </div>
-	<SCRIPT>
-    $('.login-form').css('margin-top', ($(window).height() - $('.login-form').height())/2 - 70 + "px");
-		function setCookie(name, value, options) {
-		  options = options || {};
+    <script src="./js/beautifie.js"></script>
+  <SCRIPT>
+    document.querySelector('#exampleInputPassword1').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        this.blur();
+        auth();
+      }
+    });
 
-		  var expires = options.expires;
+    $('.form-control').focus(function(){
+      $('.form-control').css('border-color', '');
+      $('#errorMessage').text('');
+    });
+      
+    //function setCookie(name, value, options) {
+    //  options = options || {};
+//
+    //  var expires = options.expires;
+//
+    //  if (typeof expires == "number" && expires) {
+    //    var d = new Date();
+    //    d.setTime(d.getTime() + expires * 1000);
+    //    expires = options.expires = d;
+    //  }
+    //  if (expires && expires.toUTCString) {
+    //    options.expires = expires.toUTCString();
+    //  }
+//
+    //  value = encodeURIComponent(value);
+//
+    //  var updatedCookie = name + "=" + value;
+//
+    //  for (var propName in options) {
+    //    updatedCookie += "; " + propName;
+    //    var propValue = options[propName];
+    //    if (propValue !== true) {
+    //      updatedCookie += "=" + propValue;
+    //    }
+    //  }
+//
+    //  document.cookie = updatedCookie;
+    //}
 
-		  if (typeof expires == "number" && expires) {
-		    var d = new Date();
-		    d.setTime(d.getTime() + expires * 1000);
-		    expires = options.expires = d;
-		  }
-		  if (expires && expires.toUTCString) {
-		    options.expires = expires.toUTCString();
-		  }
+    function setCookie(name, value){
+      var cookie_string = name + "=" + String(value);
 
-		  value = encodeURIComponent(value);
+      var expires = new Date ();
+      expires.setDate(expires.getDate() + 7);
+      cookie_string += "; expires=" + expires.toUTCString();
 
-		  var updatedCookie = name + "=" + value;
+      document.cookie = cookie_string;
+    }
 
-		  for (var propName in options) {
-		    updatedCookie += "; " + propName;
-		    var propValue = options[propName];
-		    if (propValue !== true) {
-		      updatedCookie += "=" + propValue;
-		    }
-		  }
-
-		  document.cookie = updatedCookie;
-		}
-		function auth(){
-			var user = {
-				userName: document.getElementById("exampleInputEmail1").value,
-				password: document.getElementById("exampleInputPassword1").value
-			}
-			$.ajax({
-			    url: "http://localhost:3000/users/login?userName=" + user.userName + "&password=" +  user.password,
-			    type: 'GET',
-			    crossDomain: true,
-			    dataType: 'jsonp',
-			    contentType: 'application/json; charset=utf-8',
-			    success: function (data) {
-			        localStorage.setItem('isLogIn', true);
-			        localStorage.setItem('user', JSON.stringify(data));
-	 				window.location = "main.html";
-			    }
-			});
-		}
-	</SCRIPT>
+    function auth(){
+      var user = {
+        userName: document.getElementById("exampleInputEmail1").value,
+        password: document.getElementById("exampleInputPassword1").value
+      }
+      $.ajax({
+          url: "http://localhost:3000/users/login?userName=" + user.userName + "&password=" +  user.password,
+          type: 'GET',
+          crossDomain: true,
+          dataType: 'jsonp',
+          contentType: 'application/json; charset=utf-8',
+          success: function (data) {
+            setCookie('isLogIn', true);
+            setCookie('user', JSON.stringify(data));
+            localStorage.setItem('isLogIn', true);
+            localStorage.setItem('user', JSON.stringify(data));
+            var searchParams = new URLSearchParams(window.location.search);
+            var location = searchParams.get('redirectedFrom');
+            if (location) {
+              window.location = String(location);
+            }else{
+              window.location = 'main.html'
+            }
+          },
+          error: function () {
+            $('#exampleInputEmail1').css('border-color', '#f80000');
+            $('#exampleInputPassword1').css('border-color', '#f80000');
+            $('#errorMessage').text('Неверное имя пользователя или пароль!');
+          }
+      });
+    }
+  </SCRIPT>
   </BODY>
-</HTML>	
+</HTML> 

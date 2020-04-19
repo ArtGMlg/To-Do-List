@@ -1,9 +1,12 @@
-if (!localStorage.getItem('isLogIn')) {
-	window.location="log in.html";
-}
-
 var searchParams = new URLSearchParams(window.location.search);
 var chosenDate = searchParams.get('chosenDate');
+
+if (!chosenDate) {
+	var today = new Date();
+	var month = today.getMonth() + 1;
+	var chosenDate = today.getFullYear() + '-' + month + '-' + today.getDate();
+}
+
 document.getElementById('to-do-date').value = chosenDate;
 
 var breadCrumbToDoList = $('#breadCrumbToDoList');
@@ -35,8 +38,13 @@ $.ajax({
 
 function addToDoItemsFromServer(data) {
 	var email = JSON.parse(localStorage.getItem('user')).email;
+	for (var x = 0; x < data.users.length; x++) {
+		if (data.users[x].email===email) {
+			admItem=data.users[x].admin;
+		}
+	};
 	for(i=0; i<data.tasks.length; i++){
-		if(chosenDate===data.tasks[i].date && email===data.tasks[i].userId){
+		if(chosenDate===data.tasks[i].date && email===data.tasks[i].userId && data.tasks[i].status === 'incomplite'){
 			toDoItem = {
 			    title: data.tasks[i].title,
 				description: data.tasks[i].description,
@@ -45,12 +53,8 @@ function addToDoItemsFromServer(data) {
 				points: data.tasks[i].points,
 				id: data.tasks[i].id
 			}
-	for (var x = 0; x < data.users.length; x++) {
-				if (data.users[x].email===email) {
-					admItem=data.users[x].admin;
-				}
-			}		
-			var toDoList= $('#to-do-list');
+			
+			var toDoList= $('#to-do-list-incomplite');
 			toDoList.append('<a id="'+ toDoItem.id +'" href="#" class="list-group-item list-group-item-action">'
 			+ '<div class="d-flex w-100 justify-content-between">'
 			+ '<h5 class="mb-1 item-title">'+ toDoItem.title +'</h5>'
@@ -63,8 +67,47 @@ function addToDoItemsFromServer(data) {
 			+ '<button type="button" class="btn btn-success float-right" onclick="compliteToDoItem(this)"><i class="far fa-check-circle"></i></button>'
 			+ '</a>'
 			);
+		}else if (chosenDate===data.tasks[i].date && email===data.tasks[i].userId && data.tasks[i].status === 'complite') {
+			toDoItem = {
+			    title: data.tasks[i].title,
+				description: data.tasks[i].description,
+			    timeHours: data.tasks[i].timeHours,
+				timeMinutes: data.tasks[i].timeMinutes,
+				points: data.tasks[i].points,
+				id: data.tasks[i].id
+			}
+			$('#to-do-list-complite').append('<a id="'+ toDoItem.id +'" href="#" class="complited-task list-group-item list-group-item-action">'
+			+ '<div class="d-flex w-100 justify-content-between">'
+			+ '<h5 class="mb-1 item-title">'+ toDoItem.title +'</h5>'
+			+ '<small>'+ '<span class="item-time-hours">' + toDoItem.timeHours +'</span>'+':'+ '<span class="item-time-minutes">' +toDoItem.timeMinutes+'</span>'+'</small>'
+			+ '</div>'
+			+ '<p class="mb-1 item-description">'+toDoItem.description+'</p>'
+			+ '<small class="item-points">'+pluralize(toDoItem.points, ['балл', 'балла', 'баллов']) +'</small>'
+			+ '<button type="button" class="btn btn-danger float-right" onclick="removeToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
+			+ '</a>'
+			);
 		}
 	}
+}
+
+window.addEventListener('scroll', onScroll, false);
+
+function onScroll() {
+	if(window.pageYOffset >= $(window).height()*0.03){
+    $('.btn-block').css({
+    	"width": "50px",
+    	"height": "50px",
+    	"border-radius": "100%"
+    });
+    $('.btn-block').html('<i class="fas fa-plus"></i>');
+  }else{
+    $('.btn-block').css({
+    	"width": "",
+    	"height": "",
+    	"border-radius": ""
+    });
+    $('.btn-block').html('Добавить');
+  };
 }
 
 function updateToDoItem(target) {
@@ -190,16 +233,11 @@ function compliteToDoItem(target) {
 	document.getElementById('to-do-tittle').value = target.parentElement.getElementsByClassName('item-title')[0].innerText;
 	document.getElementById('to-do-description').value = target.parentElement.getElementsByClassName('item-description')[0].innerText;
 	document.getElementById('to-do-points').value = parseInt(target.parentElement.getElementsByClassName('item-points')[0].innerText);
-    document.getElementById('to-do-time-hours').value = target.parentElement.getElementsByClassName('item-time-hours')[0].innerText; 
-    document.getElementById('to-do-time-minutes').value = target.parentElement.getElementsByClassName('item-time-minutes')[0].innerText; 
-    document.getElementById('to-do-date').value = chosenDate;
-
-
-    //$('#addNewToDoItemButton').hide();
-    //$('#updateToDoItemButton').show();
-    $('#exampleModal').data( "to-do-item-id",  target.parentElement.id);
+  document.getElementById('to-do-time-hours').value = target.parentElement.getElementsByClassName('item-time-hours')[0].innerText; 
+  document.getElementById('to-do-time-minutes').value = target.parentElement.getElementsByClassName('item-time-minutes')[0].innerText; 
+  document.getElementById('to-do-date').value = chosenDate;
+  $('#exampleModal').data( "to-do-item-id",  target.parentElement.id);
 	$('#exampleModalLive').modal('show');
-	//$('#exampleModal').modal('show');
 }
 
 function compliteToDoItemOnServer(target){
@@ -248,6 +286,7 @@ function restore(){
 	    $('#addNewToDoItemButton').show();
 	    $('#updateToDoItemButton').hide();
 	})
+  window.location.reload();
 }
 
 function pluralize(count, words) {

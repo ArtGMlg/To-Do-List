@@ -1,47 +1,51 @@
 <HTML>
 <HEAD>
-<TITLE>Ежедневник</TITLE>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <TITLE>Ежедневник</TITLE>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script>
+    if (!localStorage.getItem('isLogIn')){
+      window.location = "log in.html?redirectedFrom=main.html";
+    } 
+  </script>
 </HEAD>
 <BODY>
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item active" aria-current="page">Главная</li>
-  </ol>
-</nav>
-<a id = 'to-do-list' href="to do list.html">Список дел </a>
-<input type="date" onchange='onDateChange()' value='' class="form-control" id="chosen-date" name="date" placeholder="Дата" required>
-<a id = 'to-do-list' onclick="logout()" href="">Выйти</a>
-<script>
-function logout() {
-	localStorage.removeItem('isLogIn');
-	localStorage.removeItem('user');
-}
-function getCookie(name) {
-  var matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
-  return matches ? decodeURIComponent(matches[1]) : undefined;
-}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Главная</li>
+    </ol>
+  </nav>
+  <a id = 'to-do-list' href="to do list.html">Список дел </a>
+  <input type="date" onchange='onDateChange()' value='' class="form-control" id="chosen-date" name="date" placeholder="Дата" required>
+  <a id = 'to-do-list' onclick="logout()" href="">Выйти</a>
+  <script>
+  function logout() {
+  	localStorage.removeItem('isLogIn');
+  	localStorage.removeItem('user');
+  }
 
-if (!localStorage.getItem('isLogIn')){
-	 window.location = "log in.html";
-}		
+  function get_cookie ( cookie_name ){
+    var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
+   
+    if ( results )
+      return ( results[2] );
+    else
+      return null;
+  }	
 
-var myDate = document.getElementById('chosen-date');
-var today = new Date();
-myDate.value = today.toISOString().substr(0, 10);
-onDateChange();
+  var myDate = document.getElementById('chosen-date');
+  var today = new Date();
+  myDate.value = today.toISOString().substr(0, 10);
+  onDateChange();
 
-function onDateChange(){
-	var chosenDate = document.getElementById('chosen-date').value;
-	var toDoList = document.getElementById('to-do-list');
-	toDoList.href= 'to do list.html' + '?chosenDate=' + chosenDate;
-}
+  function onDateChange(){
+  	var chosenDate = document.getElementById('chosen-date').value;
+  	var toDoList = document.getElementById('to-do-list');
+  	toDoList.href= 'to do list.html' + '?chosenDate=' + chosenDate;
+  }
 
-</script>
+  </script>
 </BODY>
 </HTML>

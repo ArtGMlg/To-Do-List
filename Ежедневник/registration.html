@@ -1,68 +1,108 @@
 <HTML>
   <HEAD>
+    <meta charset="utf-8">
     <TITLE>Регистрация</TITLE>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-	<link rel="stylesheet" href="./ccs/registration.css">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="./ccs/registration.css"> -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="./ccs/style.css">
   </HEAD>
   <BODY>
-    <div class="registration-container">
-      <div class="form-group">
-        <label for="lastName">Фамилия</label>
-        <input type="text" class="form-control" id="lastName" aria-describedby="emailHelp" placeholder="Введите Фамилию">
+    <div class="reg-form" style="width: 90%; margin: auto;">
+      <div class="content-container">
+        <div class="form-group" style="padding-top: 15px">
+          <label for="lastName">Фамилия</label>
+          <input type="text" class="form-control" id="lastName" aria-describedby="emailHelp" placeholder="Введите Фамилию">
+        </div>
+        <div class="form-group">
+          <label for="firstName">Имя</label>
+          <input type="text" class="form-control" id="firstName" aria-describedby="emailHelp" placeholder="Введите Имя">
+        </div>
+        <div class="form-group">
+          <label for="surName">Отчество</label>
+          <input type="text" class="form-control" id="surName" aria-describedby="emailHelp" placeholder="Введите Отчество">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">E-mail</label>
+          <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Введите E-mail">
+          <div id="emailError" style="color: #f80000; margin-bottom: 15px;"></div>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Пароль</label>
+          <input type="password" class="form-control" id="exampleInputPassword" placeholder="Введите пароль">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPasswordConfirmation">Подтвердить пароль</label>
+          <input type="password" class="form-control" id="exampleInputPasswordConfirmation" placeholder="Подтвердите пароль">
+        </div>
+        <div id="errorMessage" style="color: #f80000; margin-bottom: 15px;"></div>
+        <div style="width: 100%; padding-bottom: 25px;">
+          <span style="display: inline-block; margin-right: 5px;"><button type="submit" class="btn btn-primary" onclick="reg()">Зарегистрироваться</button></span>
+          <span style="display: inline-block;">  
+            <a class="btn btn-outline-primary" role="button" href="log in.html">Войти</a>
+          </span>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="firstName">Имя</label>
-        <input type="text" class="form-control" id="firstName" aria-describedby="emailHelp" placeholder="Введите Имя">
-      </div>
-      <div class="form-group">
-        <label for="surName">Отчество</label>
-        <input type="text" class="form-control" id="surName" aria-describedby="emailHelp" placeholder="Введите Отчество">
-      </div>
-      <div class="form-group">
-        <label for="exampleInputEmail1">E-mail</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите E-mail">
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Пароль</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Введите пароль">
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPasswordConfirmation">Подтвердить пароль</label>
-        <input type="password" class="form-control" id="exampleInputPasswordConfirmation" placeholder="Подтвердите пароль">
-      </div>
-      <button type="submit" class="btn btn-primary full-screen" onclick="reg()" >Зарегистрироваться</button>
-    </div>  
-	<SCRIPT>
-    function reg(){
-      if (document.getElementById("exampleInputPassword1").value!==document.getElementById("exampleInputPasswordConfirmation").value)
-        alert("Пароли не совпадают!") 
-      var user = {
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
-        surName: document.getElementById("surName").value,
-        email: document.getElementById("exampleInputEmail1").value,
-        password: document.getElementById("exampleInputPassword1").value,
-        passwordConfirmation: document.getElementById("exampleInputPasswordConfirmation").value
-      }
+    </div>
+    <script src="./js/beautifie.js"></script>
+    <SCRIPT>
+      $('.reg-form').css({
+        'padding-top': ($(window).height() - $('.reg-form').height())/2 + "px",
+        'opacity': '1'
+      });
 
-    $.ajax({
-        type: 'POST',
-        url: 'http://localhost:3000/users/reg',
-        crossDomain: true,
-        data: user,
-        success: function(response) {
-          if(response.success) {
-            window.location.replace("log in.html");
-          } else {
-            alert(response.error);
-          }
+      $('.form-control').focus(function(){
+        $('.form-control').css('border-color', '');
+        $('#errorMessage').text('');
+        $('#emailError').text('');
+      });
 
+      $('#exampleInputEmail').blur(function(){
+        if (!this.value.includes('@') && this.value.length >= 1) {
+          $('#exampleInputEmail').css('border-color', "#f80000");
+          $('#emailError').text('Введён неверный адрес!');
         }
-    });
-    }
-	</SCRIPT>
+      })
+
+      function reg(){
+        if (document.getElementById("exampleInputPassword").value!==document.getElementById("exampleInputPasswordConfirmation").value){
+          $('#exampleInputPassword').css('border-color', '#f80000');
+          $('#exampleInputPasswordConfirmation').css('border-color', '#f80000');
+          $('#errorMessage').text('Пароли не совпадают!');
+          return;
+        }else if (!document.getElementById('exampleInputEmail').value.includes('@')) {
+          $('#exampleInputEmail').css('border-color', "#f80000");
+          $('#emailError').text('Введён неверный адрес!');
+          return;
+        }else if (document.getElementById('exampleInputPassword').value.length < 6) {
+          $('#errorMessage').text('Пароль должен содержать как минимум 6 символов!');
+          return;
+        }
+        var user = {
+          firstName: document.getElementById("firstName").value,
+          lastName: document.getElementById("lastName").value,
+          surName: document.getElementById("surName").value,
+          email: document.getElementById("exampleInputEmail").value,
+          password: document.getElementById("exampleInputPassword").value,
+          passwordConfirmation: document.getElementById("exampleInputPasswordConfirmation").value
+        }
+
+        $.ajax({
+          type: 'POST',
+          url: 'http://localhost:3000/users/reg',
+          crossDomain: true,
+          data: user,
+          success: function(response) {
+            if(response.success) {
+              window.location.replace("log in.html");
+            } else {
+              alert(response.error);
+            }
+          }
+        });
+      }
+    </SCRIPT>
   </BODY>
-</HTML>	
+</HTML> 
