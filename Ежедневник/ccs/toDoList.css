@@ -1,3 +1,36 @@
+html{
+	transition: all .3s linear;
+	backdrop-filter: blur(25px) saturate(120%);
+}
+
+body{
+	display: flex;
+  justify-content: center;
+}
+
+nav{
+	padding-bottom: 10px;
+}
+
+#contentContainer{
+	min-width: 400px;
+  max-width: 50%;
+  background-color: transparent;
+  animation: padding 1.2s;
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+
+@keyframes padding {
+	from{
+		padding-top: 0px;
+	}
+	to{
+		padding-top: 80px;
+	}
+}
+
 #to-do-list a.active small.text-muted {
 	color: #ffffff!important;
 }
@@ -7,25 +40,77 @@
 	margin-right: 10px;
 }
 
+.list-group-item{
+	background-color: rgba(255,255,255, .5);
+	color: black;
+}
+
+.list-group-item:hover{
+	background-color: rgba(255,255,255, .5);
+	color: black;
+}
+
+.list-group-item:focus{
+	background-color: rgba(255,255,255, .5);
+	color: black;
+}
+
 .complited-task{
 	text-decoration: line-through;
-  color: #cccccc;
+	color: #6c757d;
 }
 
 .complited-task:hover{
 	text-decoration: line-through;
-  color: #cccccc;
+	color: #6c757d;
 }
+
+.complited-task:focus{
+	text-decoration: line-through;
+	color: #6c757d;
+}
+
 
 #buttonContainer{
 	position: fixed;
 	top: 90%;
 	z-index: 10;
 	display: flex;
-	justify-content: center;
+	align-items: center;
+	justify-content: flex-end;
 	width: 100%;
+	padding: 0px 10px;
 }
 
 .btn-block{
-	transition: all .2s linear;
+	transition: all .2s ease;
+}
+
+#breadCrumbToDoList{
+	display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.input-group-text{
+	background-color: transparent;
+	border-color: transparent;
+	color: black;
+}
+
+h3{
+	color: black;
+	mix-blend-mode: difference;
+	font-weight: bold;
+}
+
+#loadingScreen{
+	position: fixed;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	z-index: 100;
+	background-color: rgba(255,255,255, .91);
+	backdrop-filter: blur(15px);
 }

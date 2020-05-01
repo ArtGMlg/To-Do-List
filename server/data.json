@@ -287,18 +287,6 @@
             "userId": "mail@mail.net",
             "status": "complite",
             "admin": "zigler@mail.net"
-        },
-        {
-            "title": "dddd",
-            "description": "ssss",
-            "timeHours": "17",
-            "timeMinutes": "15",
-            "points": "1",
-            "date": "2019-02-22",
-            "userId": "mail@mail.net",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "2849b700-8222-11ea-846f-b5ad06ce3fa6"
         }
     ],
     "users": [

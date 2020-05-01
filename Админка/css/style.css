@@ -27,11 +27,17 @@
 }
 
 #from, #to {
-    width: 13%;
-    float: right;
+  width: 13%;
+  float: right;
 	margin-left:10px;
 }
 
 .scroll-container {
   overflow-y: auto;
+}
+
+.row{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

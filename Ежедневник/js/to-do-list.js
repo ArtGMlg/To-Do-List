@@ -1,3 +1,9 @@
+$('#breadCrumbToDoList .input-group.date').datepicker({
+	language: "ru",
+	orientation: "bottom auto",
+	format: "yyyy-mm-dd"
+});
+
 var searchParams = new URLSearchParams(window.location.search);
 var chosenDate = searchParams.get('chosenDate');
 
@@ -9,14 +15,14 @@ if (!chosenDate) {
 
 document.getElementById('to-do-date').value = chosenDate;
 
-var breadCrumbToDoList = $('#breadCrumbToDoList');
+var calendarIcon = $('#calendarIcon');
 var chosenDateString = new Date(chosenDate).toLocaleString('ru', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
       });
 
-breadCrumbToDoList.append(' ' + chosenDateString);
+calendarIcon.append('<u id="dateText">' + chosenDateString + '</u>');
 
 var toDoItem = {
 };
@@ -24,6 +30,9 @@ var toDoItem = {
 var admItem;
 
 $('#updateToDoItemButton').hide();
+$('body').css('height', $(window).height()*1.5+"px");
+
+var bb;
 
 $.ajax({
     url: "http://localhost:3000/tasks/get",
@@ -32,8 +41,21 @@ $.ajax({
     dataType: 'jsonp',
     contentType: 'application/json; charset=utf-8',
     success: function (data) {
+    	bb = data;
         addToDoItemsFromServer(data);
-    }
+    },
+    error: function(){
+    	$('#contentContainer').append(
+				'<div class="jumbotron">'+
+				  '<h1 class="display-4">Упс, кажется, что-то пошло не так &#129301;</h1>'+
+				  '<p class="lead">Похоже, что сервер не поделился с нами данными &#128546;</p>'+
+				  '<hr class="my-4">'+
+				  '<p>Если Вы столкнулись с этой проблемой, пожалуйста, сообщите об этом нам.</p>'+
+				  '<p class="lead">'+
+				    '<a class="btn btn-primary btn-lg" href="#" data-toggle="modal" data-target="#sendReportModal" data-whatever="Возникает ошибка." role="button">Отправить отчёт</a>'+
+				  '</p>'+
+				'</div>'
+		)}
   });
 
 function addToDoItemsFromServer(data) {
@@ -88,12 +110,31 @@ function addToDoItemsFromServer(data) {
 			);
 		}
 	}
+	empty();
+}
+
+function empty(){
+	if ($('#to-do-list-incomplite').children().length === 0 && $('#to-do-list-complite').children().length === 0) {
+		$('#contentContainer').append(
+			'<div class="jumbotron">'+
+			  '<h1 class="display-4">Похоже здесь ничего нет &#128558;</h1>'+
+			  '<p class="lead">Хотите создать какое-нибудь дело?</p>'+
+			  '<hr class="my-4">'+
+			  '<p>Если Вы уверены, что здесь что-то должно быть, отправьте нам, пожалуйста, отчёт об ошибке и мы постараемя её решить.</p>'+
+			  '<p class="lead">'+
+			    '<a class="btn btn-primary btn-lg" href="#" data-toggle="modal" data-target="#sendReportModal" data-whatever="Проблемы с отображением дел." role="button">Отправить отчёт</a>'+
+			  '</p>'+
+			'</div>'
+		)
+	}
 }
 
 window.addEventListener('scroll', onScroll, false);
 
+var scrollNow = window.pageYOffset;
+
 function onScroll() {
-	if(window.pageYOffset >= $(window).height()*0.03){
+	if(window.pageYOffset > scrollNow){
     $('.btn-block').css({
     	"width": "50px",
     	"height": "50px",
@@ -108,6 +149,7 @@ function onScroll() {
     });
     $('.btn-block').html('Добавить');
   };
+  scrollNow = window.pageYOffset;
 }
 
 function updateToDoItem(target) {
@@ -175,6 +217,7 @@ function removeToDoItem(target) {
 		contentType: 'application/json; charset=utf-8',
 		success: function () {
 		    target.parentElement.remove();
+		    empty();
 		},
 		error: function(request,msg,error) {
 		    // handle failure
@@ -208,8 +251,12 @@ function addToDoItem() {
 		crossDomain: true,
         data: toDoItem,
         success: function(response) {
+        	var jumbotron = $('.jumbotron');
+        	if(jumbotron){
+        		jumbotron.remove();
+        	}
 			$('#exampleModal').modal('hide');
-			var toDoList= $('#to-do-list');
+			var toDoList= $('#to-do-list-incomplite');
 			if (toDoItem.date===chosenDate){
 				toDoList.append('<a id="'+ response.id +'" href="#" class="list-group-item list-group-item-action">'
 				+ '<div class="d-flex w-100 justify-content-between">'
@@ -218,7 +265,7 @@ function addToDoItem() {
 				+ '</div>'
 				+ '<p class="mb-1 item-description">'+toDoItem.description+'</p>'
 				+ '<small class="item-points">'+pluralize(toDoItem.points, ['балл', 'балла', 'баллов']) +'</small>'
-				+ '<button type="button" class="btn btn-danger float-right" onclick="removeToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
+				+ '<button type="button" class="btn btn-danger float-right" target="" onclick="removeToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
 				+ '<button type="button" class="btn btn-primary float-right" onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
 				+ '<button type="button" class="btn btn-success float-right" onclick="compliteToDoItem(this)"><i class="far fa-check-circle"></i></button>'	
 				+ '</a>'
@@ -286,10 +333,35 @@ function restore(){
 	    $('#addNewToDoItemButton').show();
 	    $('#updateToDoItemButton').hide();
 	})
-  window.location.reload();
 }
 
 function pluralize(count, words) {
     var cases = [2, 0, 1, 1, 1, 2];
     return count + ' ' + words[ (count % 100 > 4 && count % 100 < 20) ? 2 : cases[ Math.min(count % 10, 5)] ];
+}
+
+$('#sendReportModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-body input').val(recipient)
+})
+
+function switchDate() {
+	chosenDate = $('#toInput').val();
+	window.location = 'to do list.html?chosenDate=' + chosenDate;
+}
+
+function send(){
+	var subject = $('#recipient-name').val();
+	var body = $('#message-text').val();
+	window.open('mailto:to-do-list-report-email@inbox.ru?subject=' + subject + '&body=' + body);
+}
+
+function logout() {
+	localStorage.removeItem('isLogIn');
+	localStorage.removeItem('user');
+	window.location.replace('log in.html');
 }

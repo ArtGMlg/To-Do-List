@@ -13,20 +13,33 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 	<link rel="stylesheet" type="text/css" href="./ccs/toDoList.css">
 	<link href="./fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="./ccs/bootstrap-datepicker3.min.css">
 </HEAD>
 <BODY>
-	<nav aria-label="breadcrumb">
-	  <ol class="breadcrumb">
-	    <li class="breadcrumb-item"><a href="main.html">Главная</a></li>
-	    <li class="breadcrumb-item active" aria-current="page" id="breadCrumbToDoList">Список дел</li>
-	  </ol>
-	</nav>
-	<div id="buttonContainer">
-		<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Добавить</button>
+	<div id="loadingScreen">
+    <div id="loadingContent">
+    	<img src="./img/animation.gif">
+    </div>
+  </div>
+	<div id="contentContainer">
+		<nav aria-label="breadcrumb">
+			<h3>Список дел на:</h3>
+			<div id="breadCrumbToDoList">
+        <div class="input-group date">
+          <input type="text" id="toInput" onchange="switchDate()" style="display: none;" class="form-control">
+          <div class="input-group-append">
+          	<span id="calendarIcon" class="input-group-text"><i style="padding-right: 10px;" class="fas fa-calendar-alt"></i></span>
+          </div>
+        </div>
+				<button type="button" onclick="logout()" class="btn btn-outline-danger"><i style="display: inline;" class="fas fa-sign-out-alt"></i>Выйти</button>
+			</div>
+		</nav>
+		<div class="list-group" id="to-do-list-incomplite"></div>
+		<div class="list-group" id="to-do-list-complite"></div>
 	</div>
-	<div class="list-group" id="to-do-list-incomplite"></div>
-	<div class="list-group" id="to-do-list-complite"></div>
-	
+		<div id="buttonContainer">
+			<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Добавить</button>
+		</div>
 <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -42,6 +55,35 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="restore()">Отмена</button>
         <button type="button" class="btn btn-primary" onclick="compliteToDoItemOnServer()">Завершить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="sendReportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Создать отчёт об ошибке.</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Тема:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Опишите, пожалуйста, свою проблему:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+        <button type="button" onclick="send()" class="btn btn-primary">Отправить</button>
       </div>
     </div>
   </div>
@@ -181,7 +223,14 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+  var height = $(window).height();
 
+  $('#loadingScreen').css('height', height+"px");
+</script>
+<script src="./js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
+<script src="./js/beautifie.js"></script>
 <SCRIPT src="./js/to-do-list.js"></SCRIPT>
 </BODY>
 </HTML>
