@@ -277,16 +277,40 @@
             "admin": "zigler@mail.net"
         },
         {
-            "id": "f45d8e80-3a78-11ea-8ba8-83fa28223591",
-            "title": "ПОчистить зубы",
-            "description": "-",
-            "timeHours": "11",
-            "timeMinutes": "15",
+            "title": "Купить игрушку для кота",
+            "description": "Сходить в магазин через дорогу и купить там игрушку",
+            "timeHours": "14",
+            "timeMinutes": "00",
             "points": "5",
             "date": "2019-02-22",
             "userId": "mail@mail.net",
-            "status": "complite",
-            "admin": "zigler@mail.net"
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "f4a74670-8b71-11ea-8934-a57ab83b4b69"
+        },
+        {
+            "title": "Сходить к другу",
+            "description": "Сходить к другу и взять у него учебник по астрономии",
+            "timeHours": "16",
+            "timeMinutes": "00",
+            "points": "10",
+            "date": "2019-02-22",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "897d3c00-8b72-11ea-8934-a57ab83b4b69"
+        },
+        {
+            "title": "Приготовить домашнее задание",
+            "description": "Сделать д/з по математике и физике",
+            "timeHours": "18",
+            "timeMinutes": "00",
+            "points": "15",
+            "date": "2019-02-22",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "f1880fa0-8b72-11ea-8934-a57ab83b4b69"
         }
     ],
     "users": [

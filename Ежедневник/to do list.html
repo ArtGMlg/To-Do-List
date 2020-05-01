@@ -31,7 +31,7 @@
           	<span id="calendarIcon" class="input-group-text"><i style="padding-right: 10px;" class="fas fa-calendar-alt"></i></span>
           </div>
         </div>
-				<button type="button" onclick="logout()" class="btn btn-outline-danger"><i style="display: inline;" class="fas fa-sign-out-alt"></i>Выйти</button>
+				<button type="button" data-toggle="modal" data-target="#logoutModal" class="btn btn-outline-danger"><i style="display: inline;" class="fas fa-sign-out-alt"></i>Выйти</button>
 			</div>
 		</nav>
 		<div class="list-group" id="to-do-list-incomplite"></div>
@@ -88,6 +88,24 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Уже уходите?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Возвращайтесь скорей :)</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Отмена</button>
+          <a style="color: white" class="btn btn-primary" onclick="logout()">Выйти</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -218,7 +236,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="restore()">Закрыть</button>
         <button type="button" id="addNewToDoItemButton" class="btn btn-primary" onclick="addToDoItem()">Добавить</button>
-        <button type="button" id="updateToDoItemButton" class="btn btn-primary" onclick="updateToDoItemOnServer(this)">Обновить</button>
+        <button type="button" id="updateToDoItemButton" class="btn btn-primary" onclick="restore()" onclick="updateToDoItemOnServer(this)">Обновить</button>
       </div>
     </div>
   </div>

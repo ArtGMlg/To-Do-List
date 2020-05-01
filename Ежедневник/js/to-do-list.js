@@ -30,7 +30,6 @@ var toDoItem = {
 var admItem;
 
 $('#updateToDoItemButton').hide();
-$('body').css('height', $(window).height()*1.5+"px");
 
 var bb;
 
@@ -256,6 +255,7 @@ function addToDoItem() {
         		jumbotron.remove();
         	}
 			$('#exampleModal').modal('hide');
+			restore();
 			var toDoList= $('#to-do-list-incomplite');
 			if (toDoItem.date===chosenDate){
 				toDoList.append('<a id="'+ response.id +'" href="#" class="list-group-item list-group-item-action">'
