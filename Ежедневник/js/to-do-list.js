@@ -31,8 +31,6 @@ var admItem;
 
 $('#updateToDoItemButton').hide();
 
-var bb;
-
 $.ajax({
     url: "http://localhost:3000/tasks/get",
     type: 'GET',
@@ -40,8 +38,7 @@ $.ajax({
     dataType: 'jsonp',
     contentType: 'application/json; charset=utf-8',
     success: function (data) {
-    	bb = data;
-        addToDoItemsFromServer(data);
+      addToDoItemsFromServer(data);
     },
     error: function(){
     	$('#contentContainer').append(
@@ -83,9 +80,9 @@ function addToDoItemsFromServer(data) {
 			+ '</div>'
 			+ '<p class="mb-1 item-description">'+toDoItem.description+'</p>'
 			+ '<small class="item-points">'+pluralize(toDoItem.points, ['балл', 'балла', 'баллов']) +'</small>'
-			+ '<button type="button" class="btn btn-danger float-right" onclick="removeToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
-			+ '<button type="button" class="btn btn-primary float-right" onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
-			+ '<button type="button" class="btn btn-success float-right" onclick="compliteToDoItem(this)"><i class="far fa-check-circle"></i></button>'
+			+ '<button type="button" class="btn btn-danger float-right"  onclick="removeToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
+			+ '<button type="button" class="btn btn-primary float-right"  onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
+			+ '<button type="button" class="btn btn-success float-right"  onclick="compliteToDoItem(this)"><i class="far fa-check-circle"></i></button>'
 			+ '</a>'
 			);
 		}else if (chosenDate===data.tasks[i].date && email===data.tasks[i].userId && data.tasks[i].status === 'complite') {
@@ -318,20 +315,19 @@ function compliteToDoItemOnServer(target){
 	    $('#addNewToDoItemButton').show();
 	    $('#updateToDoItemButton').hide();
 	})
-
-    restore()
-
+  restore();
+  window.location.reload();
 }
 
 function restore(){
 	document.getElementById('to-do-tittle').value = "";
 	document.getElementById('to-do-description').value = "";
 	document.getElementById('to-do-points').value = "";
-    document.getElementById('to-do-time-hours').value = "" ;
-    document.getElementById('to-do-time-minutes').value = "" ;
-    $('#exampleModal').on('hidden.bs.modal', function (e) {
-	    $('#addNewToDoItemButton').show();
-	    $('#updateToDoItemButton').hide();
+  document.getElementById('to-do-time-hours').value = "" ;
+  document.getElementById('to-do-time-minutes').value = "" ;
+  $('#exampleModal').on('hidden.bs.modal', function (e) {
+    $('#addNewToDoItemButton').show();
+    $('#updateToDoItemButton').hide();
 	})
 }
 

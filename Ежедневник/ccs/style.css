@@ -34,3 +34,15 @@ body{
   backdrop-filter: saturate(120%) blur(15px);
   background-repeat: no-repeat;
 }
+
+#loadingScreen{
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background-color: rgba(255,255,255, .91);
+  backdrop-filter: blur(15px);
+}

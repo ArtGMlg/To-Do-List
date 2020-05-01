@@ -13,6 +13,7 @@ var regAdminRouter = require('./routes/users');
 var adminLoginRouter = require('./routes/login');
 var groupsRouter = require('./routes/groups');
 var bodyParser = require('body-parser');
+var imageRouter = require('./routes/image');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use('/complite', compliteRouter);
 app.use('/regAdmin', regAdminRouter);
 app.use('/adminLogin', adminLoginRouter);
 app.use('/groups', groupsRouter);
+app.use('/image', imageRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

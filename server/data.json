@@ -289,6 +289,7 @@
             "id": "f4a74670-8b71-11ea-8934-a57ab83b4b69"
         },
         {
+            "id": "897d3c00-8b72-11ea-8934-a57ab83b4b69",
             "title": "Сходить к другу",
             "description": "Сходить к другу и взять у него учебник по астрономии",
             "timeHours": "16",
@@ -296,11 +297,11 @@
             "points": "10",
             "date": "2019-02-22",
             "userId": "mail@mail.net",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "897d3c00-8b72-11ea-8934-a57ab83b4b69"
+            "status": "complite",
+            "admin": "zigler@mail.net"
         },
         {
+            "id": "f1880fa0-8b72-11ea-8934-a57ab83b4b69",
             "title": "Приготовить домашнее задание",
             "description": "Сделать д/з по математике и физике",
             "timeHours": "18",
@@ -308,9 +309,8 @@
             "points": "15",
             "date": "2019-02-22",
             "userId": "mail@mail.net",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "f1880fa0-8b72-11ea-8934-a57ab83b4b69"
+            "status": "complite",
+            "admin": "zigler@mail.net"
         }
     ],
     "users": [

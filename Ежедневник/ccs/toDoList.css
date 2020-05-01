@@ -118,3 +118,7 @@ h3{
 	background-color: rgba(255,255,255, .91);
 	backdrop-filter: blur(15px);
 }
+
+.input-group-append{
+	cursor: pointer;
+}
