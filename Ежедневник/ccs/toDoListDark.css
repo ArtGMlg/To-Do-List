@@ -1,6 +1,6 @@
 html{
+	backdrop-filter: blur(40px) saturate(150%) opacity(0%);
 	transition: all .3s linear;
-	backdrop-filter: blur(40px) saturate(150%) opacity(100%);
 }
 
 body{
@@ -10,6 +10,7 @@ body{
   height: auto;
   padding-bottom: 100px;
 	transition: all .3s linear;
+	background-color: #181819;
 }
 
 #loadingScreen{
@@ -20,7 +21,7 @@ body{
 	width: 100%;
 	height: 100%;
 	z-index: 100;
-	background-color: rgba(255,255,255,.96);
+	background-color: rgba(0,0,0,.96);
 	backdrop-filter: blur(15px);
 	transition: all .3s linear;
 }
@@ -34,9 +35,9 @@ nav{
   max-width: 50%;
   height: auto;
   background-color: transparent;
-  transition: all .3s linear;
   padding-top: 80px;
- }
+	transition: all .3s linear;
+}
 
 #to-do-list a.active small.text-muted {
 	color: #ffffff!important;
@@ -48,19 +49,19 @@ nav{
 }
 
 .list-group-item{
-	background-color: rgba(255,255,255, .5);
-	color: black;
 	transition: all .3s linear;
+  background-color: rgba(118,120,122,.5);
+  color: rgba(255,255,255,.85);
 }
 
 .list-group-item:hover{
-	background-color: rgba(255,255,255, .5);
-	color: black;
+  background-color: rgba(118,120,122,.5);
+  color: rgba(255,255,255,.85);
 }
 
 .list-group-item:focus{
-	background-color: rgba(255,255,255, .5);
-	color: black;
+  background-color: rgba(118,120,122,.5);
+  color: rgba(255,255,255,.85);
 }
 
 .complited-task{
@@ -103,12 +104,12 @@ nav{
 .input-group-text{
 	background-color: transparent;
 	border-color: transparent;
-	color: black;
+	color: white;
 	transition: all .3s linear;
 }
 
 h3{
-	color: black;
+	color: white;
 	mix-blend-mode: difference;
 	font-weight: bold;
 	transition: all .3s linear;
@@ -129,13 +130,14 @@ h3{
 }
 
 .jumbotron{
-	background-color: rgba(233, 236, 239, .5);
 	transition: all .3s linear;
+  background-color: rgb(37, 37, 39);
+  color: white;
 }
 
 .my-4{
 	transition: all .3s linear;
-	border-color: black;
+	border-color: white;
 }
 
 label{
@@ -144,30 +146,34 @@ label{
 }
 
 .theme-btn{
-	background-color: #007bff;
-  border-color: #007bff;
+	background-color: #7950f2;
+  border-color: #7950f2;
 }
 
 .theme-btn:focus{
-	box-shadow: 0 0 0 0.2rem rgba(38,143,255,.5);
+	box-shadow: 0 0 0 0.2rem rgba(121, 80, 242, .5);
 }
 
 .modal-content{
-	background-color: #fff;
-  color: black;
+	background-color: rgb(27, 27, 27);
+  color: white;
 }
 
 .form-control{
-	color: #495057;
-  background-color: white;
+	background-color: rgba(0, 0, 0, .5);
+  color: white;
+}
+
+.close{
+	color: white;
 }
 
 .tooltip{
 	margin-top: 8px;
 }
 
-.close{
-	color: black;
+.tooltip-inner{
+	background-color: #252527;
 }
 
 .arrow{
@@ -176,10 +182,6 @@ label{
 
 .arrow::before{
 	display: none;
-}
-
-.tooltip-inner{
-	background-color: #252527;
 }
 
 .stat-btn{
@@ -195,7 +197,8 @@ label{
 #weaContainer{
 	width: auto;
   height: fit-content;
-  background-color: rgba(233, 236, 239, .5);
+  background-color: rgb(37, 37, 39);
+  color: white;
   border-radius: 5px;
   position: absolute;
   z-index: 50;
@@ -242,7 +245,7 @@ div#weaContainer p {
 }
 
 #settings:hover{
-	color: #1c1c1c;
+	color: white;
 	transform: rotate(90deg);
 }
 
@@ -259,6 +262,6 @@ div#weaContainer p {
 		display: inline-block;
 	}
 	#settings{
-		right: 92%;
+		right: 98%;
 	}
 }

@@ -6,12 +6,14 @@
 .form-group{
   width: 82%;
   margin: auto;
+  transition: all .3s linear;
 }
 
 .form-control{
   width: 250px;
   margin-bottom: 15px;
   background-color: rgba(255, 255, 255, .5);
+  transition: all .3s linear;
 }
 
 .form-control:focus{
@@ -33,6 +35,7 @@ body{
   --webkit-backdrop-filter: saturate(120%) blur(15px);
   backdrop-filter: saturate(120%) blur(15px);
   background-repeat: no-repeat;
+  transition: all .3s linear;
 }
 
 #loadingScreen{
@@ -45,4 +48,13 @@ body{
   z-index: 100;
   background-color: rgba(255,255,255, .91);
   backdrop-filter: blur(15px);
+  transition: all .3s linear;
+}
+
+#themeSwitcherContainer{
+  height: fit-content;
+  position: fixed;
+  right: 10%;
+  top: 15px;
+  font-size: 30px;
 }

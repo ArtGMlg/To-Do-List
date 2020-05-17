@@ -15,8 +15,7 @@ router.get('/get', function(req, res, next){
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	request(options)
 		.then(function (response) {
-			var resp = response;
-		  res.jsonp(resp);
+		  res.jsonp(response);
 		})
 		.catch(function (err) {
 		    // Произошло что-то плохое, обработка ошибки

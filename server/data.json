@@ -311,6 +311,18 @@
             "userId": "mail@mail.net",
             "status": "complite",
             "admin": "zigler@mail.net"
+        },
+        {
+            "title": "Прочитать книгу",
+            "description": "Прочитать 15 глав романа \"Война и Мир\"",
+            "timeHours": "20",
+            "timeMinutes": "00",
+            "points": "25",
+            "date": "2019-02-22",
+            "userId": "mail@mail.net",
+            "status": "incomplite",
+            "admin": "zigler@mail.net",
+            "id": "16c222d0-8ec3-11ea-8f8e-adb2bd6432ee"
         }
     ],
     "users": [

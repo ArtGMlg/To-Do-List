@@ -158,4 +158,36 @@ router.post('/complite', function(req, res, next) {
       }));
   });
 });
+
+router.get('/getUserStat/:userId', function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.contentType('json');
+	res.setHeader('Content-Type', 'application/json');
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+	var tasks = data.tasks;
+	var userTasks = [];
+	var count = 0;
+	var id = req.query.userId;
+	for (i = 0; i<tasks.length; i++){
+		if (id === tasks[i].userId) 	{
+			userTasks.push(tasks[i]);
+		}
+	}
+	var incomplite = 0;
+	var complite = 0;
+	for (j = 0; j < userTasks.length; j++) {
+		if (userTasks[j].status === 'incomplite') {
+			incomplite = incomplite + 1;
+		}else if (userTasks[j].status === 'complite') {
+			complite = complite + 1;
+		}
+	}
+	var status = {
+		complitedTasks: complite,
+		incomplitedTasks: incomplite
+	}
+	res.jsonp(status);
+});
+
 module.exports = router;
