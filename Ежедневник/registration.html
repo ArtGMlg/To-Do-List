@@ -12,8 +12,13 @@
   <BODY>
   <div id="loadingScreen">
     <div id="loadingContent">
-      <img src="./img/animation.gif">
+      <img id="loadingImage">
     </div>
+  </div>
+  <div style="display: none;" id="themeSwitcherContainer" data-toggle="tooltip" data-placement="left" title="Изменить тему оформления.">
+    <input style="display: none;" type="checkbox" onclick="switchTheme()" id="themeSwitcher" name="checkbox">
+    <label style="display: none; color: #7950f2" for="themeSwitcher" id="dark"><i class="fas fa-cloud-moon"></i></label>
+    <label for="themeSwitcher" id="light"><i class="fas fa-cloud-sun"></i></label>
   </div>
     <div class="reg-form" style="width: 90%; margin: auto;">
       <div class="content-container">
@@ -51,8 +56,25 @@
         </div>
       </div>
     </div>
+    <script type="text/javascript">
+      var height = $(window).height();
+
+      var theme = localStorage.getItem('theme');
+
+      $('#loadingImage').attr('src', './img/animation-'+ theme +'.gif');
+    </script>
     <script src="./js/beautifie.js"></script>
     <SCRIPT>
+    if (localStorage.getItem('theme') === 'dark') {
+      $('.content-container').css({
+        'background-color': '#252527',
+        'color': 'white'
+      });
+      $('.form-control').css({
+        'background-color': 'rgba(0,0,0,.5)',
+        'color': 'white'
+      })
+    }
       $('.reg-form').css({
         'padding-top': ($(window).height() - $('.reg-form').height())/2 + "px",
         'opacity': '1'
