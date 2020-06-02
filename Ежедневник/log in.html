@@ -12,44 +12,32 @@
         window.location="to do list.html";
       }
     </script>
-    <link rel="stylesheet" type="text/css" href="./ccs/style.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
   </HEAD>
   <BODY>
+    <div id="bgBlurLt"></div>
   <div id="loadingScreen">
     <div id="loadingContent">
       <img id="loadingImage">
     </div>
   </div>
-  <div style="display: none;" id="themeSwitcherContainer" data-toggle="tooltip" data-placement="left" title="Изменить тему оформления.">
-    <input style="display: none;" type="checkbox" onclick="switchTheme()" id="themeSwitcher" name="checkbox">
-    <label style="display: none; color: #7950f2" for="themeSwitcher" id="dark"><i class="fas fa-cloud-moon"></i></label>
-    <label for="themeSwitcher" id="light"><i class="fas fa-cloud-sun"></i></label>
-  </div>
-    <div class="login-form" style="width: 90%; margin: auto;">
-      <div class="content-container">
-        <div style="padding-top: 25px;" class="form-group">
-          <label for="exampleInputEmail1">E-mail</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" autocomplete="on" placeholder="Введите E-mail">
-        </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1">Пароль</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Введите пароль">
-        </div>
-        <div id="errorMessage" style="color: #f80000; margin-bottom: 15px;"></div>
-        <div style="width: 100%; padding-bottom: 25px;">
-          <span style="display: inline-block; margin-right: 5px;"><button type="submit" class="btn btn-primary" onclick="auth()">Войти</button></span>
-          <span style="display: inline-block;">
-            <a class="btn btn-outline-primary" role="button" href="registration.html">Зарегистрироваться</a>
-          </span>
-        </div>
+    <div class="content-container padding-container">
+      <div style="padding-top: 25px;" class="form-group">
+        <label for="exampleInputEmail1">E-mail</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" autocomplete="on" placeholder="Введите E-mail">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Пароль</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Введите пароль">
+      </div>
+      <div id="errorMessage" style="color: #f80000; margin-bottom: 15px;"></div>
+      <div style="width: 100%; padding-bottom: 25px;">
+        <span style="display: inline-block; margin-right: 5px;"><button type="submit" class="btn btn-primary" onclick="auth()">Войти</button></span>
+        <span style="display: inline-block;">
+          <a class="btn btn-outline-primary" role="button" href="registration.html">Зарегистрироваться</a>
+        </span>
       </div>
     </div>
-    <script type="text/javascript">
-      var height = $(window).height();
-
-      var theme = localStorage.getItem('theme');
-
-      $('#loadingImage').attr('src', './img/animation-'+ theme +'.gif');
     </script>
     <script src="./js/beautifie.js"></script>
   <SCRIPT>

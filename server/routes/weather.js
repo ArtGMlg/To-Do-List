@@ -3,7 +3,6 @@ const request = require('request-promise');
 const app = express();
 var parseString = require('xml2js').parseString;
 var router = express.Router();
-var xml;
 
 router.get('/get/:city', function(req, res, next){
 	var city = req.query.city;
@@ -24,7 +23,7 @@ router.get('/get/:city', function(req, res, next){
 		  });
 		})
 		.catch(function (err) {
-		    res.end(JSON.stringify('Не удалось получить прогноз'))
+		  res.send(JSON.stringify(err))
 	})
 })
 	

@@ -1,12 +1,35 @@
 function randomInteger(min, max) {
-  let rand = min + Math.random() * (max + 1 - min);
+  var rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
 }
 
 if (!localStorage.getItem('theme')){
   localStorage.setItem('theme', 'light');
+  $('#themeSwitcher').prop('checked', false);
 }else if(localStorage.getItem('theme') === 'dark'){
   $('#themeSwitcher').prop('checked', true);
+}else if(localStorage.getItem('theme') === 'light'){
+  $('#themeSwitcher').prop('checked', false);
+}
+
+$('#loadingImage').attr('src', './img/animation-'+ localStorage.getItem('theme') +'.gif');
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+if ($(window).width() <= 590) {
+  $('#themeSwitcherContainer').tooltip('disable')
+}
+
+window.addEventListener('resize', onResize, false);
+
+function onResize() {
+  if ($(window).width() >= 590) {
+    $('#themeSwitcherContainer').tooltip('enable')
+  }else if ($(window).width() <= 590) {
+    $('#themeSwitcherContainer').tooltip('disable')
+  }
 }
 
 var background;
@@ -18,7 +41,7 @@ $.ajax({
   dataType: 'jsonp',
   contentType: 'application/json; charset=utf-8',
   success: function (data) {
-    printResult(data);
+    setBackground(data);
   },
   error: function(){
     setBackgroundError();
@@ -31,29 +54,33 @@ function setBackgroundError() {
   switchTheme();
 }
 
-function printResult(result) {
+function setBackground(result) {
   background = "http://bing.com" + result.images[0].url;
   $('body').css('background', 'url('+ background +') center/cover fixed');
   switchTheme();
 };
 
-$('.login-form').css({
-  'padding-top': ($(window).height() - $('.login-form').height())/2 - 70 + "px",
+$('.padding-container').css({
+  'margin-top': ($(window).height() - $('.padding-container').height())/2 - 70 + "px",
   'opacity': '1'
 });
 
 function switchTheme() {
-  if (document.getElementById('themeSwitcher').checked) {
-    localStorage.setItem('theme', 'dark');
+  if ($('#themeSwitcher').prop('checked') === true) {
+    localStorage.setItem('theme', 'dark'); 
+    $('head').append('<link rel="stylesheet" type="text/css" href="./css/darkCalendar.css">');
     $('#loadingScreen').css('background-color', 'rgba(0,0,0,.96)');
     $('#light').css("opacity", "0");
     $('#light').css("visibility", "hidden");
     $('#dark').css("visibility", "");
     $('#dark').css("opacity", "1");
-    $('html').css({
+    $('#bgBlur').css({
       'backdrop-filter': 'blur(40px) saturate(150%) opacity(0%)'
     });
-    $('body').css('background-color', '#181819');
+    $('body').css({
+      'background-image': 'none',
+      'background-color': '#181819'
+    });
     $('.list-group-item').css({
       'background-color': 'rgba(118,120,122,.5)',
       'color': 'rgba(255,255,255,.85)'
@@ -82,27 +109,32 @@ function switchTheme() {
       'background-color': 'rgb(37, 37, 39)',
       'color': 'white'
     });
-    $('#settings').css('color', '#b3b3b3');
-    $('#settings').hover(
+    $('.weaTools').css('color', '#b3b3b3');
+    $('.weaTools').hover(
       function (){
         $(this).css('color', 'white');
       },
       function (){
         $(this).css('color', '#b3b3b3');
       }
-    )
+    );
+    $('.progress').css('background-color', '#0c0c0d');
   }else{
     localStorage.setItem('theme', 'light');
+    $('link[href="./css/darkCalendar.css"]').remove();
     $('#loadingScreen').css('background-color', '');
     $('#dark').css("opacity", "0");
     $('#dark').css("visibility", "hidden");
     $('#light').css("visibility", "");
     $('#light').css("opacity", "1");
-    $('html').css({
+    $('#bgBlur').css({
       'backdrop-filter': 'blur(40px) saturate(150%) opacity(100%)',
       'background-color': ''
     });
-    $('body').css('background-color', '#181819');
+    $('body').css({
+      'background': 'url('+ background +') center/cover fixed',
+      'background-color': '#181819'
+    });
     $('.list-group-item').css({
       'background-color': 'rgba(255,255,255, .5)',
       'color': 'black'
@@ -133,8 +165,8 @@ function switchTheme() {
       'background-color': 'rgba(233, 236, 239, .5)',
       'color': 'black'
     });
-    $('#settings').css('color', '#b3b3b3');
-    $('#settings').hover(
+    $('.weaTools').css('color', '#b3b3b3');
+    $('.weaTools').hover(
       function (){
         $(this).css('color', '#1c1c1c')
       },
@@ -142,6 +174,7 @@ function switchTheme() {
         $(this).css('color', '#b3b3b3')
       }
     );
+    $('.progress').css('background-color', '#e9ecef');
   };
   var loadingScreen = $('#loadingScreen');
   setTimeout(function(){if (loadingScreen){loadingScreen.remove();}}, 500);
@@ -162,7 +195,3 @@ $(".theme-btn").blur(function(){
     $(this).css("box-shadow", "none");
   }
 });
-
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})

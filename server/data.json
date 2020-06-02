@@ -145,102 +145,6 @@
             "status": "incomplite"
         },
         {
-            "title": "sas-smislam145",
-            "description": "jhgjh",
-            "timeHours": "16",
-            "timeMinutes": "14",
-            "points": "12",
-            "date": "2019-11-24",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "d357c590-0eac-11ea-83b6-c5a8c4838ff2",
-            "userId": "Artem@mail.ru"
-        },
-        {
-            "title": "sas-smislam145",
-            "description": "jhgjh",
-            "timeHours": "16",
-            "timeMinutes": "14",
-            "points": "12",
-            "date": "2019-11-24",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "d357c590-0eac-11ea-83b6-c5a8c4838ff2",
-            "userId": "Artem@mail.ru"
-        },
-        {
-            "title": "sas-smislam145",
-            "description": "jhgjh",
-            "timeHours": "16",
-            "timeMinutes": "14",
-            "points": "12",
-            "date": "2019-11-24",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "34bd3e50-0ead-11ea-ad2c-11ec1b7fe896",
-            "userId": "Artem@mail.ru"
-        },
-        {
-            "title": "sas-smislam145",
-            "description": "jhgjh",
-            "timeHours": "16",
-            "timeMinutes": "14",
-            "points": "12",
-            "date": "2019-11-24",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "34bd3e50-0ead-11ea-ad2c-11ec1b7fe896",
-            "userId": "Artem@mail.ru"
-        },
-        {
-            "title": "sas-smislam145",
-            "description": "jhgjh",
-            "timeHours": "16",
-            "timeMinutes": "14",
-            "points": "12",
-            "date": "2019-11-24",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "999596b0-0ead-11ea-add7-070b8b9b919f",
-            "userId": "Artem@mail.ru"
-        },
-        {
-            "title": "sas-smislam145",
-            "description": "jhgjh",
-            "timeHours": "16",
-            "timeMinutes": "14",
-            "points": "12",
-            "date": "2019-11-24",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "999596b0-0ead-11ea-add7-070b8b9b919f",
-            "userId": "Artem@mail.ru"
-        },
-        {
-            "title": "sas-smislam145",
-            "description": "jhgjh",
-            "timeHours": "16",
-            "timeMinutes": "14",
-            "points": "12",
-            "date": "2019-11-24",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "20e924b0-0eae-11ea-9688-7f035b0860fc",
-            "userId": "Artem@mail.ru"
-        },
-        {
-            "title": "sas-smislam145",
-            "description": "jhgjh",
-            "timeHours": "16",
-            "timeMinutes": "14",
-            "points": "12",
-            "date": "2019-11-24",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "20e924b0-0eae-11ea-9688-7f035b0860fc",
-            "userId": "Artem@mail.ru"
-        },
-        {
             "title": "asc",
             "description": "asc",
             "timeHours": "16",
@@ -251,18 +155,6 @@
             "admin": "zigler@mail.net",
             "id": "20b3a050-0eaf-11ea-b6f6-7111c40fa665",
             "userId": "zigler@mail.net"
-        },
-        {
-            "title": "asc",
-            "description": "asc",
-            "timeHours": "16",
-            "timeMinutes": "14",
-            "points": "12",
-            "date": "2019-11-24",
-            "status": "incomplite",
-            "admin": "zigler@mail.net",
-            "id": "20b3a051-0eaf-11ea-b6f6-7111c40fa665",
-            "userId": "Artem@mail.ru"
         },
         {
             "id": "bbf8a6a0-1422-11ea-af0c-ed80e53f1bf7",
@@ -323,6 +215,54 @@
             "status": "incomplite",
             "admin": "zigler@mail.net",
             "id": "16c222d0-8ec3-11ea-8f8e-adb2bd6432ee"
+        },
+        {
+            "id": "84597ad0-9a96-11ea-aff1-994b9ad36324",
+            "title": "Test",
+            "description": "Test",
+            "timeHours": "20",
+            "timeMinutes": "17",
+            "points": "1",
+            "date": "2019-11-24",
+            "userId": "Artem@mail.ru",
+            "status": "complite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "id": "8db62d80-9a96-11ea-aff1-994b9ad36324",
+            "title": "Test2",
+            "description": "Test2",
+            "timeHours": "15",
+            "timeMinutes": "17",
+            "points": "2",
+            "date": "2019-11-24",
+            "userId": "Artem@mail.ru",
+            "status": "complite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "id": "53533550-9a98-11ea-aff1-994b9ad36324",
+            "title": "FFF",
+            "description": "DDD",
+            "timeHours": "16",
+            "timeMinutes": "11",
+            "points": "11",
+            "date": "2019-11-24",
+            "userId": "Artem@mail.ru",
+            "status": "complite",
+            "admin": "zigler@mail.net"
+        },
+        {
+            "id": "5b48e880-9a99-11ea-aff1-994b9ad36324",
+            "title": "FDS",
+            "description": "FSD",
+            "timeHours": "21",
+            "timeMinutes": "20",
+            "points": "7",
+            "date": "2019-11-24",
+            "userId": "Artem@mail.ru",
+            "status": "incomplite",
+            "admin": "zigler@mail.net"
         }
     ],
     "users": [

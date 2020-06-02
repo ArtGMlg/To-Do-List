@@ -1,6 +1,7 @@
-<HTML>
-<HEAD>
-	<TITLE>План на день</TITLE>
+<html>
+<head>
+  <meta charset="utf-8">
+	<title>План на день</title>
 	<script>
 		if (!localStorage.getItem('isLogIn')) {
 			window.location="log in.html?redirectedFrom=to do list.html";
@@ -12,16 +13,19 @@
 	<script src="https://kit.fontawesome.com/60c6536c6a.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-  <link rel="stylesheet" type="text/css" href="./ccs/bootstrap-datepicker3.min.css">
-  <link rel="stylesheet" type="text/css" href="./ccs/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/jquery-ui.css">
 	<script src="./js/addLink.js"></script>
-</HEAD>
-<BODY>
+</head>
+<body>
+  <div id="bgBlur"></div>
+
 	<div id="loadingScreen" style="height: 100%; width: 100%">
     <div id="loadingContent">
     	<img id="loadingImage">
     </div>
   </div>
+
 	<div id="contentContainer">
 		<nav aria-label="breadcrumb">
 			<h3>Список дел на:</h3>
@@ -37,311 +41,307 @@
 		</nav>
 		<div class="list-group" id="to-do-list-incomplite"></div>
 		<div class="list-group" id="to-do-list-complite"></div>
-	</div>
+  </div>
+
+  <div id="buttonContainer">
+    <button style="margin-right: 10px" id="statBtn" class="btn stat-btn btn-primary theme-btn btn-lg" onclick="showStat()" role="button"><i class="far fa-chart-bar"></i></button>
+    <button type="button" class="btn btn-primary theme-btn btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Добавить</button>
+  </div>
+
 	<div id="weaContainer">
-		<i data-toggle="modal" data-target="#weaModal" onclick="loadCitiesNames()" id="settings" class="fas fa-cog"></i>
+    <i class="fas fa-sync-alt weaTools" id="refresh" onclick="getForecast()"></i>
+		<i data-toggle="modal" data-target="#weaModal" onclick="loadCitiesNames()" id="settings" class="fas fa-cog weaTools"></i>
 		<div id="weaImg">	
-			<img style="width: 75px;" id="skyImg" src="./weatherIcons/sunny.png">
+			<img style="width: 75px;" id="skyImg" src="./weatherIcons/32.png">
 		</div>
 		<div id="weaInf">
 			<p id="sky">&mdash;</p>
 			<p id="temperature">--/--&#8451;</p>
 			<p id="city">&mdash;</p>
-			<p id="provider"><a target="_blank" href="http://www.foreca.com/">Foreca</a></p>
+			<p id="provider"><a id="providerLink" target="_blank" href="https://www.msn.com/ru-ru/weather">MSN weather</a></p>
 		</div>
 	</div>
+
 	<div id="themeSwitcherContainer" data-toggle="tooltip" data-placement="left" title="Изменить тему оформления.">
 		<input style="display: none;" type="checkbox" onclick="switchTheme()" id="themeSwitcher" name="checkbox">
 		<label style="visibility: hidden; position: absolute; color: #7950f2" for="themeSwitcher" id="dark"><i class="fas fa-cloud-moon"></i></label>
 		<label style="position: absolute; color: #f39f18" for="themeSwitcher" id="light"><i class="far fa-sun"></i></label>
 	</div>
-	<div id="buttonContainer">
-		<button style="margin-right: 10px" class="btn stat-btn btn-primary theme-btn btn-lg" onclick="showStat()" role="button"><i class="far fa-chart-bar"></i></button>
-		<button type="button" class="btn btn-primary theme-btn btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Добавить</button>
-	</div>
-<div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLiveLabel">Завершение задания</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="restore()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Вы точно хотите завершить задание? <br> Это действие будет невозможно отменить.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="restore()">Отмена</button>
-        <button type="button" class="btn theme-btn btn-primary" onclick="compliteToDoItemOnServer()">Завершить</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="modal fade" id="sendReportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Создать отчёт об ошибке.</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Тема:</label>
-            <input type="text" class="form-control" id="recipient-name">
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Опишите, пожалуйста, свою проблему:</label>
-            <textarea class="form-control" id="message-text"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-        <button type="button" onclick="send()" class="btn theme-btn btn-primary">Отправить</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Уже уходите?</h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">Возвращайтесь скорей :)</div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Отмена</button>
-        <a style="color: white" class="btn theme-btn btn-primary" onclick="logout()">Выйти</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="statModal" tabindex="-1" role="dialog" aria-labelledby="statModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="statModalLabel"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div id="statModalBody" class="modal-body">
-        <div id="today">
-        	<p id="todayStat"></p>
-        	<div class="progress">
-					  <div class="progress-bar" id="incompliteProgressToday" role="progressbar"></div>
-					  <div class="progress-bar bg-success" id="compliteProgressToday" role="progressbar"></div>
-					</div>
-          <div class="mt-4 text-center small">
-            <span class="mr-2">
-              <i class="fas fa-circle text-primary"></i> Невыполненные
-            </span>
-            <span class="mr-2">
-              <i class="fas fa-circle text-success"></i> Выполненные
-            </span>
-          </div>
+  <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLiveLabel">Завершение задания</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="restore()">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <hr class="my-4">
-        <div style="margin-top: 15px" id="allTime">
-        	<p id="allTimeStat"></p>
-        	<div class="progress">
-					  <div class="progress-bar" id="incompliteProgressAllTime" role="progressbar"></div>
-					  <div class="progress-bar bg-success" id="compliteProgressAllTime" role="progressbar"></div>
-					</div>
-          <div class="mt-4 text-center small">
-            <span class="mr-2">
-              <i class="fas fa-circle text-primary"></i> Невыполненные
-            </span>
-            <span class="mr-2">
-              <i class="fas fa-circle text-success"></i> Выполненные
-            </span>
-          </div>
+        <div class="modal-body">
+          <p>Вы точно хотите завершить задание? <br> Это действие будет невозможно отменить.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="restore()">Отмена</button>
+          <button type="button" class="btn theme-btn btn-primary" onclick="compliteToDoItemOnServer()">Завершить</button>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+    </div>
+  </div>
+
+  <div class="modal fade" id="sendReportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Создать отчёт об ошибке.</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Тема:</label>
+              <input type="text" class="form-control" id="recipient-name">
+            </div>
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Опишите, пожалуйста, свою проблему:</label>
+              <textarea class="form-control" id="message-text"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+          <button type="button" onclick="send()" class="btn theme-btn btn-primary">Отправить</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="weaModal" tabindex="-1" role="dialog" aria-labelledby="weaModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="weaModalLabel">Выберите город:</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="weaModalBody">
-      	<input id="cityInput" class="form-control" type="text" placeholder="Введите название города">
-				<p style="padding: 20px 0px 0px 0px; text-align: center;" id="author">Icons by <a target="_blank" href="https://www.iconfinder.com/andinur">andinur</a></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-        <button type="button" id="weaButton" class="btn theme-btn btn-primary" onclick="setCity()">Сохранить</button>
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Уже уходите?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">Возвращайтесь скорей :)</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Отмена</button>
+          <a style="color: white" class="btn theme-btn btn-primary" onclick="logout()">Выйти</a>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Добавить дело</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="restore()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="to-do-tittle" class="col-form-label">Заголовок:</label>
-            <input type="text" class="form-control" id="to-do-tittle">
+  <div class="modal fade" id="statModal" tabindex="-1" role="dialog" aria-labelledby="statModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="statModalLabel"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="statModalBody" class="modal-body">
+          <div id="today">
+          	<p id="todayStat"></p>
+          	<div class="progress">
+  					  <div class="progress-bar" id="incompliteProgressToday" role="progressbar"></div>
+  					  <div class="progress-bar bg-success" id="compliteProgressToday" role="progressbar"></div>
+  					</div>
+            <div class="mt-4 text-center small">
+              <span class="mr-2">
+                <i class="fas fa-circle text-primary"></i> Невыполненные
+              </span>
+              <span class="mr-2">
+                <i class="fas fa-circle text-success"></i> Выполненные
+              </span>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="to-do-description" class="col-form-label">Описание:</label>
-            <textarea class="form-control" id="to-do-description"></textarea>
+          <hr class="my-4">
+          <div style="margin-top: 15px" id="allTime">
+          	<p id="allTimeStat"></p>
+          	<div class="progress">
+  					  <div class="progress-bar" id="incompliteProgressAllTime" role="progressbar"></div>
+  					  <div class="progress-bar bg-success" id="compliteProgressAllTime" role="progressbar"></div>
+  					</div>
+            <div class="mt-4 text-center small">
+              <span class="mr-2">
+                <i class="fas fa-circle text-primary"></i> Невыполненные
+              </span>
+              <span class="mr-2">
+                <i class="fas fa-circle text-success"></i> Выполненные
+              </span>
+            </div>
           </div>
-		  <div class="form-group">
-            <label for="to-do-points" class="col-form-label">Количество баллов:</label>
-            <input type="text" class="form-control" id="to-do-points">
-          </div>
-		  <div class="form-group">
-            <div class="form-group">
-				<label for="to-do-time-hours">Часы:</label>
-				<select class="form-control" id="to-do-time-hours">
-				  <option>0</option>
-				  <option>1</option>
-				  <option>2</option>
-				  <option>3</option>
-				  <option>4</option>
-				  <option>5</option>
-				  <option>6</option>
-				  <option>7</option>
-				  <option>8</option>
-				  <option>9</option>
-				  <option>10</option>
-				  <option>11</option>
-				  <option>12</option>
-				  <option>13</option>
-				  <option>14</option>
-				  <option>15</option>
-				  <option>16</option>
-				  <option>17</option>
-				  <option>18</option>
-				  <option>19</option>
-				  <option>20</option>
-				  <option>21</option>
-				  <option>22</option>
-				  <option>23</option>
-				</select>
-			</div>
-			<div class="form-group">
-            <div class="form-group">
-				<label for="to-do-time-minutes">Минуты:</label>
-				<select class="form-control" id="to-do-time-minutes">
-				  <option>00</option>
-				  <option>01</option>
-				  <option>02</option>
-				  <option>03</option>
-				  <option>04</option>
-				  <option>05</option>
-				  <option>06</option>
-				  <option>07</option>
-				  <option>08</option>
-				  <option>09</option>
-				  <option>10</option>
-				  <option>11</option>
-				  <option>12</option>
-				  <option>13</option>
-				  <option>14</option>
-				  <option>15</option>
-				  <option>16</option>
-				  <option>17</option>
-				  <option>18</option>
-				  <option>19</option>
-				  <option>20</option>
-				  <option>21</option>
-				  <option>22</option>
-				  <option>23</option>				  
-				  <option>24</option>
-				  <option>25</option>
-				  <option>26</option>
-				  <option>27</option>
-				  <option>28</option>
-				  <option>29</option>
-				  <option>30</option>
-				  <option>31</option>
-				  <option>32</option>
-				  <option>33</option>
-				  <option>34</option>
-				  <option>35</option>
-				  <option>36</option>
-				  <option>37</option>
-				  <option>38</option>
-				  <option>39</option>
-				  <option>40</option>
-				  <option>41</option>
-				  <option>42</option>
-				  <option>43</option>
-				  <option>44</option>
-				  <option>45</option>
-				  <option>46</option>
-				  <option>47</option>				  
-				  <option>48</option>
-				  <option>49</option>
-				  <option>50</option>
-				  <option>51</option>
-				  <option>52</option>
-				  <option>53</option>
-				  <option>54</option>
-				  <option>55</option>
-				  <option>56</option>
-				  <option>57</option>
-				  <option>58</option>
-				  <option>59</option>
-				</select>
-			</div>
-            <div class="form-group">
-            	<label for="to-do-date">Дата</label>
-				<input type="date" onchange='onDateChange()' class="form-control" id="to-do-date" name="date" placeholder="Дата" required>
-			</div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="restore()">Закрыть</button>
-        <button type="button" id="addNewToDoItemButton" class="btn theme-btn btn-primary" onclick="addToDoItem()">Добавить</button>
-        <button type="button" id="updateToDoItemButton" class="btn theme-btn btn-primary" onclick="restore()" onclick="updateToDoItemOnServer(this)">Обновить</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<script type="text/javascript">
-  var height = $(window).height();
 
-  var theme = localStorage.getItem('theme');
+  <div class="modal fade" id="weaModal" tabindex="-1" role="dialog" aria-labelledby="weaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="weaModalLabel">Выберите город:</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="weaModalBody">
+        	<input id="cityInput" class="form-control" type="text" placeholder="Введите название города">
+  				<p style="padding: 20px 0px 0px 0px; text-align: center;" id="author">Icons by <a target="_blank" href="https://www.iconfinder.com/andinur">andinur</a></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+          <button type="button" id="weaButton" class="btn theme-btn btn-primary" onclick="setCity()">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  $('#loadingImage').attr('src', './img/animation-'+ theme +'.gif');
-</script>
-<script src="./js/beautifie.js"></script>
-<script src="./js/bootstrap-datepicker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
-<SCRIPT src="./js/to-do-list.js"></SCRIPT>
-</BODY>
-</HTML>
-
-
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Добавить дело</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="restore()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="to-do-tittle" class="col-form-label">Заголовок:</label>
+              <input type="text" class="form-control" id="to-do-tittle">
+            </div>
+            <div class="form-group">
+              <label for="to-do-description" class="col-form-label">Описание:</label>
+              <textarea class="form-control" id="to-do-description"></textarea>
+            </div>
+  		  <div class="form-group">
+              <label for="to-do-points" class="col-form-label">Количество баллов:</label>
+              <input type="text" class="form-control" id="to-do-points">
+            </div>
+  		  <div class="form-group">
+              <div class="form-group">
+  				<label for="to-do-time-hours">Часы:</label>
+  				<select class="form-control" id="to-do-time-hours">
+  				  <option>0</option>
+  				  <option>1</option>
+  				  <option>2</option>
+  				  <option>3</option>
+  				  <option>4</option>
+  				  <option>5</option>
+  				  <option>6</option>
+  				  <option>7</option>
+  				  <option>8</option>
+  				  <option>9</option>
+  				  <option>10</option>
+  				  <option>11</option>
+  				  <option>12</option>
+  				  <option>13</option>
+  				  <option>14</option>
+  				  <option>15</option>
+  				  <option>16</option>
+  				  <option>17</option>
+  				  <option>18</option>
+  				  <option>19</option>
+  				  <option>20</option>
+  				  <option>21</option>
+  				  <option>22</option>
+  				  <option>23</option>
+  				</select>
+  			</div>
+  			<div class="form-group">
+              <div class="form-group">
+  				<label for="to-do-time-minutes">Минуты:</label>
+  				<select class="form-control" id="to-do-time-minutes">
+  				  <option>00</option>
+  				  <option>01</option>
+  				  <option>02</option>
+  				  <option>03</option>
+  				  <option>04</option>
+  				  <option>05</option>
+  				  <option>06</option>
+  				  <option>07</option>
+  				  <option>08</option>
+  				  <option>09</option>
+  				  <option>10</option>
+  				  <option>11</option>
+  				  <option>12</option>
+  				  <option>13</option>
+  				  <option>14</option>
+  				  <option>15</option>
+  				  <option>16</option>
+  				  <option>17</option>
+  				  <option>18</option>
+  				  <option>19</option>
+  				  <option>20</option>
+  				  <option>21</option>
+  				  <option>22</option>
+  				  <option>23</option>				  
+  				  <option>24</option>
+  				  <option>25</option>
+  				  <option>26</option>
+  				  <option>27</option>
+  				  <option>28</option>
+  				  <option>29</option>
+  				  <option>30</option>
+  				  <option>31</option>
+  				  <option>32</option>
+  				  <option>33</option>
+  				  <option>34</option>
+  				  <option>35</option>
+  				  <option>36</option>
+  				  <option>37</option>
+  				  <option>38</option>
+  				  <option>39</option>
+  				  <option>40</option>
+  				  <option>41</option>
+  				  <option>42</option>
+  				  <option>43</option>
+  				  <option>44</option>
+  				  <option>45</option>
+  				  <option>46</option>
+  				  <option>47</option>				  
+  				  <option>48</option>
+  				  <option>49</option>
+  				  <option>50</option>
+  				  <option>51</option>
+  				  <option>52</option>
+  				  <option>53</option>
+  				  <option>54</option>
+  				  <option>55</option>
+  				  <option>56</option>
+  				  <option>57</option>
+  				  <option>58</option>
+  				  <option>59</option>
+  				</select>
+  			</div>
+              <div class="form-group">
+              	<label for="to-do-date">Дата</label>
+  				<input type="date" onchange='onDateChange()' class="form-control" id="to-do-date" name="date" placeholder="Дата" required>
+  			</div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="restore()">Закрыть</button>
+          <button type="button" id="addNewToDoItemButton" class="btn theme-btn btn-primary" onclick="addToDoItem()">Добавить</button>
+          <button type="button" id="updateToDoItemButton" class="btn theme-btn btn-primary" onclick="updateToDoItemOnServer(this)">Обновить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="./js/beautifie.js"></script>
+  <script src="./js/bootstrap-datepicker.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
+  <script src="./js/to-do-list.js"></script>
+</body>
+</html>

@@ -1,8 +1,0 @@
-#to-do-list a.active small {
-	color: #ffffff;
-}
-
-.complited-task{
-	text-decoration: line-through;
-  color: #cccccc;
-}

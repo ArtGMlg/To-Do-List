@@ -1,7 +1,10 @@
 $('#breadCrumbToDoList .input-group.date').datepicker({
   language: "ru",
   orientation: "bottom auto",
-  format: "yyyy-mm-dd"
+  format: "yyyy-mm-dd",
+  autoclose: true,
+  todayHighlight: true,
+  disableTouchKeyboard: true
 });
 
 var searchParams = new URLSearchParams(window.location.search);
@@ -20,7 +23,7 @@ if (!chosenDate) {
   }
   var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
   chosenDate = today.getFullYear() + '-' + month + '-' + day;
-  var chosenDateString = days[today.getDay()] + ', ' + day + ' ' + pluralizedMonth;
+  var chosenDateString = days[today.getDay()] + ', ' + today.getDate() + ' ' + pluralizedMonth;
 }else{
   var today = new Date();
   var month = today.getMonth() + 1;
@@ -35,7 +38,10 @@ if (!chosenDate) {
   var todayDate = today.getFullYear() + '-' + month + '-' + day;
   var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
   if (chosenDate === todayDate) {
-    var chosenDateString = days[today.getDay()] + ', ' + day + ' ' + pluralizedMonth;
+    var chosenDateString = days[today.getDay()] + ', ' + today.getDate() + ' ' + pluralizedMonth;
+  }else if (new Date(chosenDate).getDate() - day === 1 && (new Date(chosenDate).getMonth()+1) === parseInt(month)) {
+    var chosenMonth = new Date(chosenDate).getMonth() + 1;
+    var chosenDateString = 'Завтра' + ', ' + new Date(chosenDate).getDate() + ' ' + pluralizeMonth(chosenMonth);
   }else{
     var chosenDateString = new Date(chosenDate).toLocaleString('ru', {
       year: 'numeric',
@@ -47,7 +53,6 @@ if (!chosenDate) {
 
 document.getElementById('to-do-date').value = chosenDate;
 
-
 $('#calendarIcon').append('<u id="dateText">' + chosenDateString + '</u>');
 
 var toDoItem = {
@@ -55,9 +60,14 @@ var toDoItem = {
 
 var admItem;
 
+var cPoints = [];
+
 $('#updateToDoItemButton').hide();
 
-$.ajax({
+getTasks();
+
+function getTasks () {
+  $.ajax({
     url: "http://localhost:3000/tasks/get",
     type: 'GET',
     crossDomain: true,
@@ -69,8 +79,8 @@ $.ajax({
     error: function(){
       $('#contentContainer').append(
         '<div class="jumbotron">'+
-          '<h1 class="display-4">Упс, кажется, что-то пошло не так &#129301;</h1>'+
-          '<p class="lead">Похоже, что сервер не поделился с нами данными &#128546;</p>'+
+          '<h1 class="display-4">Упс, кажется, что-то пошло не так <i class="emoji">&#129301;</i></h1>'+
+          '<p class="lead">Похоже, что сервер не поделился с нами данными <i class="emoji">&#128546;</i></p>'+
           '<hr class="my-4">'+
           '<p>Если Вы столкнулись с этой проблемой, пожалуйста, сообщите об этом нам.</p>'+
           '<p class="lead">'+
@@ -79,8 +89,12 @@ $.ajax({
         '</div>'
     )}
   });
+}
 
 function addToDoItemsFromServer(data) {
+  $('#to-do-list-incomplite').empty();
+  $('#to-do-list-complite').empty();
+  $('.jumbotron').remove();
   var email = JSON.parse(localStorage.getItem('user')).email;
   for (var x = 0; x < data.users.length; x++) {
     if (data.users[x].email===email) {
@@ -99,7 +113,7 @@ function addToDoItemsFromServer(data) {
       }
       
       var toDoList= $('#to-do-list-incomplite');
-      toDoList.append('<a id="'+ toDoItem.id +'" href="#" class="list-group-item list-group-item-action">'
+      toDoList.append('<a id="'+ toDoItem.id +'" class="list-group-item list-group-item-action">'
       + '<div class="d-flex w-100 justify-content-between">'
       + '<h5 class="mb-1 item-title">'+ toDoItem.title +'</h5>'
       + '<small>'+ '<span class="item-time-hours">' + toDoItem.timeHours +'</span>'+':'+ '<span class="item-time-minutes">' +toDoItem.timeMinutes+'</span>'+'</small>'
@@ -113,14 +127,15 @@ function addToDoItemsFromServer(data) {
       );
     }else if (chosenDate===data.tasks[i].date && email===data.tasks[i].userId && data.tasks[i].status === 'complite') {
       toDoItem = {
-          title: data.tasks[i].title,
+        title: data.tasks[i].title,
         description: data.tasks[i].description,
-          timeHours: data.tasks[i].timeHours,
+        timeHours: data.tasks[i].timeHours,
         timeMinutes: data.tasks[i].timeMinutes,
         points: data.tasks[i].points,
         id: data.tasks[i].id
       }
-      $('#to-do-list-complite').append('<a id="'+ toDoItem.id +'" href="#" class="complited-task list-group-item list-group-item-action">'
+      cPoints.push(toDoItem.points);
+      $('#to-do-list-complite').append('<a id="'+ toDoItem.id +'" class="complited-task list-group-item list-group-item-action">'
       + '<div class="d-flex w-100 justify-content-between">'
       + '<h5 class="mb-1 item-title">'+ toDoItem.title +'</h5>'
       + '<small>'+ '<span class="item-time-hours">' + toDoItem.timeHours +'</span>'+':'+ '<span class="item-time-minutes">' +toDoItem.timeMinutes+'</span>'+'</small>'
@@ -139,7 +154,7 @@ function empty(){
   if ($('#to-do-list-incomplite').children().length === 0 && $('#to-do-list-complite').children().length === 0) {
     $('#contentContainer').append(
       '<div class="jumbotron">'+
-        '<h1 class="display-4">Похоже здесь ничего нет &#128558;</h1>'+
+        '<h1 class="display-4">Похоже, здесь ничего нет <i class="emoji">&#129300;</i></h1>'+
         '<p class="lead">Хотите создать какое-нибудь дело?</p>'+
         '<hr class="my-4">'+
         '<p>Если Вы уверены, что здесь что-то должно быть, отправьте нам, пожалуйста, отчёт об ошибке и мы постараемя её решить.</p>'+
@@ -186,21 +201,20 @@ function updateToDoItem(target) {
   document.getElementById('to-do-tittle').value = target.parentElement.getElementsByClassName('item-title')[0].innerText;
   document.getElementById('to-do-description').value = target.parentElement.getElementsByClassName('item-description')[0].innerText;
   document.getElementById('to-do-points').value = parseInt(target.parentElement.getElementsByClassName('item-points')[0].innerText);
-    document.getElementById('to-do-time-hours').value = target.parentElement.getElementsByClassName('item-time-hours')[0].innerText; 
-    document.getElementById('to-do-time-minutes').value = target.parentElement.getElementsByClassName('item-time-minutes')[0].innerText; 
-    document.getElementById('to-do-date').value = chosenDate;
+  document.getElementById('to-do-time-hours').value = target.parentElement.getElementsByClassName('item-time-hours')[0].innerText; 
+  document.getElementById('to-do-time-minutes').value = target.parentElement.getElementsByClassName('item-time-minutes')[0].innerText; 
+  document.getElementById('to-do-date').value = chosenDate;
 
-
-    $('#addNewToDoItemButton').hide();
-    $('#updateToDoItemButton').show();
-    $('#exampleModal').data( "to-do-item-id",  target.parentElement.id);
+  $('#addNewToDoItemButton').hide();
+  $('#updateToDoItemButton').show();
+  $('#exampleModal').data( "to-do-item-id",  target.parentElement.id);
   $('#exampleModal').modal('show');
 }
 
 function updateToDoItemOnServer(target){
   if (!document.getElementById('to-do-tittle').value) {
-      alert('Введите заголовок');
-      return;
+    alert('Введите заголовок');
+    return;
   }
   else if (!document.getElementById('to-do-points').value) {
     alert('Введите количетсво баллов');
@@ -210,31 +224,27 @@ function updateToDoItemOnServer(target){
     id: $('#exampleModal').data( "to-do-item-id"),
     title: document.getElementById('to-do-tittle').value,
     description: document.getElementById('to-do-description').value,
-      timeHours: document.getElementById('to-do-time-hours').value,
+    timeHours: document.getElementById('to-do-time-hours').value,
     timeMinutes: document.getElementById('to-do-time-minutes').value,
     points: document.getElementById('to-do-points').value,
     date: document.getElementById('to-do-date').value,
     userId: JSON.parse(localStorage.getItem('user')).email,
     status: "incomplite",
-        admin: admItem
+    admin: admItem
   }
-  console.log(updatedToDoItem);
-  $.post( "http://localhost:3000/tasks/update", updatedToDoItem, function( data ) {
-    
-    
-  }, "json");
+  $.post( "http://localhost:3000/tasks/update", updatedToDoItem, function( data ) {}, "json");
   $('#exampleModal').modal('hide');
   var updatedTarget = document.getElementById(updatedToDoItem.id)
   updatedTarget.getElementsByClassName('item-title')[0].innerText =document.getElementById('to-do-tittle').value ;
   updatedTarget.getElementsByClassName('item-description')[0].innerText = document.getElementById('to-do-description').value;
   updatedTarget.getElementsByClassName('item-points')[0].innerText = pluralize(document.getElementById('to-do-points').value, ['балл', 'балла', 'баллов']);
-    updatedTarget.getElementsByClassName('item-time-hours')[0].innerText =document.getElementById('to-do-time-hours').value ;  
-    updatedTarget.getElementsByClassName('item-time-minutes')[0].innerText =document.getElementById('to-do-time-minutes').value; 
+  updatedTarget.getElementsByClassName('item-time-hours')[0].innerText =document.getElementById('to-do-time-hours').value ;  
+  updatedTarget.getElementsByClassName('item-time-minutes')[0].innerText =document.getElementById('to-do-time-minutes').value; 
   $('#exampleModal').on('hidden.bs.modal', function (e) {
-      $('#addNewToDoItemButton').show();
-      $('#updateToDoItemButton').hide();
+    $('#addNewToDoItemButton').show();
+    $('#updateToDoItemButton').hide();
   })
-  restore()
+  restore();
 };
 
 function removeToDoItem(target) {
@@ -246,65 +256,64 @@ function removeToDoItem(target) {
     dataType: 'jsonp',
     contentType: 'application/json; charset=utf-8',
     success: function () {
-        target.parentElement.remove();
-        empty();
+      target.parentElement.remove();
+      empty();
     },
     error: function(request,msg,error) {
-        // handle failure
+      // handle failure
     }
   });
 }
 
 function addToDoItem() {
-    if (!document.getElementById('to-do-tittle').value){
-      alert('Введите заголовок!');
-      return;
-    }
-    else if (!document.getElementById('to-do-points').value) {
-      alert('Введите количество баллов');
-      return;
-    }
+  if (!document.getElementById('to-do-tittle').value){
+    alert('Введите заголовок!');
+    return;
+  }
+  else if (!document.getElementById('to-do-points').value) {
+    alert('Введите количество баллов');
+    return;
+  }
   toDoItem = {
     title: document.getElementById('to-do-tittle').value,
     description: document.getElementById('to-do-description').value,
-      timeHours: document.getElementById('to-do-time-hours').value,
+    timeHours: document.getElementById('to-do-time-hours').value,
     timeMinutes: document.getElementById('to-do-time-minutes').value,
     points: document.getElementById('to-do-points').value,
     date: document.getElementById('to-do-date').value,
     userId: JSON.parse(localStorage.getItem('user')).email,
     status: "incomplite",
-        admin: admItem
+    admin: admItem
   }
-    $.ajax({
-        type: 'POST',
-        url: 'http://localhost:3000/tasks/save',
-    crossDomain: true,
-        data: toDoItem,
-        success: function(response) {
-          var jumbotron = $('.jumbotron');
-          if(jumbotron){
-            jumbotron.remove();
-          }
-      $('#exampleModal').modal('hide');
-      restore();
-      var toDoList= $('#to-do-list-incomplite');
-      if (toDoItem.date===chosenDate){
-        toDoList.append('<a id="'+ response.id +'" href="#" class="list-group-item list-group-item-action">'
-        + '<div class="d-flex w-100 justify-content-between">'
-        + '<h5 class="mb-1 item-title">'+ toDoItem.title +'</h5>'
-        + '<small>' + '<span class="item-time-hours">' + toDoItem.timeHours + '</span>:' + '<span class="item-time-minutes">' + toDoItem.timeMinutes + '</span></small>'
-        + '</div>'
-        + '<p class="mb-1 item-description">'+toDoItem.description+'</p>'
-        + '<small class="item-points">'+pluralize(toDoItem.points, ['балл', 'балла', 'баллов']) +'</small>'
-        + '<button type="button" class="btn btn-danger float-right" target="" onclick="removeToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
-        + '<button type="button" class="btn btn-primary float-right" onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
-        + '<button type="button" class="btn btn-success float-right" onclick="compliteToDoItem(this)"><i class="far fa-check-circle"></i></button>' 
-        + '</a>'
-      );
-      }
+  $.ajax({
+      type: 'POST',
+      url: 'http://localhost:3000/tasks/save',
+      crossDomain: true,
+      data: toDoItem,
+      success: function(response) {
+        var jumbotron = $('.jumbotron');
+        if(jumbotron){
+          jumbotron.remove();
         }
-    });
-
+        $('#exampleModal').modal('hide');
+        restore();
+        var toDoList= $('#to-do-list-incomplite');
+        if (toDoItem.date===chosenDate){
+          toDoList.append('<a id="'+ response.id +'" href="#" class="list-group-item list-group-item-action">'
+            + '<div class="d-flex w-100 justify-content-between">'
+            + '<h5 class="mb-1 item-title">'+ toDoItem.title +'</h5>'
+            + '<small>' + '<span class="item-time-hours">' + toDoItem.timeHours + '</span>:' + '<span class="item-time-minutes">' + toDoItem.timeMinutes + '</span></small>'
+            + '</div>'
+            + '<p class="mb-1 item-description">'+toDoItem.description+'</p>'
+            + '<small class="item-points">'+pluralize(toDoItem.points, ['балл', 'балла', 'баллов']) +'</small>'
+            + '<button type="button" class="btn btn-danger float-right" target="" onclick="removeToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
+            + '<button type="button" class="btn btn-primary float-right" onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
+            + '<button type="button" class="btn btn-success float-right" onclick="compliteToDoItem(this)"><i class="far fa-check-circle"></i></button>' 
+            + '</a>'
+          );
+        }
+      }
+  });
 }
 
 function compliteToDoItem(target) {
@@ -323,34 +332,24 @@ function compliteToDoItemOnServer(target){
     id: $('#exampleModal').data( "to-do-item-id"),
     title: document.getElementById('to-do-tittle').value,
     description: document.getElementById('to-do-description').value,
-      timeHours: document.getElementById('to-do-time-hours').value,
+    timeHours: document.getElementById('to-do-time-hours').value,
     timeMinutes: document.getElementById('to-do-time-minutes').value,
     points: document.getElementById('to-do-points').value,
     date: document.getElementById('to-do-date').value,
     userId: JSON.parse(localStorage.getItem('user')).email,
     status: "complite",
-        admin: admItem
+    admin: admItem
   }
-  console.log(complitedToDoItem);
   $('#exampleModal').modal('hide');
   $('#exampleModalLive').modal('hide');
-  $.post( "http://localhost:3000/tasks/complite", complitedToDoItem, function( data ) {
-    
-    
-  }, "json");
 
-  var updatedTarget = document.getElementById(complitedToDoItem.id)
-  updatedTarget.getElementsByClassName('item-title')[0].innerText =document.getElementById('to-do-tittle').value ;
-  updatedTarget.getElementsByClassName('item-description')[0].innerText = document.getElementById('to-do-description').value;
-  updatedTarget.getElementsByClassName('item-points')[0].innerText = pluralize(document.getElementById('to-do-points').value, ['балл', 'балла', 'баллов']);
-    updatedTarget.getElementsByClassName('item-time-hours')[0].innerText =document.getElementById('to-do-time-hours').value ;  
-    updatedTarget.getElementsByClassName('item-time-minutes')[0].innerText =document.getElementById('to-do-time-minutes').value; 
+  $.post( "http://localhost:3000/tasks/complite", complitedToDoItem, function( data ) {getTasks()}, "json");
+
   $('#exampleModal').on('hidden.bs.modal', function (e) {
-      $('#addNewToDoItemButton').show();
-      $('#updateToDoItemButton').hide();
+    $('#addNewToDoItemButton').show();
+    $('#updateToDoItemButton').hide();
   })
   restore();
-  window.location.reload();
 }
 
 function restore(){
@@ -366,8 +365,8 @@ function restore(){
 }
 
 function pluralize(count, words) {
-    var cases = [2, 0, 1, 1, 1, 2];
-    return count + ' ' + words[ (count % 100 > 4 && count % 100 < 20) ? 2 : cases[ Math.min(count % 10, 5)] ];
+  var cases = [2, 0, 1, 1, 1, 2];
+  return count + ' ' + words[ (count % 100 > 4 && count % 100 < 20) ? 2 : cases[ Math.min(count % 10, 5)] ];
 }
 
 function pluralizeMonth(month) {
@@ -377,7 +376,7 @@ function pluralizeMonth(month) {
     case 2:
       return 'Февраля';
     case 3:
-      return 'марта';
+      return 'Марта';
     case 4:
       return 'Апреля';
     case 5:
@@ -400,12 +399,10 @@ function pluralizeMonth(month) {
 }
 
 $('#sendReportModal').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('whatever') // Extract info from data-* attributes
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  modal.find('.modal-body input').val(recipient)
+  var button = $(event.relatedTarget);
+  var recipient = button.data('whatever');
+  var modal = $(this);
+  modal.find('.modal-body input').val(recipient);
 })
 
 function switchDate() {
@@ -422,12 +419,18 @@ function send(){
 function logout() {
   localStorage.removeItem('isLogIn');
   localStorage.removeItem('user');
+  localStorage.setItem('theme', 'light');
   window.location.replace('log in.html');
 }
 
 function showStat() {
+  $('#statBtn').html('<img src="./img/stat_load.gif">');
   var user = JSON.parse(localStorage.getItem('user'));
   var userId = user.email;
+  var tPoints = 0;
+  for (var i = 0; i < cPoints.length; i++) {
+    tPoints = tPoints + parseInt(cPoints[i]);
+  }
   $.ajax({
     url: "http://localhost:3000/tasks/getUserStat/:userId",
     type: 'GET',
@@ -436,19 +439,24 @@ function showStat() {
     dataType: 'jsonp',
     contentType: 'application/json; charset=utf-8',
     success: function (data) {
+      $('#statBtn').html('<i class="far fa-chart-bar"></i>');
       $('#statModal').modal('toggle');
       $('#statModalLabel').text('Статистика пользователя ' + user.firstName);
-      $('#todayStat').text('Выполнено дел в этот день ' + $('#to-do-list-complite').children().length + '/' + $('#to-do-list-incomplite').children().length);
+      $('#todayStat').html('Выполнено дел в этот день <em>' + $('#to-do-list-complite').children().length + '/' + $('#to-do-list-incomplite').children().length + '</em> <br>' + 'Заработано баллов <em>' + tPoints + '</em>');
       $('#incompliteProgressToday').css('width', ($('#to-do-list-incomplite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
       $('#compliteProgressToday').css('width', ($('#to-do-list-complite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
-      $('#allTimeStat').text('Выполнено дел за всё время ' + data.complitedTasks + '/' + data.incomplitedTasks);
+      $('#allTimeStat').html('Выполнено дел за всё время <em>' + data.complitedTasks + '/' + data.incomplitedTasks + '</em> <br>' + 'Заработано баллов <em>' + data.points + '</em>');
       $('#incompliteProgressAllTime').css('width', (data.incomplitedTasks / (data.incomplitedTasks + data.complitedTasks))*100 + '%');
       $('#compliteProgressAllTime').css('width', (data.complitedTasks / (data.incomplitedTasks + data.complitedTasks))*100 + '%');
     },
     error: function(request,msg,error) {
+      $('#statBtn').html('<i class="far fa-chart-bar"></i>');
       $('#statModal').modal('toggle');
-      $('#statModalLabel').html('Упс &#128561;');
-      $('#todayStat').text('К сожалению, нам не удалось получить данные с сервера, но не волнуйтиесь, мы уже работаем над этим!')
+      $('#statModalLabel').text('Статистика пользователя ' + user.firstName);
+      $('#todayStat').html('Выполнено дел в этот день <em>' + $('#to-do-list-complite').children().length + '/' + $('#to-do-list-incomplite').children().length + '</em> <br>' + 'Заработано баллов <em>' + tPoints + '</em>');
+      $('#incompliteProgressToday').css('width', ($('#to-do-list-incomplite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
+      $('#compliteProgressToday').css('width', ($('#to-do-list-complite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
+      $('#allTimeStat').html('Упс! <i class="emoji">&#128561;</i><br>К сожалению, нам не удалось получить данные с сервера, но не волнуйтиесь, мы уже работаем над этим!')
     }
   });
 }
@@ -478,6 +486,7 @@ function getForecast(){
         $('#sky').html(data.weatherdata.weather[0].current[0].$.skytext);
         $('#temperature').html(data.weatherdata.weather[0].current[0].$.temperature + '&#8451;');
         $('#city').html(data.weatherdata.weather[0].$.weatherlocationname);
+        $('#providerLink').attr('href', data.weatherdata.weather[0].$.url);
       }else{
         $('#sky').html('Не удалось загрузить прогноз.');
         $('#temperature').html('--/--&#8451;');
@@ -503,6 +512,7 @@ function setIcon(data) {
     case '39':
     case '45':
     case '9':
+    case '8':
       $('#skyImg').attr('src', './weatherIcons/12.png');
       break;
     case '16':
@@ -540,7 +550,6 @@ function setIcon(data) {
     case '32':
     case '23':
     case '24':
-    case '8':
       $('#skyImg').attr('src', './weatherIcons/32.png');
       break;
     case '35':
@@ -591,20 +600,3 @@ function setCity(){
   getForecast();
   $('#cityInput').val('');
 }
-
-function sortData() {
-  $.ajax({
-    url: "http://localhost:3000/cities/sort",
-    type: 'GET',
-    crossDomain: true,
-    dataType: 'jsonp',
-    contentType: 'application/json; charset=utf-8',
-    success: function (data) {
-      console.log(data);
-    },
-    error: function(request,msg,error){
-      console.log(request + ' ' + msg + ' ' + error);
-    }
-  });
-}
-  

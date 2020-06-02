@@ -49,12 +49,10 @@ router.post('/update', function(req, res, next) {
 	var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
     for (i = 0; i < data.groups.length; i++) {
 		if (group.name === data.groups[i].name) {
-			console.log("Привет");
 			var newUsers = group.users.concat(JSON.parse(data.groups[i].users));
 			function onlyUnique(value, index, self) { 
 				return self.indexOf(value) === index;
-			}	
-			console.log(newUsers);
+			}
 			newUsers = JSON.stringify(newUsers.filter( onlyUnique ));
 			data.groups[i].users = newUsers;
 			fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
@@ -153,8 +151,7 @@ router.post('/removeUsers', function(req, res, next) {
   res.contentType('json');
   res.setHeader('Content-Type', 'application/json');
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
-  var groups = data.groups
-	console.log(req.body.groupId);
+  var groups = data.groups;
   var groupId =req.body.groupId.toString();
   var peopleIds = JSON.parse(req.body.peopleIds);
   

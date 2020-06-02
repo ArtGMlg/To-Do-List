@@ -74,8 +74,11 @@ router.post('/saveMultiple', function(req, res, next) {
 });
 
 router.post('/update', function(req, res, next) {
+	res.setHeader('Content-Type', 'application/json');	
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	
   var task = req.body;
-
 
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
   data.tasks;
@@ -140,11 +143,14 @@ router.get('/delete/:taskId', function(req, res, next) {
 })
 
 router.post('/complite', function(req, res, next) {
+	res.setHeader('Content-Type', 'application/json');	
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	
   var task = req.body;
 
 
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
-  data.tasks;
   for (i=0;i<data.tasks.length;i++) {
     if (data.tasks[i].id === task.id) {
       data.tasks[i]= task;
@@ -176,16 +182,19 @@ router.get('/getUserStat/:userId', function(req, res, next) {
 	}
 	var incomplite = 0;
 	var complite = 0;
+	var points = 0;
 	for (j = 0; j < userTasks.length; j++) {
 		if (userTasks[j].status === 'incomplite') {
 			incomplite = incomplite + 1;
 		}else if (userTasks[j].status === 'complite') {
 			complite = complite + 1;
+			points = points + parseInt(userTasks[j].points);
 		}
 	}
 	var status = {
 		complitedTasks: complite,
-		incomplitedTasks: incomplite
+		incomplitedTasks: incomplite,
+		points: points
 	}
 	res.jsonp(status);
 });

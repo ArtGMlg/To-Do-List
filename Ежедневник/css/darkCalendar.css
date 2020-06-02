@@ -1,0 +1,28 @@
+.datepicker table{
+	color: white;
+}
+
+.datepicker-dropdown{
+	background-color: #252527;
+}
+
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover{
+	color: #252527;
+}
+
+.datepicker table tr td.day:hover,
+.datepicker table tr td.focused{
+	color: #252527;
+}
+
+.datepicker table tr td span.focused,
+.datepicker table tr td span:hover{
+	color: #252527;
+}
+
+.datepicker-dropdown:after{
+	border-bottom-color: #252527;
+}
