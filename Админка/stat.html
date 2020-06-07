@@ -19,8 +19,8 @@
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
 
   <script>
     if (!localStorage.getItem('admIsLogIn')){
@@ -127,78 +127,71 @@
 
           <!-- Page Heading -->
       
-
-    <div id="to">
-      <div class="input-group date">
-        <input type="text" id="toInput" onChange="statFiter()" class="form-control">
-        <div class="input-group-append">
-        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-        </div>
-      </div>
-    </div>
-    <div id="from">
-      <div class="input-group date">
-        <input type="text" id="fromInput" onChange="statFilter()" class="form-control">
-        <div class="input-group-append">
-        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-        </div>
-      </div>
-    </div>
-      
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Статистика</h1>
-          </div>  
+            <div class="input-group input-daterange">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">C</span>
+              </div>
+              <input type="text" id="fromInput" onchange="statFilter()" class="form-control">
+              <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">по</span>
+              </div>
+              <input type="text" id="toInput" onchange="statFilter()" class="form-control">
+            </div>
+          </div> 
+
         </div>
     
         <!-- /.container-fluid -->
     
     
-  <div class="row">
-    <div class="col-xl-4 col-lg-5" id="chart">
-      <div class="card shadow mb-4">
-      <!-- Card Header - Dropdown -->
-        <div class="card-header py-3">
-          <h6 style="padding-top: 10px; float: left;" class="m-0 font-weight-bold text-primary" style="float: left;">Группа:</h6>
-          <div class="dropdown mb4" style="float: right;">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Все группы
-            </button>
-            <div class="dropdown-menu animated--fade-in" id="dropdown" aria-labelledby="dropdownMenuButton" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -104px, 0px);">
-              <a class="dropdown-item" href="#" onclick = "changeGroup()">Все группы</a>
+        <div class="row">
+          <div class="col-xl-4 col-lg-5" id="chart">
+            <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+              <div class="card-header py-3">
+                <h6 style="padding-top: 10px; float: left;" class="m-0 font-weight-bold text-primary" style="float: left;">Группа:</h6>
+                <div class="dropdown mb4" style="float: right;">
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Все группы
+                  </button>
+                  <div class="dropdown-menu animated--fade-in" id="dropdown" aria-labelledby="dropdownMenuButton" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -104px, 0px);">
+                    <a class="dropdown-item" href="#" onclick = "changeGroup()">Все группы</a>
+                  </div>
+                </div>
+              </div>
+              <!-- Card Body -->
+              <div class="card-body">
+                <div class="chart-pie pt-4">
+                  <canvas id="myPieChart"></canvas>
+                </div>
+                <hr>
+                <div class="mt-4 text-center small">
+                  <span class="mr-2">
+                    <i class="fas fa-circle text-primary"></i> Выполненные
+                  </span>
+                  <span class="mr-2">
+                    <i class="fas fa-circle text-success"></i> Невыполненные
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Card Body -->
-        <div class="card-body">
-          <div class="chart-pie pt-4">
-            <canvas id="myPieChart"></canvas>
+          
+          <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4" id="topCard">
+              <div class="card-header py-3" style="height: 71px;">
+                <h6 style="padding-top: 10px;" class="m-0 font-weight-bold text-primary">Топ среди групп:</h6>
+              </div>
+              <div class="card-body scroll-container">
+                <ol id="top">
+                </ol>
+              </div>
+            </div>
           </div>
-          <hr>
-          <div class="mt-4 text-center small">
-            <span class="mr-2">
-              <i class="fas fa-circle text-primary"></i> Выполненные
-            </span>
-            <span class="mr-2">
-              <i class="fas fa-circle text-success"></i> Невыполненные
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
       
-      <div class="col-xl-4 col-lg-5">
-        <div class="card shadow mb-4" id="topCard">
-          <div class="card-header py-3" style="height: 71px;">
-            <h6 style="padding-top: 10px;" class="m-0 font-weight-bold text-primary">Топ среди групп:</h6>
-          </div>
-          <div class="card-body scroll-container">
-            <ol id="top">
-            </ol>
-          </div>
         </div>
-      </div>
-    
-    </div>
 
       </div>
       <!-- End of Main Content -->
@@ -265,15 +258,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
 
   <script type="text/javascript">
-  $('#from .input-group.date').datepicker({
+  $('.input-group.input-daterange').datepicker({
     language: "ru",
     orientation: "bottom auto",
     format: "yyyy-mm-dd"
   });
-  $('#to .input-group.date').datepicker({
-    language: "ru",
-    orientation: "bottom auto",
-    format: "yyyy-mm-dd"
+
+  $('.input-daterange input').each(function() {
+    $(this).datepicker('clearDates');
   });
   
   $.ajax({

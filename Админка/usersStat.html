@@ -19,8 +19,8 @@
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
 
   <script>
     if (!localStorage.getItem('admIsLogIn')){
@@ -124,27 +124,22 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-      <div id="to">
-        <div class="input-group date">
-          <input type="text" id="toInput" onChange="statFilter()" class="form-control">
-          <div class="input-group-append">
-          <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-          </div>
-        </div>
-      </div>
-      <div id="from">
-        <div class="input-group date">
-          <input type="text" id="fromInput" onChange="statFilter()" class="form-control">
-          <div class="input-group-append">
-          <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-          </div>
-        </div>
-      </div>
 
           <!-- Page Heading -->
+      
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Статистика</h1>
-          </div>
+            <div class="input-group input-daterange">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">C</span>
+              </div>
+              <input type="text" id="fromInput" onchange="statFilter()" class="form-control">
+              <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">по</span>
+              </div>
+              <input type="text" id="toInput" onchange="statFilter()" class="form-control">
+            </div>
+          </div> 
       
         </div>
         <!-- /.container-fluid -->
@@ -261,15 +256,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
 
   <script type="text/javascript">
-    $('#from .input-group.date').datepicker({
+  $('.input-group.input-daterange').datepicker({
     language: "ru",
     orientation: "bottom auto",
     format: "yyyy-mm-dd"
   });
-  $('#to .input-group.date').datepicker({
-    language: "ru",
-    orientation: "bottom auto",
-    format: "yyyy-mm-dd"
+
+  $('.input-daterange input').each(function() {
+    $(this).datepicker('clearDates');
   });
   
   function statFilter() {

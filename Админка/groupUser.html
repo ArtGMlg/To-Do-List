@@ -21,8 +21,8 @@
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
 
   <script>
     if (!localStorage.getItem('admIsLogIn')){
@@ -126,47 +126,49 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-		  <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('complite')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Выполненные</button>
-		  <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('incomplite')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Невыполненные</button>
-		  <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('all')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Все</button>
-		 
-		<div id="to">
-			<div class="input-group date">
-			  <input type="text" id="toInput" onChange="tasksFilter()" class="form-control">
-			  <div class="input-group-append">
-			  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-			  </div>
-			</div>
-		</div>
-		<div id="from">
-			<div class="input-group date">
-			  <input type="text" id="fromInput" onChange="tasksFilter()" class="form-control">
-			  <div class="input-group-append">
-			  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-			  </div>
-			</div>
-		</div>
  
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 id="userTitle" class="h3 mb-0 text-gray-800"></h1>
           </div>
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th width="50px"> 
-					  </th>
-                      <th>Название</th>
-					  <th>Статус</th>
-					  <th>Срок сдачи</th>
-					  <th>Баллы</th>
-                    </tr>
-                  </thead>
-                  <tbody id="groupedUsersList">
-					
-                  </tbody>
-                </table>
+            <div class="card shadow mb-4">
+              <!-- Card Header - Accordion -->
+              <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-primary">Фильтры</h6>
+              </a>
+              <!-- Card Content - Collapse -->
+              <div class="collapse" id="collapseCardExample">
+                <div class="card-body">
+                  <div class="input-group input-daterange inverted-width">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">C</span>
+                    </div>
+                    <input type="text" id="fromInput" onchange="tasksFilter()" class="form-control">
+                    <div class="input-group-append">
+                      <span class="input-group-text" id="basic-addon2">по</span>
+                    </div>
+                    <input type="text" id="toInput" onchange="tasksFilter()" class="form-control">
+                  </div>
+                  <div id="filterButtons">
+                    <button class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('complite')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Выполненные</button>
+                    <button class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('incomplite')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Невыполненные</button>
+                    <button class=" d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('all')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Все</button>                
+                  </div>
+                </div>
+              </div>
+            </div>
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th width="50px"></th>
+                <th>Название</th>
+        			  <th>Статус</th>
+        			  <th>Срок сдачи</th>
+        			  <th>Баллы</th>
+              </tr>
+            </thead>
+            <tbody id="groupedUsersList"></tbody>
+          </table>
 
-          
         </div>
         <!-- /.container-fluid -->
 
@@ -399,16 +401,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
 
   <script type="text/javascript">
-	$('#from .input-group.date').datepicker({
-		language: "ru",
-		orientation: "bottom auto",
-		format: "yyyy-mm-dd"
-	});
-	$('#to .input-group.date').datepicker({
-		language: "ru",
-		orientation: "bottom auto",
-		format: "yyyy-mm-dd"
-	});
+	
+  $('.input-group.input-daterange').datepicker({
+    language: "ru",
+    orientation: "bottom auto",
+    format: "yyyy-mm-dd"
+  });
+
+  $('.input-daterange input').each(function() {
+    $(this).datepicker('clearDates');
+  });
 	
 	var urlParams = new URLSearchParams(window.location.search);
 	var email = urlParams.get('email');

@@ -41,3 +41,31 @@
   align-items: center;
   justify-content: center;
 }
+
+.input-daterange{
+  width: 50%;
+}
+
+#filterButtons{
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.collapse{
+  position: initial;
+}
+
+.inverted-width{
+  width: 100%;
+}
+
+@media all and (max-width: 575px){
+  .input-daterange{
+    width: 100%;
+  }
+  #filterButtons{
+    justify-content: space-between;
+  }
+}
