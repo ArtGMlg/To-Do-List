@@ -176,22 +176,20 @@ function switchTheme() {
     );
     $('.progress').css('background-color', '#e9ecef');
   };
+  $(".theme-btn").focus(function(){
+    if (localStorage.getItem('theme') === 'light') {
+      $(this).css("box-shadow", "0 0 0 0.2rem rgba(38,143,255,.5)");
+    }else if (localStorage.getItem('theme') === 'dark') {
+      $(this).css("box-shadow", "0 0 0 0.2rem rgba(121, 80, 242, .5)");
+    }
+  });
+  $(".theme-btn").blur(function(){
+    if (localStorage.getItem('theme') === 'dark') {
+      $(this).css("box-shadow", "none");
+    }else if (localStorage.getItem('theme') === 'light') {
+      $(this).css("box-shadow", "none");
+    }
+  });
   var loadingScreen = $('#loadingScreen');
   setTimeout(function(){if (loadingScreen){loadingScreen.remove();}}, 500);
 };
-
-$(".theme-btn").focus(function(){
-  if (localStorage.getItem('theme') === 'light') {
-    $(this).css("box-shadow", "0 0 0 0.2rem rgba(38,143,255,.5)");
-  }else if (localStorage.getItem('theme') === 'dark') {
-    $(this).css("box-shadow", "0 0 0 0.2rem rgba(121, 80, 242, .5)");
-  }
-});
-
-$(".theme-btn").blur(function(){
-  if (localStorage.getItem('theme') === 'dark') {
-    $(this).css("box-shadow", "none");
-  }else if (localStorage.getItem('theme') === 'light') {
-    $(this).css("box-shadow", "none");
-  }
-});

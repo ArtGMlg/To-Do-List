@@ -120,9 +120,9 @@ function addToDoItemsFromServer(data) {
       + '</div>'
       + '<p class="mb-1 item-description">'+toDoItem.description+'</p>'
       + '<small class="item-points">'+pluralize(toDoItem.points, ['балл', 'балла', 'баллов']) +'</small>'
-      + '<button type="button" class="btn btn-danger float-right"  onclick="removeToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
-      + '<button type="button" class="btn btn-primary theme-btn float-right"  onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
-      + '<button type="button" class="btn btn-success float-right"  onclick="compliteToDoItem(this)"><i class="far fa-check-circle"></i></button>'
+      + '<button type="button" class="btn btn-danger remove-btn float-right"><i class="far fa-trash-alt"></i></button>'
+      + '<button type="button" class="btn btn-primary theme-btn float-right" onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
+      + '<button type="button" class="btn btn-success float-right" onclick="compliteToDoItem(this)"><i class="far fa-check-circle"></i></button>'
       + '</a>'
       );
     }else if (chosenDate===data.tasks[i].date && email===data.tasks[i].userId && data.tasks[i].status === 'complite') {
@@ -142,12 +142,14 @@ function addToDoItemsFromServer(data) {
       + '</div>'
       + '<p class="mb-1 item-description">'+toDoItem.description+'</p>'
       + '<small class="item-points">'+pluralize(toDoItem.points, ['балл', 'балла', 'баллов']) +'</small>'
-      + '<button type="button" class="btn btn-danger float-right" onclick="removeToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
+      + '<button type="button" class="btn btn-danger remove-btn float-right"><i class="far fa-trash-alt"></i></button>'
       + '</a>'
       );
     }
   }
   empty();
+  switchTheme();
+  setOnClick();
 }
 
 function empty(){
@@ -247,22 +249,38 @@ function updateToDoItemOnServer(target){
   restore();
 };
 
-function removeToDoItem(target) {
-  $.ajax({
-    url: "http://localhost:3000/tasks/delete/:taskId",
-    type: 'GET',
-    data: {"taskId": target.parentElement.id},
-    crossDomain: true,
-    dataType: 'jsonp',
-    contentType: 'application/json; charset=utf-8',
-    success: function () {
-      target.parentElement.remove();
-      empty();
-    },
-    error: function(request,msg,error) {
-      // handle failure
-    }
+var removeIds = [];
+
+function setOnClick() {
+  $('.remove-btn').click(function(){
+    $(this).addClass('decline');
+    $(this).removeClass('remove-btn');
+    $(this).html('<i class="fas fa-trash-restore"></i>');
+    removeIds.push($(this).parent().attr('id'));
+    decline();
   });
+}
+
+function decline(){
+  $('.decline').click(function(){
+    $(this).removeClass('decline');
+    $(this).addClass('remove-btn');
+    $(this).html('<i class="far fa-trash-alt"></i>');
+    for (i = 0; i < removeIds.length; i++) {
+      if (removeIds[i] === $(this).parent().attr('id')) {
+        removeIds.splice(i,1);
+      }
+    }
+    setOnClick();
+  })
+}
+
+window.addEventListener("unload", function() {
+  $.post( "http://localhost:3000/tasks/delete", $.extend({}, removeIds), function( data ) {}, "json");
+});
+
+window.onbeforeunload = function(){
+  $.post( "http://localhost:3000/tasks/delete", $.extend({}, removeIds), function( data ) {}, "json");
 }
 
 function addToDoItem() {
@@ -291,27 +309,9 @@ function addToDoItem() {
       crossDomain: true,
       data: toDoItem,
       success: function(response) {
-        var jumbotron = $('.jumbotron');
-        if(jumbotron){
-          jumbotron.remove();
-        }
         $('#exampleModal').modal('hide');
         restore();
-        var toDoList= $('#to-do-list-incomplite');
-        if (toDoItem.date===chosenDate){
-          toDoList.append('<a id="'+ response.id +'" href="#" class="list-group-item list-group-item-action">'
-            + '<div class="d-flex w-100 justify-content-between">'
-            + '<h5 class="mb-1 item-title">'+ toDoItem.title +'</h5>'
-            + '<small>' + '<span class="item-time-hours">' + toDoItem.timeHours + '</span>:' + '<span class="item-time-minutes">' + toDoItem.timeMinutes + '</span></small>'
-            + '</div>'
-            + '<p class="mb-1 item-description">'+toDoItem.description+'</p>'
-            + '<small class="item-points">'+pluralize(toDoItem.points, ['балл', 'балла', 'баллов']) +'</small>'
-            + '<button type="button" class="btn btn-danger float-right" target="" onclick="removeToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
-            + '<button type="button" class="btn btn-primary float-right" onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
-            + '<button type="button" class="btn btn-success float-right" onclick="compliteToDoItem(this)"><i class="far fa-check-circle"></i></button>' 
-            + '</a>'
-          );
-        }
+        getTasks()
       }
   });
 }
@@ -442,10 +442,10 @@ function showStat() {
       $('#statBtn').html('<i class="far fa-chart-bar"></i>');
       $('#statModal').modal('toggle');
       $('#statModalLabel').text('Статистика пользователя ' + user.firstName);
-      $('#todayStat').html('Выполнено дел в этот день <em>' + $('#to-do-list-complite').children().length + '/' + $('#to-do-list-incomplite').children().length + '</em> <br>' + 'Заработано баллов <em>' + tPoints + '</em>');
+      $('#todayStat').html('Выполнено дел в этот день <em>' + $('#to-do-list-complite').children().length + '/' + ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length) + '</em> <br>' + 'Заработано баллов <em>' + tPoints + '</em>');
       $('#incompliteProgressToday').css('width', ($('#to-do-list-incomplite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
       $('#compliteProgressToday').css('width', ($('#to-do-list-complite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
-      $('#allTimeStat').html('Выполнено дел за всё время <em>' + data.complitedTasks + '/' + data.incomplitedTasks + '</em> <br>' + 'Заработано баллов <em>' + data.points + '</em>');
+      $('#allTimeStat').html('Выполнено дел за всё время <em>' + data.complitedTasks + '/' + (data.incomplitedTasks + data.complitedTasks) + '</em> <br>' + 'Заработано баллов <em>' + data.points + '</em>');
       $('#incompliteProgressAllTime').css('width', (data.incomplitedTasks / (data.incomplitedTasks + data.complitedTasks))*100 + '%');
       $('#compliteProgressAllTime').css('width', (data.complitedTasks / (data.incomplitedTasks + data.complitedTasks))*100 + '%');
     },
@@ -456,7 +456,9 @@ function showStat() {
       $('#todayStat').html('Выполнено дел в этот день <em>' + $('#to-do-list-complite').children().length + '/' + $('#to-do-list-incomplite').children().length + '</em> <br>' + 'Заработано баллов <em>' + tPoints + '</em>');
       $('#incompliteProgressToday').css('width', ($('#to-do-list-incomplite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
       $('#compliteProgressToday').css('width', ($('#to-do-list-complite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
-      $('#allTimeStat').html('Упс! <i class="emoji">&#128561;</i><br>К сожалению, нам не удалось получить данные с сервера, но не волнуйтиесь, мы уже работаем над этим!')
+      $('#allTimeStat').html('Упс! <i class="emoji">&#128561;</i><br>К сожалению, нам не удалось получить данные с сервера, но не волнуйтиесь, мы уже работаем над этим!');
+      $('#incompliteProgressAllTime').css('width', '0%');
+      $('#compliteProgressAllTime').css('width', '0%');
     }
   });
 }

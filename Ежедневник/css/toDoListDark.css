@@ -61,36 +61,15 @@ nav{
 }
 
 .list-group-item{
+	background-color: rgba(255,255,255, .5);
+	color: black;
 	transition: all .3s linear;
-  background-color: rgba(118,120,122,.5);
-  color: rgba(255,255,255,.85);
-}
-
-.list-group-item:hover{
-  background-color: rgba(118,120,122,.5);
-  color: rgba(255,255,255,.85);
-}
-
-.list-group-item:focus{
-  background-color: rgba(118,120,122,.5);
-  color: rgba(255,255,255,.85);
 }
 
 .complited-task{
-	text-decoration: line-through;
-	color: #6c757d;
+	text-decoration: line-through!important;
+	color: #6c757d!important;
 }
-
-.complited-task:hover{
-	text-decoration: line-through;
-	color: #6c757d;
-}
-
-.complited-task:focus{
-	text-decoration: line-through;
-	color: #6c757d;
-}
-
 
 #buttonContainer{
 	position: fixed;
@@ -290,6 +269,23 @@ em{
 
 .progress{
 	background-color: #0c0c0d;
+}
+
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover{
+	transition: all .3s linear;
+}
+
+.datepicker table tr td.day:hover,
+.datepicker table tr td.focused{
+	transition: all .3s linear;
+}
+
+.datepicker table tr td span.focused,
+.datepicker table tr td span:hover{
+	transition: all .3s linear;
 }
 
 @media all and (max-width: 1024px){
