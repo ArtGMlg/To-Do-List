@@ -20,6 +20,7 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 
   <script>
     if (!localStorage.getItem('admIsLogIn')){
@@ -64,8 +65,8 @@
           <i class="fas fa-users"></i>
           <span>Группы</span></a>
       </li>
-	  
-	  <!-- Divider -->
+    
+    <!-- Divider -->
       <hr class="sidebar-divider">
 
       <!-- Nav Item - Dashboard -->
@@ -105,6 +106,9 @@
 
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
@@ -126,54 +130,52 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800" id = "groupTitle"></h1>
-			<a href="#" class="btn btn-success btn-icon-split" style="float: right; margin-left: auto;" data-toggle="modal" data-target="#taskModal">
-              <span class="icon text-white-50">
+            <div class="btns-container">
+              <a href="#" class="btn btn-success btn-icon-split" data-toggle="modal" data-target="#taskModal">
+                <span class="icon text-white-50">
                   <i class="fas fas fa-plus-circle"></i>
-              </span>
-              <span class="text">Создать дело</span>
-            </a>
-            <a href="#" class="btn btn-danger btn-icon-split" style="float: right; margin-left: 5px;"  onclick = "RemovePeople()" >
-              <span class="icon text-white-50">
-                <i class="fas fa-trash"></i>
-              </span>
-              <span class="text">Исключить людей</span>
-            </a>
+                </span>
+                <span class="text">Создать дело</span>
+              </a>
+              <a href="#" class="btn btn-danger btn-icon-split" style="float: right; margin-left: 10px;"  onclick = "RemovePeople()" >
+                <span class="icon text-white-50">
+                  <i class="fas fa-trash"></i>
+                </span>
+                <span class="text">Исключить людей</span>
+              </a>
+            </div>
           </div>
+          <div class="card shadow mb-4">
+            <div class="card-body">
+              <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
                       <th>
-					  <div class="custom-control custom-checkbox small">
+                        <div class="custom-control custom-checkbox small">
                         <input onclick="checkAllUsers(this)" type="checkbox" class="custom-control-input main-checkbox" id="checkAll">
                         <label class="custom-control-label" for="checkAll"></label>
-                      </div>
-					  </th>
+                        </div>
+                      </th>
                       <th>Имя</th>
                       <th>Фамилия</th>
                       <th>Отчество</th>
                       <th>Email</th>
                     </tr>
-                  </thead> 
+                  </thead>
                   <tbody id="groupUsers">
+
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </div>
 
-          
         </div>
         <!-- /.container-fluid -->
 
       </div>
       <!-- End of Main Content -->
-
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2019</span>
-          </div>
-        </div>
-      </footer>
-      <!-- End of Footer -->
 
     </div>
     <!-- End of Content Wrapper -->
@@ -218,7 +220,7 @@
         <form>
           <div class="form-group">
             <label for="to-do-tittle" class="col-form-label">Заголовок:</label>
-            <input type="text" class="form-control" id="to-do-tittle">
+            <input type="text" class="form-control" id="to-do-tittle" autocomplete="off">
           </div>
           <div class="form-group">
             <label for="to-do-description" class="col-form-label">Описание:</label>
@@ -352,130 +354,173 @@
   <!-- Page level plugins -->
   <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
 
-  <!-- Page level custom scripts
-  <script src="js/demo/chart-area-demo.js"></script>
-  <script src="js/demo/chart-pie-demo.js"></script> -->
-
+  <!-- Page level custom scripts -->
+  <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
   <script type="text/javascript">
     var urlParams = new URLSearchParams(window.location.search);
     var name = urlParams.get('name');
     document.getElementById('groupTitle').innerText = name;
 
     $.ajax({
-    url: "http://localhost:3000/groups/users/" + name,
-    type: 'GET',
-    crossDomain: true,
-    dataType: 'jsonp',
-    contentType: 'application/json; charset=utf-8',
-    success: function (users) {
-        drawGroupUsers(users);
+      url: "http://localhost:3000/groups/users/" + name,
+      type: 'GET',
+      crossDomain: true,
+      dataType: 'jsonp',
+      contentType: 'application/json; charset=utf-8',
+      success: function (users) {
+          drawGroupUsers(users);
+      }
+    });
+
+    if ($(window).width()<767) {
+      $('body').addClass('sidebar-toggled');
+      $('#accordionSidebar').addClass('toggled');
     }
-  });
 
     function drawGroupUsers(users) {
       var groupUsers = $('#groupUsers');
       for(i = 0; i < users.length; i++){
-        groupUsers.append('<tr>'+
-                        '<td>'+
-                          '<div class="custom-control custom-checkbox small">'+
-                           '<input type="checkbox" class="custom-control-input user-checkbox" onclick="checkUser(this)" id="'+users[i].email+'">'+
-                           '<label class="custom-control-label" for="'+users[i].email+'"></label>'+
-                          '</div>'+
-                        '</td>' +
-                        '<td>'+'<a href="./groupUser.html?email='+users[i].email+'&lastName='+users[i].lastName+'&firstName='+users[i].firstName+'">'+users[i].firstName+'</a>'+'</td>'+
-                        '<td>'+users[i].lastName+'</td>'+ 
-                        '<td>'+users[i].surName+'</td>'+
-                        '<td>'+users[i].email+'</td>'+
-                      '</tr>'
-      )}
+        groupUsers.append(
+          '<tr>'+
+            '<td>'+
+              '<div class="custom-control custom-checkbox small">'+
+                '<input type="checkbox" class="custom-control-input user-checkbox" onclick="checkUser(this)" id="'+users[i].email+'">'+
+                '<label class="custom-control-label" for="'+users[i].email+'"></label>'+
+              '</div>'+
+            '</td>' +
+            '<td>'+'<a href="./groupUser.html?email='+users[i].email+'&lastName='+users[i].lastName+'&firstName='+users[i].firstName+'">'+users[i].firstName+'</a>'+'</td>'+
+            '<td>'+users[i].lastName+'</td>'+ 
+            '<td>'+users[i].surName+'</td>'+
+            '<td>'+users[i].email+'</td>'+
+          '</tr>'
+        )
+      }
+      $('#dataTable').DataTable({
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+        }
+      });
     };
 
     function logout() {
       localStorage.removeItem('admIsLogIn');
       localStorage.removeItem('admUser');
     };
-	
-	function RemovePeople()  {
-		var people = $(".user-checkbox:checked");
-		var peopleIds = [];
-		for(i =0 ; i < people.length; i++) {
-		peopleIds.push(people[i].id);
-		}
+  
+  function RemovePeople()  {
+    var people = $(".user-checkbox:checked");
+    var peopleIds = [];
+    for(i =0 ; i < people.length; i++) {
+      peopleIds.push(people[i].id);
+    }
     $.ajax({
-          type: 'POST',
-          url: 'http://localhost:3000/groups/removeUsers',
-          crossDomain: true,
-          data: {
-		    groupId: name,
-            peopleIds: JSON.stringify(peopleIds)
-          },
-          success: function(response) {
-            location.reload();
-          }
+      type: 'POST',
+      url: 'http://localhost:3000/groups/removeUsers',
+      crossDomain: true,
+      data: {
+    groupId: name,
+        peopleIds: JSON.stringify(peopleIds)
+      },
+      success: function(response) {
+        location.reload();
+      }
+    });
+  };
+  
+  function checkAllUsers(cb){
+    var checked = $(".user-checkbox");
+    for(i=0; i < checked.length; i++){
+      checked[i].checked = cb.checked;
+    };
+  };
+  function checkUser(cb){
+    var checked = $(".user-checkbox");
+    var markAllChecked = true;
+    for (i=0; i < checked.length; i++){
+      if (checked[i].checked === false || $('input.form-control-sm').val().length !== 0){
+        markAllChecked = false;
+      };
+    };
+    document.getElementById('checkAll').checked = markAllChecked;
+  };
+  
+  function restore(){
+    $('#to-do-tittle').val('');
+    $('#to-do-description').val('');
+    $('#to-do-points').val('');
+    $('#to-do-time-hours').val('0');
+    $('#to-do-time-minutes').val('00');
+  };
+  
+  function addToDoItem() {
+    if (!document.getElementById('to-do-tittle').value){
+      alert('Введите заголовок!');
+      return;
+    }
+    else if (!document.getElementById('to-do-points').value) {
+      alert('Введите количество баллов');
+      return;
+    }
+    var restore = $('#taskModal .modal-body form').clone();
+    var people = $(".user-checkbox:checked");
+    
+    var usersIds = [];
+    
+    for(i=0; i<people.length; i++){
+      usersIds.push(people[i].id);
+    }
+    
+    toDoItem = {
+      title: document.getElementById('to-do-tittle').value,
+      description: document.getElementById('to-do-description').value,
+      timeHours: document.getElementById('to-do-time-hours').value,
+      timeMinutes: document.getElementById('to-do-time-minutes').value,
+      points: document.getElementById('to-do-points').value,
+      date: document.getElementById('to-do-date').value,
+      "usersIds": usersIds.join(),
+      status: "incomplite",
+      admin: JSON.parse(localStorage.getItem('admUser')).email
+    }
+    $('#taskModal .modal-body form').css({'display': 'flex', 'justify-content': 'center'});
+    $('#taskModal .modal-body form').html('<img src="./img/load.gif">');
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:3000/tasks/saveMultiple',
+      crossDomain: true,
+      data: toDoItem,
+      success: function(response) {
+        $('#taskModal .modal-body form img').attr({
+          'style': 'width: 200px',
+          'src': './img/done.gif'
         });
-	
-	};
-	
-	function checkAllUsers(cb){
-		var checked = $(".user-checkbox");
-		for(i=0; i < checked.length; i++){
-			checked[i].checked = cb.checked;
-		};
-	};
-	function checkUser(cb){
-		var checked = $(".user-checkbox");
-		var markAllChecked = true;
-		for (i=0; i < checked.length; i++){
-			if (checked[i].checked === false){
-				markAllChecked = false;
-			};
-		};
-		document.getElementById('checkAll').checked = markAllChecked;
-	};
-	
-	function addToDoItem() {
-		if (!document.getElementById('to-do-tittle').value){
-			alert('Введите заголовок!');
-			return;
-		}
-		else if (!document.getElementById('to-do-points').value) {
-			alert('Введите количество баллов');
-			return;
-		}
-		var people = $(".user-checkbox:checked");
-		
-		var usersIds = [];
-		
-		for(i=0; i<people.length; i++){
-			usersIds.push(people[i].id);
-		}
-		
-		toDoItem = {
-			title: document.getElementById('to-do-tittle').value,
-			description: document.getElementById('to-do-description').value,
-			timeHours: document.getElementById('to-do-time-hours').value,
-			timeMinutes: document.getElementById('to-do-time-minutes').value,
-			points: document.getElementById('to-do-points').value,
-			date: document.getElementById('to-do-date').value,
-			"usersIds": usersIds.join(),
-			status: "incomplite",
-			admin: JSON.parse(localStorage.getItem('admUser')).email
-		}
-		$.ajax({
-			type: 'POST',
-			url: 'http://localhost:3000/tasks/saveMultiple',
-			crossDomain: true,
-			data: toDoItem,
-			success: function(response) {
-				$('#taskModal').modal('hide');
-			}
-		});
-		
-		
-		
-
-	}
-	
+        setTimeout(function(){
+          $('#taskModal').modal('hide');
+          $('#taskModal .modal-body form').replaceWith(restore);
+          $('#to-do-tittle').val('');
+          $('#to-do-description').val('');
+          $('#to-do-points').val('');
+          $('#to-do-time-hours').val('0');
+          $('#to-do-time-minutes').val('00');          
+        },1000);
+      },
+      error: function(response) {
+        $('#taskModal .modal-body form img').attr({
+          'style': 'width: 200px',
+          'src': './img/err.gif'
+        });
+        setTimeout(function(){
+          $('#taskModal').modal('hide');
+          $('#taskModal .modal-body form').replaceWith(restore);
+          $('#to-do-tittle').val('');
+          $('#to-do-description').val('');
+          $('#to-do-points').val('');
+          $('#to-do-time-hours').val('0');
+          $('#to-do-time-minutes').val('00');          
+        },1000);
+      }
+    });
+  } 
   </script>
 
 </body>

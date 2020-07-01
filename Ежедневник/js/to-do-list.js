@@ -292,6 +292,7 @@ function addToDoItem() {
     alert('Введите количество баллов');
     return;
   }
+  var restore = $('#exampleModal .modal-body form').clone();
   toDoItem = {
     title: document.getElementById('to-do-tittle').value,
     description: document.getElementById('to-do-description').value,
@@ -303,15 +304,28 @@ function addToDoItem() {
     status: "incomplite",
     admin: admItem
   }
+  $('#exampleModal .modal-body form').css({'display': 'flex', 'justify-content': 'center'});
+  $('#exampleModal .modal-body form').html('<img src="./img/load.gif">');
   $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/tasks/save',
       crossDomain: true,
       data: toDoItem,
       success: function(response) {
-        $('#exampleModal').modal('hide');
-        restore();
-        getTasks()
+        $('#exampleModal .modal-body form img').attr({
+          'style': 'width: 200px',
+          'src': './img/done.gif'
+        });
+        setTimeout(function(){
+          $('#exampleModal').modal('hide');
+          $('#exampleModal .modal-body form').replaceWith(restore);
+          $('#to-do-tittle').val('');
+          $('#to-do-description').val('');
+          $('#to-do-points').val('');
+          $('#to-do-time-hours').val('0');
+          $('#to-do-time-minutes').val('00');
+          getTasks()
+        },1000);
       }
   });
 }

@@ -2,12 +2,12 @@
   height: 450px;
 }
 
-@media screen and (min-width:300px) and (max-width:927px) {
+@media screen and (max-width:927px) {
  #usualButton{
     display: none;
   }
   #mobileButton{
-	  margin-bottom: 15px;
+    margin-bottom: 15px;
   }
 }
 
@@ -20,16 +20,10 @@
   }
 }
 .calendarWrapper{
-	position: relative;
+  position: relative;
 }
 .collapse{
-	position: absolute;
-}
-
-#from, #to {
-  width: 13%;
-  float: right;
-	margin-left:10px;
+  position: absolute;
 }
 
 .scroll-container {
@@ -44,6 +38,11 @@
 
 .input-daterange{
   width: 50%;
+}
+
+#toInput{
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 #filterButtons{
@@ -61,11 +60,43 @@
   width: 100%;
 }
 
-@media all and (max-width: 575px){
+.icon{
+  display: flex!important;
+  align-items: center;
+  justify-content: center;
+  padding: 0px!important;
+  min-width: 38px;
+}
+
+@media all and (max-width: 650px){
   .input-daterange{
     width: 100%;
+    margin: 10px 0px;
   }
+  .shadow-sm{
+    display: block;
+    float: none!important;
+    margin: 0px 0px 10px 0px!important;
+  }
+  .h3{
+    text-align: center;
+  }
+  .btns-container{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+  }
+}
+
+@media all and (min-width: 450px) and (max-width: 650px){
   #filterButtons{
     justify-content: space-between;
+  }
+}
+
+@media all and (max-width: 450px){
+  #filterButtons{
+    display: initial;
+    padding-top: 10px;
   }
 }

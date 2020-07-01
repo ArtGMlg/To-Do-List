@@ -2,46 +2,48 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-	<title>План на день</title>
-	<script>
-		if (!localStorage.getItem('isLogIn')) {
-			window.location="log in.html?redirectedFrom=to do list.html";
-		}
-	</script>
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-	<script src="https://kit.fontawesome.com/60c6536c6a.js" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <title>План на день</title>
+  <script>
+    if (!localStorage.getItem('isLogIn')) {
+      window.location="log in.html?redirectedFrom=to do list.html";
+    }
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/60c6536c6a.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="./css/bootstrap-datepicker3.min.css">
   <link rel="stylesheet" type="text/css" href="./css/jquery-ui.css">
-	<script src="./js/addLink.js"></script>
+  <script src="./js/addLink.js"></script>
 </head>
 <body>
-  <div id="bgBlur"></div>
+  <div id="bgBlur">
+    <img src="">
+  </div>
 
-	<div id="loadingScreen" style="height: 100%; width: 100%">
+  <div id="loadingScreen" style="height: 100%; width: 100%">
     <div id="loadingContent">
-    	<img id="loadingImage">
+      <img id="loadingImage">
     </div>
   </div>
 
-	<div id="contentContainer">
-		<nav aria-label="breadcrumb">
-			<h3>Список дел на:</h3>
-			<div id="breadCrumbToDoList">
+  <div id="contentContainer">
+    <nav aria-label="breadcrumb">
+      <h3>Список дел на:</h3>
+      <div id="breadCrumbToDoList">
         <div class="input-group date">
           <input type="text" id="toInput" onchange="switchDate()" style="display: none;" class="form-control">
           <div class="input-group-append">
-          	<span id="calendarIcon" class="input-group-text"><i style="padding-right: 10px;" class="fas fa-calendar-alt"></i></span>
+            <span id="calendarIcon" class="input-group-text"><i style="padding-right: 10px;" class="fas fa-calendar-alt"></i></span>
           </div>
         </div>
-				<button type="button" data-toggle="modal" data-target="#logoutModal" class="btn btn-outline-danger"><i style="display: inline;" class="fas fa-sign-out-alt"></i>Выйти</button>
-			</div>
-		</nav>
-		<div class="list-group" id="to-do-list-incomplite"></div>
-		<div class="list-group" id="to-do-list-complite"></div>
+        <button type="button" data-toggle="modal" data-target="#logoutModal" id="logout" class="btn btn-outline-danger"><i style="display: inline;" class="fas fa-sign-out-alt"></i>Выйти</button>
+      </div>
+    </nav>
+    <div class="list-group" id="to-do-list-incomplite"></div>
+    <div class="list-group" id="to-do-list-complite"></div>
   </div>
 
   <div id="buttonContainer">
@@ -49,25 +51,25 @@
     <button type="button" class="btn btn-primary theme-btn btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Добавить</button>
   </div>
 
-	<div id="weaContainer">
+  <div id="weaContainer">
     <i class="fas fa-sync-alt weaTools" id="refresh" onclick="getForecast()"></i>
-		<i data-toggle="modal" data-target="#weaModal" onclick="loadCitiesNames()" id="settings" class="fas fa-cog weaTools"></i>
-		<div id="weaImg">	
-			<img style="width: 75px;" id="skyImg" src="./weatherIcons/32.png">
-		</div>
-		<div id="weaInf">
-			<p id="sky">&mdash;</p>
-			<p id="temperature">--/--&#8451;</p>
-			<p id="city">&mdash;</p>
-			<p id="provider"><a id="providerLink" target="_blank" href="https://www.msn.com/ru-ru/weather">MSN weather</a></p>
-		</div>
-	</div>
+    <i data-toggle="modal" data-target="#weaModal" onclick="loadCitiesNames()" id="settings" class="fas fa-cog weaTools"></i>
+    <div id="weaImg"> 
+      <img style="width: 75px;" id="skyImg" src="./weatherIcons/32.png">
+    </div>
+    <div id="weaInf">
+      <p id="sky">&mdash;</p>
+      <p id="temperature">--/--&#8451;</p>
+      <p id="city">&mdash;</p>
+      <p id="provider"><a id="providerLink" target="_blank" href="https://www.msn.com/ru-ru/weather">MSN weather</a></p>
+    </div>
+  </div>
 
-	<div id="themeSwitcherContainer" data-toggle="tooltip" data-placement="left" title="Изменить тему оформления.">
-		<input style="display: none;" type="checkbox" onclick="switchTheme()" id="themeSwitcher" name="checkbox">
-		<label style="visibility: hidden; position: absolute; color: #7950f2" for="themeSwitcher" id="dark"><i class="fas fa-cloud-moon"></i></label>
-		<label style="position: absolute; color: #f39f18" for="themeSwitcher" id="light"><i class="far fa-sun"></i></label>
-	</div>
+  <div id="themeSwitcherContainer" data-toggle="tooltip" data-placement="left" title="Изменить тему оформления.">
+    <input style="display: none;" type="checkbox" onclick="switchTheme()" id="themeSwitcher" name="checkbox">
+    <label style="visibility: hidden; position: absolute; color: #7950f2" for="themeSwitcher" id="dark"><i class="fas fa-cloud-moon"></i></label>
+    <label style="position: absolute; color: #f39f18" for="themeSwitcher" id="light"><i class="far fa-sun"></i></label>
+  </div>
 
   <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -127,7 +129,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">Возвращайтесь скорей :)</div>
+        <div class="modal-body">Возвращайтесь скорей <i class="emoji">&#128521;</i></div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Отмена</button>
           <a style="color: white" class="btn theme-btn btn-primary" onclick="logout()">Выйти</a>
@@ -147,11 +149,11 @@
         </div>
         <div id="statModalBody" class="modal-body">
           <div id="today">
-          	<p id="todayStat"></p>
-          	<div class="progress">
-  					  <div class="progress-bar" id="incompliteProgressToday" role="progressbar"></div>
-  					  <div class="progress-bar bg-success" id="compliteProgressToday" role="progressbar"></div>
-  					</div>
+            <p id="todayStat"></p>
+            <div class="progress">
+              <div class="progress-bar" id="incompliteProgressToday" role="progressbar"></div>
+              <div class="progress-bar bg-success" id="compliteProgressToday" role="progressbar"></div>
+            </div>
             <div class="mt-4 text-center small">
               <span class="mr-2">
                 <i class="fas fa-circle text-primary"></i> Невыполненные
@@ -163,11 +165,11 @@
           </div>
           <hr class="my-4">
           <div style="margin-top: 15px" id="allTime">
-          	<p id="allTimeStat"></p>
-          	<div class="progress">
-  					  <div class="progress-bar" id="incompliteProgressAllTime" role="progressbar"></div>
-  					  <div class="progress-bar bg-success" id="compliteProgressAllTime" role="progressbar"></div>
-  					</div>
+            <p id="allTimeStat"></p>
+            <div class="progress">
+              <div class="progress-bar" id="incompliteProgressAllTime" role="progressbar"></div>
+              <div class="progress-bar bg-success" id="compliteProgressAllTime" role="progressbar"></div>
+            </div>
             <div class="mt-4 text-center small">
               <span class="mr-2">
                 <i class="fas fa-circle text-primary"></i> Невыполненные
@@ -195,8 +197,8 @@
           </button>
         </div>
         <div class="modal-body" id="weaModalBody">
-        	<input id="cityInput" class="form-control" type="text" placeholder="Введите название города">
-  				<p style="padding: 20px 0px 0px 0px; text-align: center;" id="author">Icons by <a target="_blank" href="https://www.iconfinder.com/andinur">andinur</a></p>
+          <input id="cityInput" class="form-control" type="text" placeholder="Введите название города">
+          <p style="padding: 20px 0px 0px 0px; text-align: center;" id="author">Icons by <a target="_blank" href="https://www.iconfinder.com/andinur">andinur</a></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
@@ -225,110 +227,107 @@
               <label for="to-do-description" class="col-form-label">Описание:</label>
               <textarea class="form-control" id="to-do-description"></textarea>
             </div>
-  		  <div class="form-group">
+            <div class="form-group">
               <label for="to-do-points" class="col-form-label">Количество баллов:</label>
               <input type="number" class="form-control" id="to-do-points">
             </div>
-  		  <div class="form-group">
-              <div class="form-group">
-  				<label for="to-do-time-hours">Часы:</label>
-  				<select class="form-control" id="to-do-time-hours">
-  				  <option>0</option>
-  				  <option>1</option>
-  				  <option>2</option>
-  				  <option>3</option>
-  				  <option>4</option>
-  				  <option>5</option>
-  				  <option>6</option>
-  				  <option>7</option>
-  				  <option>8</option>
-  				  <option>9</option>
-  				  <option>10</option>
-  				  <option>11</option>
-  				  <option>12</option>
-  				  <option>13</option>
-  				  <option>14</option>
-  				  <option>15</option>
-  				  <option>16</option>
-  				  <option>17</option>
-  				  <option>18</option>
-  				  <option>19</option>
-  				  <option>20</option>
-  				  <option>21</option>
-  				  <option>22</option>
-  				  <option>23</option>
-  				</select>
-  			</div>
-  			<div class="form-group">
-              <div class="form-group">
-  				<label for="to-do-time-minutes">Минуты:</label>
-  				<select class="form-control" id="to-do-time-minutes">
-  				  <option>00</option>
-  				  <option>01</option>
-  				  <option>02</option>
-  				  <option>03</option>
-  				  <option>04</option>
-  				  <option>05</option>
-  				  <option>06</option>
-  				  <option>07</option>
-  				  <option>08</option>
-  				  <option>09</option>
-  				  <option>10</option>
-  				  <option>11</option>
-  				  <option>12</option>
-  				  <option>13</option>
-  				  <option>14</option>
-  				  <option>15</option>
-  				  <option>16</option>
-  				  <option>17</option>
-  				  <option>18</option>
-  				  <option>19</option>
-  				  <option>20</option>
-  				  <option>21</option>
-  				  <option>22</option>
-  				  <option>23</option>				  
-  				  <option>24</option>
-  				  <option>25</option>
-  				  <option>26</option>
-  				  <option>27</option>
-  				  <option>28</option>
-  				  <option>29</option>
-  				  <option>30</option>
-  				  <option>31</option>
-  				  <option>32</option>
-  				  <option>33</option>
-  				  <option>34</option>
-  				  <option>35</option>
-  				  <option>36</option>
-  				  <option>37</option>
-  				  <option>38</option>
-  				  <option>39</option>
-  				  <option>40</option>
-  				  <option>41</option>
-  				  <option>42</option>
-  				  <option>43</option>
-  				  <option>44</option>
-  				  <option>45</option>
-  				  <option>46</option>
-  				  <option>47</option>				  
-  				  <option>48</option>
-  				  <option>49</option>
-  				  <option>50</option>
-  				  <option>51</option>
-  				  <option>52</option>
-  				  <option>53</option>
-  				  <option>54</option>
-  				  <option>55</option>
-  				  <option>56</option>
-  				  <option>57</option>
-  				  <option>58</option>
-  				  <option>59</option>
-  				</select>
-  			</div>
-              <div class="form-group">
-              	<label for="to-do-date">Дата</label>
-  				<input type="date" onchange='onDateChange()' class="form-control" id="to-do-date" name="date" placeholder="Дата" required>
-  			</div>
+            <div class="form-group">
+              <label for="to-do-time-hours">Часы:</label>
+              <select class="form-control" id="to-do-time-hours">
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+                <option>11</option>
+                <option>12</option>
+                <option>13</option>
+                <option>14</option>
+                <option>15</option>
+                <option>16</option>
+                <option>17</option>
+                <option>18</option>
+                <option>19</option>
+                <option>20</option>
+                <option>21</option>
+                <option>22</option>
+                <option>23</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="to-do-time-minutes">Минуты:</label>
+              <select class="form-control" id="to-do-time-minutes">
+                <option>00</option>
+                <option>01</option>
+                <option>02</option>
+                <option>03</option>
+                <option>04</option>
+                <option>05</option>
+                <option>06</option>
+                <option>07</option>
+                <option>08</option>
+                <option>09</option>
+                <option>10</option>
+                <option>11</option>
+                <option>12</option>
+                <option>13</option>
+                <option>14</option>
+                <option>15</option>
+                <option>16</option>
+                <option>17</option>
+                <option>18</option>
+                <option>19</option>
+                <option>20</option>
+                <option>21</option>
+                <option>22</option>
+                <option>23</option>         
+                <option>24</option>
+                <option>25</option>
+                <option>26</option>
+                <option>27</option>
+                <option>28</option>
+                <option>29</option>
+                <option>30</option>
+                <option>31</option>
+                <option>32</option>
+                <option>33</option>
+                <option>34</option>
+                <option>35</option>
+                <option>36</option>
+                <option>37</option>
+                <option>38</option>
+                <option>39</option>
+                <option>40</option>
+                <option>41</option>
+                <option>42</option>
+                <option>43</option>
+                <option>44</option>
+                <option>45</option>
+                <option>46</option>
+                <option>47</option>         
+                <option>48</option>
+                <option>49</option>
+                <option>50</option>
+                <option>51</option>
+                <option>52</option>
+                <option>53</option>
+                <option>54</option>
+                <option>55</option>
+                <option>56</option>
+                <option>57</option>
+                <option>58</option>
+                <option>59</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="to-do-date">Дата</label>
+              <input type="date" onchange='onDateChange()' class="form-control" id="to-do-date" name="date" placeholder="Дата" required>
             </div>
           </form>
         </div>
@@ -341,7 +340,7 @@
     </div>
   </div>
   <script src="./js/beautifie.js"></script>
-  <script src="./js/bootstrap-datepicker.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
   <script src="./js/to-do-list.js"></script>
 </body>

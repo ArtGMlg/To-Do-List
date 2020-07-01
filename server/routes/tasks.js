@@ -35,7 +35,7 @@ router.get('/check/:id', function(req, res, next) {
 		}
 		data.tasks = tasks;
 		fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
-			res.end(JSON.stringify({}));
+			res.send(JSON.stringify('done'));
 		});
 		
 });

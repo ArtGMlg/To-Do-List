@@ -15,12 +15,14 @@
     <link rel="stylesheet" type="text/css" href="./css/style.css">
   </HEAD>
   <BODY>
-    <div id="bgBlurLt"></div>
-  <div id="loadingScreen">
-    <div id="loadingContent">
-      <img id="loadingImage">
+    <div id="bgBlurLt">
+      <img src="">
     </div>
-  </div>
+    <div id="loadingScreen">
+      <div id="loadingContent">
+        <img id="loadingImage">
+      </div>
+    </div>
     <div class="content-container padding-container">
       <div style="padding-top: 25px;" class="form-group">
         <label for="exampleInputEmail1">E-mail</label>
@@ -31,11 +33,9 @@
         <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Введите пароль">
       </div>
       <div id="errorMessage" style="color: #f80000; margin-bottom: 15px;"></div>
-      <div style="width: 100%; padding-bottom: 25px;">
-        <span style="display: inline-block; margin-right: 5px;"><button type="submit" class="btn btn-primary" onclick="auth()">Войти</button></span>
-        <span style="display: inline-block;">
-          <a class="btn btn-outline-primary" role="button" href="registration.html">Зарегистрироваться</a>
-        </span>
+      <div style="width: 100%; padding-bottom: 25px; display: flex; justify-content: center;">
+        <button style="margin-right: 5px" type="submit" class="btn btn-primary" onclick="auth()">Войти</button>
+        <a class="btn btn-outline-primary" role="button" href="registration.html">Зарегистрироваться</a>
       </div>
     </div>
     </script>

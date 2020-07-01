@@ -142,7 +142,7 @@ router.get('/getTop', function(req, res, next) {
     var userScore = 0;
 	for(j=0; j< Tasks.length; j++){
 		if(Tasks[j].status === "complite" && Tasks[j].userId === users[i].email){
-			userScore = userScore + 1;
+			userScore = userScore + parseInt(Tasks[j].points);
 		};
 	};
 	users[i].score = userScore;

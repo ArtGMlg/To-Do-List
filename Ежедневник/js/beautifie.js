@@ -18,17 +18,20 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
-if ($(window).width() <= 590) {
-  $('#themeSwitcherContainer').tooltip('disable')
+if ($(window).width() <= 800) {
+  $('#themeSwitcherContainer').tooltip('disable');
+  $('#logout').html('<i style="display: inline;" class="fas fa-sign-out-alt"></i>');
 }
 
 window.addEventListener('resize', onResize, false);
 
 function onResize() {
-  if ($(window).width() >= 590) {
-    $('#themeSwitcherContainer').tooltip('enable')
-  }else if ($(window).width() <= 590) {
-    $('#themeSwitcherContainer').tooltip('disable')
+  if ($(window).width() >= 800) {
+    $('#themeSwitcherContainer').tooltip('enable');
+    $('#logout').html('<i style="display: inline;" class="fas fa-sign-out-alt"></i>Выйти');
+  }else if ($(window).width() <= 800) {
+    $('#themeSwitcherContainer').tooltip('disable');
+    $('#logout').html('<i style="display: inline;" class="fas fa-sign-out-alt"></i>');
   }
 }
 
@@ -50,13 +53,15 @@ $.ajax({
 
 function setBackgroundError() {
   background = './img/' + randomInteger(1, 13) + '.jpg';
-  $('body').css('background', 'url('+ background +') center/cover fixed');
+  $('#bgBlur img').attr('src', background);
+  $('#bgBlurLt img').attr('src', background);
   switchTheme();
 }
 
-function setBackground(result) {
-  background = "http://bing.com" + result.images[0].url;
-  $('body').css('background', 'url('+ background +') center/cover fixed');
+function setBackground(result) {;
+  background = "http://bing.com" + result.images[0].url.replace('1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp','1280x720.jpg');
+  $('#bgBlur img').attr('src', background);
+  $('#bgBlurLt img').attr('src', background);
   switchTheme();
 };
 
@@ -74,12 +79,14 @@ function switchTheme() {
     $('#light').css("visibility", "hidden");
     $('#dark').css("visibility", "");
     $('#dark').css("opacity", "1");
-    $('#bgBlur').css({
-      'backdrop-filter': 'blur(40px) saturate(150%) opacity(0%)'
+    $('#bgBlur img').css({
+      'filter': 'blur(40px) saturate(150%) opacity(0)'
+    });
+    $('#bgBlurLt img').css({
+      'filter': 'blur(25px) saturate(150%) opacity(0)'
     });
     $('body').css({
-      'background-image': 'none',
-      'background-color': '#181819'
+      'background-color': 'black'
     });
     $('.list-group-item').css({
       'background-color': 'rgba(118,120,122,.5)',
@@ -127,12 +134,13 @@ function switchTheme() {
     $('#dark').css("visibility", "hidden");
     $('#light').css("visibility", "");
     $('#light').css("opacity", "1");
-    $('#bgBlur').css({
-      'backdrop-filter': 'blur(40px) saturate(150%) opacity(100%)',
-      'background-color': ''
+    $('#bgBlur img').css({
+      'filter': 'blur(40px) saturate(150%) opacity(1)'
+    });
+    $('#bgBlurLt img').css({
+      'filter': 'blur(25px) saturate(150%) opacity(1)'
     });
     $('body').css({
-      'background': 'url('+ background +') center/cover fixed',
       'background-color': '#181819'
     });
     $('.list-group-item').css({
