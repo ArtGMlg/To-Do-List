@@ -117,13 +117,16 @@
   }
 
   .toggle-blur{
-    transition: all .2s linear;
     filter: blur(2px) brightness(0.9);
     pointer-events: none;
   }
 
   .sidebar-brand{
     margin-top: 45px;
+  }
+
+  #content-wrapper{
+    transition: all .2s linear;
   }
 
   body:not([class="sidebar-toggled"]){
