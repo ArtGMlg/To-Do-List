@@ -33,6 +33,9 @@
 <body id="page-top">
   <!-- Page Wrapper -->
   <div id="wrapper">
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+      <i class="fa fa-bars"></i>
+    </button>
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
       <!-- Sidebar - Brand -->
@@ -99,9 +102,6 @@
 
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-            <i class="fa fa-bars"></i>
-          </button>
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
@@ -128,11 +128,11 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">C</span>
               </div>
-              <input type="text" id="fromInput" onchange="statFilter()" class="form-control">
+              <input type="text" id="fromInput" onchange="statFilter()" class="form-control" autocomplete="off">
               <div class="input-group-append">
                 <span class="input-group-text" id="basic-addon2">по</span>
               </div>
-              <input type="text" id="toInput" onchange="statFilter()" class="form-control">
+              <input type="text" id="toInput" onchange="statFilter()" class="form-control" autocomplete="off">
             </div>
           </div> 
       
@@ -244,7 +244,10 @@
   $('.input-group.input-daterange').datepicker({
     language: "ru",
     orientation: "bottom auto",
-    format: "yyyy-mm-dd"
+    format: "yyyy-mm-dd",
+    todayHighlight: true,
+    disableTouchKeyboard: true,
+    clearBtn: true
   });
 
   $('.input-daterange input').each(function() {

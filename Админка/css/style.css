@@ -100,3 +100,33 @@
     padding-top: 10px;
   }
 }
+
+@media all and (max-width: 767px){
+  #accordionSidebar{
+    position: fixed;
+    z-index: 1;
+    transition: all .1s linear;
+  }
+
+  #sidebarToggleTop{
+    position: absolute;
+    z-index: 2;
+    color: black;
+    top: 15px;
+    left: 30px;
+  }
+
+  .toggle-blur{
+    transition: all .2s linear;
+    filter: blur(2px) brightness(0.9);
+    pointer-events: none;
+  }
+
+  .sidebar-brand{
+    margin-top: 45px;
+  }
+
+  body:not([class="sidebar-toggled"]){
+    overflow-y: hidden;
+  }
+}
