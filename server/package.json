@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
-    "cookie-parser": "~1.4.3",
+    "cookie-parser": "^1.4.5",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "fs": "0.0.1-security",
@@ -18,7 +18,7 @@
     "path": "^0.12.7",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
-    "uuid": "^3.3.2",
+    "uuid": "^3.4.0",
     "xml2js": "^0.4.23"
   }
 }
