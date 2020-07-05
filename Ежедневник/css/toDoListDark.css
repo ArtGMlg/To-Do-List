@@ -1,0 +1,315 @@
+@font-face {
+  font-family: 'NotoColorEmoji';
+  src: url(../fonts/NotoColorEmoji.ttf);
+}
+
+html{
+  transition: all .3s linear;
+}
+
+#bgBlur{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -100;
+  transition: all .3s linear;
+  display: flex;
+  justify-content: center;
+}
+
+#bgBlur img{
+  filter: blur(0px) saturate(150%) opacity(0);
+  width: 100%;
+  transform: scale(1.5);
+  transition: inherit;
+}
+
+body{
+  display: flex;
+  justify-content: center;
+  transition: all .3s linear;
+  background-color: #181819;
+  padding-bottom: 100px;
+  padding-right: 0px!important;
+}
+
+#loadingScreen{
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background-color: rgba(0,0,0,.96);
+  backdrop-filter: blur(15px);
+  transition: all .3s linear;
+}
+
+nav{
+  padding-bottom: 10px;
+}
+
+#contentContainer{
+  min-width: 300px;
+  max-width: 50%;
+  height: auto;
+  background-color: transparent;
+  padding-top: 80px;
+  transition: all .3s linear;
+}
+
+#to-do-list a.active small.text-muted {
+  color: #ffffff!important;
+}
+.float-right
+{
+  float: right;
+  margin-right: 10px;
+}
+
+.list-group-item{
+  background-color: rgba(255,255,255, .5);
+  color: black;
+  transition: all .3s linear;
+}
+
+.complited-task{
+  text-decoration: line-through!important;
+  color: #6c757d!important;
+}
+
+#buttonContainer{
+  position: fixed;
+  top: 90%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 0px 10px;
+}
+
+.btn-block{
+  transition: all .2s ease;
+}
+
+#breadCrumbToDoList{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.input-group-text{
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+  transition: all .3s linear;
+}
+
+h3{
+  color: white;
+  font-weight: bold;
+  transition: all .3s linear;
+}
+
+.input-group-append{
+  cursor: pointer;
+  transition: all .3s linear;
+}
+
+#themeSwitcherContainer{
+  height: fit-content;
+  position: absolute;
+  right: 15%;
+  top: 30px;
+  font-size: 30px;
+  z-index: 80;
+}
+
+.jumbotron{
+  transition: all .3s linear;
+  background-color: rgb(37, 37, 39);
+  color: white;
+}
+
+.my-4{
+  transition: all .3s linear;
+  border-color: white;
+}
+
+label{
+  cursor: pointer;
+  transition: all .3s linear;
+}
+
+.theme-btn{
+  background-color: #7950f2;
+  border-color: #7950f2;
+}
+
+.theme-btn:focus{
+  box-shadow: 0 0 0 0.2rem rgba(121, 80, 242, .5);
+}
+
+.modal-content{
+  background-color: rgb(27, 27, 27);
+  color: white;
+}
+
+.form-control{
+  background-color: rgba(0, 0, 0, .5);
+  color: white;
+}
+
+.close{
+  color: white;
+}
+
+.tooltip{
+  margin-top: 8px;
+}
+
+.tooltip-inner{
+  background-color: #252527;
+}
+
+.arrow{
+  display: none;
+}
+
+.arrow::before{
+  display: none;
+}
+
+.stat-btn{
+  font-size: 30px;
+  width: 50px;
+  padding-left: 10px;
+}
+
+#dateText{
+  font-weight: bold;
+}
+
+#weaContainer{
+  width: auto;
+  height: fit-content;
+  background-color: rgb(37, 37, 39);
+  color: white;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 50;
+  left: 20px;
+  top: 10px;
+  padding: 0px 10px;
+  transition: all .3s linear;
+  max-width: 280px;
+}
+
+#skyImg{
+  width: 75px;
+  transition: all .3s linear;
+}
+
+#sky{
+  display: block;
+}
+
+#temperature{
+  display: block;
+}
+
+#weaImg{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all .3s linear;
+}
+
+div#weaContainer p {
+  margin: 0;
+  text-align: center;
+  transition: all .3s linear;
+}
+
+.weaTools{
+  top: 5px;
+  font-size: 15px;
+  position: absolute;
+  color: #b3b3b3;
+  transition: all .3s linear;
+  cursor: pointer;
+}
+
+#settings{
+  right: 5px;
+}
+
+#settings:hover{
+  color: white;
+  transform: rotate(90deg);
+}
+
+#refresh{
+  left: 5px;
+  transition: all .3s linear;
+  cursor: pointer;
+}
+
+#refresh:hover{
+  transform: rotate(180deg);
+}
+
+em{
+  color: #007bff!important;
+  font-weight: bold!important;
+}
+
+.emoji{
+  font-family: NotoColorEmoji;
+  font-style: normal;
+}
+
+.datepicker-dropdown{
+  box-shadow: rgb(8, 7, 7) 9px 9px 20px 2px;
+}
+
+.progress{
+  background-color: #0c0c0d;
+}
+
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover{
+  transition: all .3s linear;
+}
+
+.datepicker table tr td.day:hover,
+.datepicker table tr td.focused{
+  transition: all .3s linear;
+}
+
+.datepicker table tr td span.focused,
+.datepicker table tr td span:hover{
+  transition: all .3s linear;
+}
+
+@media all and (max-width: 1024px){
+  #contentContainer{
+    padding-top: 135px;
+  }
+  #weaContainer{
+    left: 5px;
+    display: flex;
+    height: auto;
+    max-width: 100%;
+  }
+  #weaInf{
+    display: inline-block;
+  }
+  #settings{
+    top: 75%;
+  }
+}

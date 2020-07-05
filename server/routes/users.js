@@ -70,9 +70,7 @@ router.post('/regAdmin', function(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
     for (i = 0; i < data.adminUsers.length; i++) {
-    if (adminUser.email === data.adminUsers[i].email) {
-      console.log('Ура мы тут');
-      
+    if (adminUser.email === data.adminUsers[i].email) {      
       res.send(JSON.stringify({
         error: "Пользователь с таким Email уже существует!"
       }));
@@ -122,7 +120,6 @@ router.get('/get', function(req, res, next) {
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
   var users = data.users;
   var usersForAdmin = [];
-  //console.log(users);
   for (i = 0; i < users.length; i++) {
     usersForAdmin.push({
         firstName: users[i].firstName,
@@ -141,12 +138,11 @@ router.get('/getTop', function(req, res, next) {
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
   var users = data.users;
   var Tasks = data.tasks;
-  //console.log(users);
   for (i = 0; i < users.length; i++) {
     var userScore = 0;
 	for(j=0; j< Tasks.length; j++){
 		if(Tasks[j].status === "complite" && Tasks[j].userId === users[i].email){
-			userScore = userScore + 1;
+			userScore = userScore + parseInt(Tasks[j].points);
 		};
 	};
 	users[i].score = userScore;

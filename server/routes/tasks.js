@@ -35,7 +35,7 @@ router.get('/check/:id', function(req, res, next) {
 		}
 		data.tasks = tasks;
 		fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
-			res.end(JSON.stringify({}));
+			res.send(JSON.stringify('done'));
 		});
 		
 });
@@ -74,8 +74,11 @@ router.post('/saveMultiple', function(req, res, next) {
 });
 
 router.post('/update', function(req, res, next) {
+	res.setHeader('Content-Type', 'application/json');	
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	
   var task = req.body;
-
 
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
   data.tasks;
@@ -116,35 +119,16 @@ router.get('/get-by-email/:email', function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.jsonp(userstasks);
 });
-  
 
-router.get('/delete/:taskId', function(req, res, next) {
-  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
-  var taskId = req.query.taskId;
-  var newTasks = [];
-  for (i = 0; i < data.tasks.length; i++){
-	if(data.tasks[i].id !== taskId){
-		newTasks.push(data.tasks[i]);
-	}
-  } 
-  data.tasks = newTasks;
-  fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
+router.post('/complite', function(req, res, next) {
 	res.setHeader('Content-Type', 'application/json');	
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.jsonp(JSON.stringify({
-	  message: "Запрос принят"
-    }));
-  });
-
-})
-
-router.post('/complite', function(req, res, next) {
+	
   var task = req.body;
 
 
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
-  data.tasks;
   for (i=0;i<data.tasks.length;i++) {
     if (data.tasks[i].id === task.id) {
       data.tasks[i]= task;
@@ -158,4 +142,63 @@ router.post('/complite', function(req, res, next) {
       }));
   });
 });
+
+router.get('/getUserStat/:userId', function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.contentType('json');
+	res.setHeader('Content-Type', 'application/json');
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+	var tasks = data.tasks;
+	var userTasks = [];
+	var count = 0;
+	var id = req.query.userId;
+	for (i = 0; i<tasks.length; i++){
+		if (id === tasks[i].userId) 	{
+			userTasks.push(tasks[i]);
+		}
+	}
+	var incomplite = 0;
+	var complite = 0;
+	var points = 0;
+	for (j = 0; j < userTasks.length; j++) {
+		if (userTasks[j].status === 'incomplite') {
+			incomplite = incomplite + 1;
+		}else if (userTasks[j].status === 'complite') {
+			complite = complite + 1;
+			points = points + parseInt(userTasks[j].points);
+		}
+	}
+	var status = {
+		complitedTasks: complite,
+		incomplitedTasks: incomplite,
+		points: points
+	}
+	res.jsonp(status);
+});
+
+router.post('/delete', function(req, res, next) {
+
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.contentType('json');
+	res.setHeader('Content-Type', 'application/json');
+
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+  var taskIds = req.body;
+  upperLoop:
+	  for (i = 0; i < Object.keys(taskIds).length; i++){
+	  	deeperLoop:
+				for (j = 0; j < data.tasks.length; j++){
+					if(JSON.stringify(data.tasks[j].id) === JSON.stringify(taskIds[i])){
+						data.tasks.splice(j,1);
+						break deeperLoop;
+					}
+		  	} 
+	  }
+  fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
+    res.end();
+  });
+})
+
 module.exports = router;

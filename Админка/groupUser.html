@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
 
@@ -11,7 +11,7 @@
 
   <title>Дела ученика</title>
 
-  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
 
@@ -21,8 +21,9 @@
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 
   <script>
     if (!localStorage.getItem('admIsLogIn')){
@@ -36,6 +37,10 @@
 
   <!-- Page Wrapper -->
   <div id="wrapper">
+    
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+      <i class="fa fa-bars"></i>
+    </button>
 
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -66,12 +71,12 @@
           <i class="fas fa-users"></i>
           <span>Группы</span></a>
       </li>
-	  
-	  <!-- Divider -->
+    
+    <!-- Divider -->
       <hr class="sidebar-divider">
 
       <!-- Nav Item - Dashboard -->
-	  <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
           <i class="fas fa-chart-bar"></i>
           <span>Статистика</span>
@@ -126,63 +131,73 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-		  <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('complite')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Выполненные</button>
-		  <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('incomplite')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Невыполненные</button>
-		  <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('all')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Все</button>
-		 
-		<div id="to">
-			<div class="input-group date">
-			  <input type="text" id="toInput" onChange="tasksFilter()" class="form-control">
-			  <div class="input-group-append">
-			  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-			  </div>
-			</div>
-		</div>
-		<div id="from">
-			<div class="input-group date">
-			  <input type="text" id="fromInput" onChange="tasksFilter()" class="form-control">
-			  <div class="input-group-append">
-			  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-			  </div>
-			</div>
-		</div>
  
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 id="userTitle" class="h3 mb-0 text-gray-800"></h1>
           </div>
+          <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Фильтры</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse" id="collapseCardExample">
+              <div class="card-body">
+                <div class="input-group input-daterange inverted-width">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">C</span>
+                  </div>
+                  <input type="text" id="fromInput" onchange="tasksFilter()" class="form-control" autocomplete="off">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">по</span>
+                  </div>
+                  <input type="text" id="toInput" onchange="tasksFilter()" class="form-control" autocomplete="off">
+                </div>
+                <div id="filterButtons">
+                  <button class="btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('complite')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Выполненные</button>
+                  <button class="btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('incomplite')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Невыполненные</button>
+                  <button class="btn btn-sm btn-primary shadow-sm" onclick="tasksFilter('all')" style="float: right; margin-left: 10px;"><i class="fas fa-filter"></i> Все</button>                
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card border-left-warning shadow mb-4">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">Задания в таблице будут отмечены выполненными после перезагрузки страницы</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-exclamation-circle fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card shadow mb-4">
+            <div class="card-body">
+              <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th width="50px"> 
-					  </th>
+                      <th>Отметить выполненным</th>
                       <th>Название</th>
-					  <th>Статус</th>
-					  <th>Срок сдачи</th>
-					  <th>Баллы</th>
+                      <th>Статус</th>
+                      <th>Срок сдачи</th>
+                      <th>Баллы</th>
                     </tr>
                   </thead>
-                  <tbody id="groupedUsersList">
-					
-                  </tbody>
+                  <tbody id="groupedUsersList"></tbody>
+                  <tfoot id="pointsSum"></tfoot>
                 </table>
-
-          
+              </div>
+            </div>
+          </div>
         </div>
         <!-- /.container-fluid -->
 
       </div>
       <!-- End of Main Content -->
-
-       <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2019</span>
-          </div>
-        </div>
-      </footer>
-      <!-- End of Footer -->
-	 
+   
     </div>
     <!-- End of Content Wrapper -->
 
@@ -194,7 +209,7 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
-	 <nav aria-label="breadcrumb">
+   <nav aria-label="breadcrumb">
 </nav>
 <div class="list-group" id="to-do-list">
 </div>
@@ -229,116 +244,116 @@
         <form>
           <div class="form-group">
             <label for="to-do-tittle" class="col-form-label">Заголовок:</label>
-            <input type="text" class="form-control" id="to-do-tittle">
+            <input type="text" class="form-control" id="to-do-tittle" autocomplete="off">
           </div>
           <div class="form-group">
             <label for="to-do-description" class="col-form-label">Описание:</label>
             <textarea class="form-control" id="to-do-description"></textarea>
           </div>
-		  <div class="form-group">
+      <div class="form-group">
             <label for="to-do-points" class="col-form-label">Количество баллов:</label>
             <input type="text" class="form-control" id="to-do-points">
           </div>
-		  <div class="form-group">
+      <div class="form-group">
             <div class="form-group">
-				<label for="to-do-time-hours">Часы:</label>
-				<select class="form-control" id="to-do-time-hours">
-				  <option>0</option>
-				  <option>1</option>
-				  <option>2</option>
-				  <option>3</option>
-				  <option>4</option>
-				  <option>5</option>
-				  <option>6</option>
-				  <option>7</option>
-				  <option>8</option>
-				  <option>9</option>
-				  <option>10</option>
-				  <option>11</option>
-				  <option>12</option>
-				  <option>13</option>
-				  <option>14</option>
-				  <option>15</option>
-				  <option>16</option>
-				  <option>17</option>
-				  <option>18</option>
-				  <option>19</option>
-				  <option>20</option>
-				  <option>21</option>
-				  <option>22</option>
-				  <option>23</option>
-				</select>
-			</div>
+        <label for="to-do-time-hours">Часы:</label>
+        <select class="form-control" id="to-do-time-hours">
+          <option>0</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+          <option>13</option>
+          <option>14</option>
+          <option>15</option>
+          <option>16</option>
+          <option>17</option>
+          <option>18</option>
+          <option>19</option>
+          <option>20</option>
+          <option>21</option>
+          <option>22</option>
+          <option>23</option>
+        </select>
+      </div>
             <div class="form-group">
-				<label for="to-do-time-minutes">Минуты:</label>
-				<select class="form-control" id="to-do-time-minutes">
-				  <option>00</option>
-				  <option>01</option>
-				  <option>02</option>
-				  <option>03</option>
-				  <option>04</option>
-				  <option>05</option>
-				  <option>06</option>
-				  <option>07</option>
-				  <option>08</option>
-				  <option>09</option>
-				  <option>10</option>
-				  <option>11</option>
-				  <option>12</option>
-				  <option>13</option>
-				  <option>14</option>
-				  <option>15</option>
-				  <option>16</option>
-				  <option>17</option>
-				  <option>18</option>
-				  <option>19</option>
-				  <option>20</option>
-				  <option>21</option>
-				  <option>22</option>
-				  <option>23</option>				  
-				  <option>24</option>
-				  <option>25</option>
-				  <option>26</option>
-				  <option>27</option>
-				  <option>28</option>
-				  <option>29</option>
-				  <option>30</option>
-				  <option>31</option>
-				  <option>32</option>
-				  <option>33</option>
-				  <option>34</option>
-				  <option>35</option>
-				  <option>36</option>
-				  <option>37</option>
-				  <option>38</option>
-				  <option>39</option>
-				  <option>40</option>
-				  <option>41</option>
-				  <option>42</option>
-				  <option>43</option>
-				  <option>44</option>
-				  <option>45</option>
-				  <option>46</option>
-				  <option>47</option>				  
-				  <option>48</option>
-				  <option>49</option>
-				  <option>50</option>
-				  <option>51</option>
-				  <option>52</option>
-				  <option>53</option>
-				  <option>54</option>
-				  <option>55</option>
-				  <option>56</option>
-				  <option>57</option>
-				  <option>58</option>
-				  <option>59</option>
-				</select>
-			</div>
+        <label for="to-do-time-minutes">Минуты:</label>
+        <select class="form-control" id="to-do-time-minutes">
+          <option>00</option>
+          <option>01</option>
+          <option>02</option>
+          <option>03</option>
+          <option>04</option>
+          <option>05</option>
+          <option>06</option>
+          <option>07</option>
+          <option>08</option>
+          <option>09</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+          <option>13</option>
+          <option>14</option>
+          <option>15</option>
+          <option>16</option>
+          <option>17</option>
+          <option>18</option>
+          <option>19</option>
+          <option>20</option>
+          <option>21</option>
+          <option>22</option>
+          <option>23</option>         
+          <option>24</option>
+          <option>25</option>
+          <option>26</option>
+          <option>27</option>
+          <option>28</option>
+          <option>29</option>
+          <option>30</option>
+          <option>31</option>
+          <option>32</option>
+          <option>33</option>
+          <option>34</option>
+          <option>35</option>
+          <option>36</option>
+          <option>37</option>
+          <option>38</option>
+          <option>39</option>
+          <option>40</option>
+          <option>41</option>
+          <option>42</option>
+          <option>43</option>
+          <option>44</option>
+          <option>45</option>
+          <option>46</option>
+          <option>47</option>         
+          <option>48</option>
+          <option>49</option>
+          <option>50</option>
+          <option>51</option>
+          <option>52</option>
+          <option>53</option>
+          <option>54</option>
+          <option>55</option>
+          <option>56</option>
+          <option>57</option>
+          <option>58</option>
+          <option>59</option>
+        </select>
+      </div>
             <div class="form-group">
-            	<label for="to-do-date">Дата</label>
-				<input type="date" onchange='onDateChange()' class="form-control" id="to-do-date" name="date" placeholder="Дата" required>
-			</div>
-		  </div>
+              <label for="to-do-date">Дата</label>
+        <input type="date" onchange='onDateChange()' class="form-control" id="to-do-date" name="date" placeholder="Дата" required>
+      </div>
+      </div>
         </form>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="restore()">Закрыть</button>
@@ -348,7 +363,6 @@
       </div>
     </div>
   </div>
-      <!-- End of Footer -->
 </div>
     <!-- End of Content Wrapper -->
 
@@ -392,143 +406,151 @@
   <!-- Page level plugins -->
   <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
 
-  <!-- Page level custom scripts
-  <script src="js/demo/chart-area-demo.js"></script>
-  <script src="js/demo/chart-pie-demo.js"></script> -->
+  <!-- Page level custom scripts -->
+  <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
 
   <script type="text/javascript">
-	$('#from .input-group.date').datepicker({
-		language: "ru",
-		orientation: "bottom auto",
-		format: "yyyy-mm-dd"
-	});
-	$('#to .input-group.date').datepicker({
-		language: "ru",
-		orientation: "bottom auto",
-		format: "yyyy-mm-dd"
-	});
-	
-	var urlParams = new URLSearchParams(window.location.search);
-	var email = urlParams.get('email');
-	var lastName = urlParams.get('lastName');
-	var firstName = urlParams.get('firstName');
-	var allTasks = [];
-	
-	var userTitle = document.getElementById('userTitle');
-	userTitle.innerHTML=lastName +' '+ firstName;
-	
-	$.ajax({
-		url: "http://localhost:3000/tasks/get-by-email/"+email,
-		type: 'GET',
-		crossDomain: true,
-		dataType: 'jsonp',
-		contentType: 'application/json; charset=utf-8',
-		success: function (tasks) {
-			allTasks = tasks;
-			var sum = calculateSum(allTasks);
-			drawTasksList(allTasks, sum);
-		}
-	});
-	
-	function drawTasksList(tasks, sum) {
-		document.getElementById('groupedUsersList').innerHTML = "";
-		var groupedUsersList = $('#groupedUsersList');
-		for (i=0; i<tasks.length; i++){
-			groupedUsersList.append('<tr>'+
-                        '<td>'+
-                          '<div class="custom-control custom-checkbox small">'+
-                           '<input type="checkbox" class="custom-control-input task-checkbox" onclick="checkTask(this)" id="'+tasks[i].id+'">'+
-                           '<label class="custom-control-label" for="'+tasks[i].id+'"></label>'+
-                          '</div>'+
-                        '</td>' +
-                        '<td>'+tasks[i].title+'</td>'+
-						'<td>'+(tasks[i].status === 'complite'?"Выполнено":"Невыполнено")+'</td>'+
-						'<td>'+tasks[i].date+'</td>'+
-						'<td>'+tasks[i].points+'</td>'+
-                      '</tr>'
-      )}
-	  groupedUsersList.append(
-	  '<tr>'+
-	  '<td colspan="4">'+"Сумма баллов"+'</td>'+
-	  '<td>'+sum+'</td>'+
-	  '</tr>'
-	  );
+  
+  $('.input-group.input-daterange').datepicker({
+    language: "ru",
+    orientation: "bottom auto",
+    format: "yyyy-mm-dd",
+    todayHighlight: true,
+    disableTouchKeyboard: true,
+    clearBtn: true
+  });
+
+  $('.input-daterange input').each(function() {
+    $(this).datepicker('clearDates');
+  });
+  
+  var urlParams = new URLSearchParams(window.location.search);
+  var email = urlParams.get('email');
+  var lastName = urlParams.get('lastName');
+  var firstName = urlParams.get('firstName');
+  var allTasks = [];
+  var table;
+  
+  var userTitle = document.getElementById('userTitle');
+  userTitle.innerHTML=lastName +' '+ firstName;
+
+  getTasks();
+  
+  function getTasks() {
+    $.ajax({
+      url: "http://localhost:3000/tasks/get-by-email/"+email,
+      type: 'GET',
+      crossDomain: true,
+      dataType: 'jsonp',
+      contentType: 'application/json; charset=utf-8',
+      success: function (tasks) {
+        allTasks = tasks;
+        var sum = calculateSum(allTasks);
+        drawTasksList(allTasks, sum);
+      }
+    });
+  }
+  
+  function drawTasksList(tasks, sum) {
+    $('#groupedUsersList').empty();
+    for (i=0; i<tasks.length; i++){
+      $('#groupedUsersList').append(
+        '<tr>'+
+          '<td class="'+ (tasks[i].status === 'complite'?"border-left-success":"border-left-primary") +'">'+
+            '<div class="custom-control custom-checkbox small">'+
+             '<input type="checkbox" class="custom-control-input task-checkbox" onchange="checkTask(this)" id="'+tasks[i].id+'" '+ (tasks[i].status === 'complite'?"disabled":"") +'>'+
+             '<label class="custom-control-label" for="'+tasks[i].id+'"></label>'+
+            '</div>'+
+          '</td>' +
+          '<td>'+tasks[i].title+'</td>'+
+          '<td>'+(tasks[i].status === 'complite'?"Выполнено":"Невыполнено")+'</td>'+
+          '<td>'+tasks[i].date+'</td>'+
+          '<td>'+tasks[i].points+'</td>'+
+        '</tr>'
+      )
+    }
+    $('#pointsSum').html(
+      '<tr>'+
+        '<td colspan="4">'+"Сумма баллов"+'</td>'+
+        '<td>'+sum+'</td>'+
+      '</tr>'
+    );
+    table = $('#dataTable').DataTable({
+      "language": {
+        "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+      }
+    });
+  };
+  
+  function checkTask(cb){
+    $.ajax({
+      url: "http://localhost:3000/tasks/check/"+cb.id + '?status=' + cb.checked ,
+      type: 'GET',
+      crossDomain: true,
+      dataType: 'jsonp',
+      contentType: 'application/json; charset=utf-8',
+      success: function () {
+        table.destroy();
+        getTasks();
+      }
+    });
+  };
+  
+  function tasksFilter(status) {
+    var date = document.getElementById('fromInput').value;
+    if (date) {
+      date = new Date(date);
+    } else {
+      date = new Date('2000-01-01');
+    }
+    date = date.getTime();
+    var date1 = document.getElementById('toInput').value;
+    if (date1) {
+      date1 = new Date(date1);
+    } else {
+      date1 = new Date();
+    }
+    date1 = date1.getTime();
+    rangedTasks = [];
+    for(i=0; i < allTasks.length; i++){
+      taskDate = new Date(allTasks[i].date)
+      taskDate = taskDate.getTime();
+      if(taskDate >=  date && taskDate <= date1){
+        rangedTasks.push(allTasks[i]);
+      };
     };
-	
-	function checkTask(cb){
-		$.ajax({
-			url: "http://localhost:3000/tasks/check/"+cb.id + '?status=' + cb.checked ,
-			type: 'GET',
-			crossDomain: true,
-			dataType: 'jsonp',
-			contentType: 'application/json; charset=utf-8',
-			success: function () {
-				var checked = $(".task-checkbox");
-				var markAllChecked = true;
-				for (i=0; i < checked.length; i++){
-					if (checked[i].checked === false){
-						markAllChecked = false;
-					}
-				}
-				document.getElementById('checkAll').checked = markAllChecked;
-			}
-		});
-	
-	
-	};
-	
-	function tasksFilter(status) {
-		var date = document.getElementById('fromInput').value;
-		if (date) {
-			date = new Date(date);
-		} else {
-			date = new Date('2000-01-01');
-		}
-		date = date.getTime();
-		var date1 = document.getElementById('toInput').value;
-		if (date1) {
-			date1 = new Date(date1);
-		} else {
-			date1 = new Date();
-		}
-		date1 = date1.getTime();
-		rangedTasks = [];
-		for(i=0; i < allTasks.length; i++){
-			taskDate = new Date(allTasks[i].date)
-			taskDate = taskDate.getTime();
-			if(taskDate >=  date && taskDate <= date1){
-				rangedTasks.push(allTasks[i]);
-			};
-		};
-		if (status !== 'all'){
-			var activeTasks = []; 
-			if (status) {
-				for (i = 0; i< rangedTasks.length; i++){
-					if (rangedTasks[i].status === status){
-						activeTasks.push(rangedTasks[i]);
-					}
-				}
-			} else {
-				activeTasks = rangedTasks;
-			}
-			var sum = calculateSum(activeTasks);
-			drawTasksList(activeTasks, sum);
-		}else{
-			var sum = calculateSum(rangedTasks);
-			drawTasksList(rangedTasks, sum);
-		};
-	};
-	
-	function calculateSum(tasks){
-		var sum = 0;
-		for(i = 0; i < tasks.length; i++){
-			sum = sum + parseInt(tasks[i].points);
-		};
-		return sum;
-	};
-	
+    if (status !== 'all'){
+      var activeTasks = []; 
+      if (status) {
+        for (i = 0; i< rangedTasks.length; i++){
+          if (rangedTasks[i].status === status){
+            activeTasks.push(rangedTasks[i]);
+          }
+        }
+      } else {
+        activeTasks = rangedTasks;
+      }
+      var sum = calculateSum(activeTasks);
+      table.destroy();
+      drawTasksList(activeTasks, sum);
+    }else{
+      var sum = calculateSum(rangedTasks);
+      table.destroy();
+      drawTasksList(rangedTasks, sum);
+    };
+  };
+  
+  function calculateSum(tasks){
+    var sum = 0;
+    for(i = 0; i < tasks.length; i++){
+      sum = sum + parseInt(tasks[i].points);
+    };
+    return sum;
+  };
+  
     function logout() {
       localStorage.removeItem('admIsLogIn');
       localStorage.removeItem('admUser');
