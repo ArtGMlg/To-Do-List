@@ -249,38 +249,97 @@ function updateToDoItemOnServer(target){
   restore();
 };
 
-var removeIds = [];
+var tasksCards = [];
 
 function setOnClick() {
   $('.remove-btn').click(function(){
-    $(this).addClass('decline');
-    $(this).removeClass('remove-btn');
-    $(this).html('<i class="fas fa-trash-restore"></i>');
-    removeIds.push($(this).parent().attr('id'));
-    decline();
+    tasksCards.push($(this).parent().clone());
+    $(this).parent().replaceWith(
+      '<a class="list-group-item list-group-item-action countDownCard '+$(this).parent().attr('id')+'" style="'+ cardTheme() +'">'
+      +'<div id="'+$(this).parent().attr('id')+'"></div>'
+      +'<div class="text-center">До удаления <strong>5...</strong></div>'
+      +'<button type="button" class="btn btn-link" onclick="abortTheDeletion(\''+$(this).parent().attr('id')+'\')"><i class="fas fa-undo-alt" aria-hidden="true"></i> Отмена</button></a>'
+    );
+    $('#'+$(this).parent().attr('id')).on('circle-animation-progress', function(event, animationProgress, stepValue) {
+      switch (Math.floor(stepValue*10)){
+        case 8:
+          $(this).parent().find(".text-center strong").html('4&nbsp;..');
+          break;
+        case 6:
+          $(this).parent().find(".text-center strong").html('3&nbsp;&nbsp;.');
+          break;
+        case 4:
+          $(this).parent().find(".text-center strong").html('2&nbsp;&nbsp;&nbsp;');
+          break;
+        case 2:
+          $(this).parent().find(".text-center strong").html('1.&nbsp;&nbsp;');
+          break;
+        case 0:
+          $(this).parent().find(".text-center strong").html('0..&nbsp;');
+          break;
+      }
+    });
+    $('#'+$(this).parent().attr('id')).circleProgress({
+      startAngle: -Math.PI / 2,
+      animationStartValue: 1,
+      value: 0,
+      size: 50,
+      animation: {
+        duration: 5000,
+        easing: 'linear'
+      },
+      fill: {
+        color: localStorage.getItem('theme') === 'light' ? '#007bff' : '#7950f2'
+      },
+      emptyFill: "rgba(255,255,255,.3)"
+    }).on('circle-animation-end', function(event){
+      $(this).data('circle-progress').lastFrameValue === 0 ? deleteTaskOnServer($(this).attr('id')) : "";
+    });
   });
 }
 
-function decline(){
-  $('.decline').click(function(){
-    $(this).removeClass('decline');
-    $(this).addClass('remove-btn');
-    $(this).html('<i class="far fa-trash-alt"></i>');
-    for (i = 0; i < removeIds.length; i++) {
-      if (removeIds[i] === $(this).parent().attr('id')) {
-        removeIds.splice(i,1);
-      }
+function abortTheDeletion(id){
+  $($('#'+id).circleProgress('widget')).stop();
+  for (var i = 0; i < tasksCards.length; i++) {
+    if (tasksCards[i][0].id===id) {
+      $('.'+id).replaceWith(tasksCards[i]);
+      setOnClick();
+      tasksCards.splice(i,1);
+      return;
     }
-    setOnClick();
-  })
+  };
 }
 
-window.addEventListener("unload", function() {
-  $.post( "http://localhost:3000/tasks/delete", $.extend({}, removeIds), function( data ) {}, "json");
-});
+function cardTheme(){
+  if (localStorage.getItem("theme") === "light") {
+    return 'background-color: rgba(255, 255, 255, 0.5); color: black; height: 112px;display: flex;align-items: center;justify-content: space-between;'
+  }else{
+    return 'background-color: rgba(118, 120, 122, 0.5);color: rgba(255, 255, 255, 0.85);height: 112px;display: flex;align-items: center;justify-content: space-between;'
+  }
+}
 
-window.onbeforeunload = function(){
-  $.post( "http://localhost:3000/tasks/delete", $.extend({}, removeIds), function( data ) {}, "json");
+function deleteTaskOnServer(id){
+  $('.'+id).nextAll().animate({
+    top: -112
+  }, 500, 'linear', function(){
+    $('.'+id).nextAll().css('top', '0');
+  });
+  $({scale: 1, opacity: 1}).animate({
+    opacity: 0,
+    scale: 0.5
+  }, {
+    duration: 500,
+    step: function(now, fx) {
+      $('.'+id).css('transform', 'scale(' + now + ')');
+      $('.'+id).css('opacity', now);
+      $('.'+id).next().css('bottom', now);
+    },
+    complete: function(){
+      $('.'+id).remove();
+      empty();
+      $.post( "http://localhost:3000/tasks/delete", {"taskId": id}, function( data ) {}, "json");
+    }
+  }, 'linear');
 }
 
 function addToDoItem() {
@@ -312,6 +371,7 @@ function addToDoItem() {
       crossDomain: true,
       data: toDoItem,
       success: function(response) {
+        getTasks();
         $('#exampleModal .modal-body form img').attr({
           'style': 'width: 200px',
           'src': './img/done.gif'
@@ -324,8 +384,15 @@ function addToDoItem() {
           $('#to-do-points').val('');
           $('#to-do-time-hours').val('0');
           $('#to-do-time-minutes').val('00');
-          getTasks()
         },1000);
+        $('#exampleModal').on('hidden.bs.modal', function (e) {
+          $('#exampleModal .modal-body form').replaceWith(restore);
+          $('#to-do-tittle').val('');
+          $('#to-do-description').val('');
+          $('#to-do-points').val('');
+          $('#to-do-time-hours').val('0');
+          $('#to-do-time-minutes').val('00');
+        })
       }
   });
 }
@@ -481,6 +548,7 @@ var weaData;
 getForecast();
 
 function getForecast(){
+  $('#refresh i').toggleClass('rotation');
   if (localStorage.getItem('city')) {
     var cityName = localStorage.getItem('city');
     $('#cityInput').attr('placeholder', localStorage.getItem('city'));
@@ -499,6 +567,7 @@ function getForecast(){
     success: function (data) {
       if(data.weatherdata.weather[0].current[0]){
         setIcon(data);
+        $('#refresh i').toggleClass('rotation');
         $('#sky').html(data.weatherdata.weather[0].current[0].$.skytext);
         $('#temperature').html(data.weatherdata.weather[0].current[0].$.temperature + '&#8451;');
         $('#city').html(data.weatherdata.weather[0].$.weatherlocationname);
@@ -510,9 +579,13 @@ function getForecast(){
       }
     },
     error: function(request,msg,error){
+      $('#refresh i').toggleClass('rotation');
+      $('#refresh').html('<i class="fas fa-times-circle weaTools text-danger"></i>');
+      setTimeout(function(){
+        $('#refresh').html('<i class="fas fa-sync-alt weaTools"></i>');
+      }, 2000);
       console.log(request + ' ' + msg + ' ' + error);
-      $('#sky').html('Не удалось загрузить прогноз.');
-      $('#temperature').html('--/--&#8451;');
+      $('#sky').text().length < 2 ? $('#sky').html('Не удалось загрузить прогноз.') : "";
       $('#city').html(localStorage.getItem('city'));
     }
   });

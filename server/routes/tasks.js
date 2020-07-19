@@ -185,17 +185,13 @@ router.post('/delete', function(req, res, next) {
 	res.setHeader('Content-Type', 'application/json');
 
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
-  var taskIds = req.body;
-  upperLoop:
-	  for (i = 0; i < Object.keys(taskIds).length; i++){
-	  	deeperLoop:
-				for (j = 0; j < data.tasks.length; j++){
-					if(JSON.stringify(data.tasks[j].id) === JSON.stringify(taskIds[i])){
-						data.tasks.splice(j,1);
-						break deeperLoop;
-					}
-		  	} 
-	  }
+  var taskId = req.body.taskId;
+	for (i = 0; i < data.tasks.length; i++){
+		if(data.tasks[i].id === taskId){
+			data.tasks.splice(i,1);
+			break;
+		}
+	} 
   fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
     res.end();
   });
