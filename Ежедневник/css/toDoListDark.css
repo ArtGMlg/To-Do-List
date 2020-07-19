@@ -19,6 +19,7 @@ html{
 
 #bgBlur img{
   filter: blur(0px) saturate(150%) opacity(0);
+  opacity: 1;
   transform: scale(1.1);
   transition: inherit;
 }
@@ -33,16 +34,17 @@ body{
 }
 
 #loadingScreen{
-  position: fixed;
+  position: fixed!important;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
   z-index: 100;
-  background-color: rgba(0,0,0,.96);
+  background-color: rgba(0,0,0,.85);
   backdrop-filter: blur(15px);
-  transition: all .3s linear;
+  transition: background-color .3s linear, color .3s linear;
 }
 
 nav{
@@ -68,9 +70,9 @@ nav{
 }
 
 .list-group-item{
-  background-color: rgba(255,255,255, .5);
-  color: black;
-  transition: all .3s linear;
+  background-color: rgba(118,120,122,.5);
+  color: rgba(255,255,255,.85);
+  transition: background-color .3s linear, color .3s linear;
 }
 
 .complited-task{
@@ -121,7 +123,7 @@ h3{
   height: fit-content;
   position: absolute;
   right: 15%;
-  top: 30px;
+  top: 25px;
   font-size: 30px;
   z-index: 80;
 }
@@ -145,10 +147,6 @@ label{
 .theme-btn{
   background-color: #7950f2;
   border-color: #7950f2;
-}
-
-.theme-btn:focus{
-  box-shadow: 0 0 0 0.2rem rgba(121, 80, 242, .5);
 }
 
 .modal-content{
@@ -254,10 +252,7 @@ div#weaContainer p {
   left: 5px;
   transition: all .3s linear;
   cursor: pointer;
-}
-
-#refresh:hover{
-  transform: rotate(180deg);
+  transform: rotate(0deg);
 }
 
 em{
@@ -330,7 +325,23 @@ em{
   transition: all .3s linear;
 }
 
-@media all and (max-width: 1024px){
+.rotation{
+  animation-name: rotate;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes rotate{
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+}
+
+@media all and (max-width: 1240px){
   #contentContainer{
     padding-top: 135px;
   }
@@ -339,6 +350,7 @@ em{
     display: flex;
     height: auto;
     max-width: 100%;
+    margin-right: 5px;
   }
   #weaInf{
     display: inline-block;

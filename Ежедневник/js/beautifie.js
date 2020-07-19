@@ -18,11 +18,6 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
-if ($(window).width() <= 800) {
-  $('#themeSwitcherContainer').tooltip('disable');
-  $('#logout').html('<i style="display: inline;" class="fas fa-sign-out-alt"></i>');
-}
-
 window.addEventListener('resize', onResize, false);
 
 function onResize() {
@@ -59,31 +54,22 @@ function setBackgroundError() {
 }
 
 function setBackground(result) {;
-  background = "http://bing.com" + result.images[0].url.replace('1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp','1280x720.jpg');
+  background = "https://bing.com" + result.images[0].url.replace('1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp','1280x720.jpg');
   $('#bgBlur img').attr('src', background);
   $('#bgBlurLt img').attr('src', background);
   switchTheme();
 };
 
-$('.padding-container').css({
-  'margin-top': ($(window).height() - $('.padding-container').height())/2 - 70 + "px",
-  'opacity': '1'
-});
-
 function switchTheme() {
   if ($('#themeSwitcher').prop('checked') === true) {
     localStorage.setItem('theme', 'dark'); 
     $('head').append('<link rel="stylesheet" type="text/css" href="./css/darkCalendar.css">');
-    $('#loadingScreen').css('background-color', 'rgba(0,0,0,.96)');
     $('#light').css("opacity", "0");
     $('#light').css("visibility", "hidden");
     $('#dark').css("visibility", "");
     $('#dark').css("opacity", "1");
     $('#bgBlur img').css({
       'filter': 'blur(40px) saturate(150%) opacity(0)'
-    });
-    $('#bgBlurLt img').css({
-      'filter': 'blur(25px) saturate(150%) opacity(0)'
     });
     $('body').css({
       'background-color': 'black'
@@ -137,9 +123,6 @@ function switchTheme() {
     $('#bgBlur img').css({
       'filter': 'blur(40px) saturate(150%) opacity(1)'
     });
-    $('#bgBlurLt img').css({
-      'filter': 'blur(25px) saturate(150%) opacity(1)'
-    });
     $('body').css({
       'background-color': '#181819'
     });
@@ -184,6 +167,22 @@ function switchTheme() {
     );
     $('.progress').css('background-color', '#e9ecef');
   };
+};
+
+window.onload = function(){
+  $('#bgBlurLt img, #bgBlur img').animate({
+    opacity: 1
+  }, 500, 'linear');
+  $('#loadingScreen').animate({
+    opacity: 0
+  }, 500, 'linear', function(){
+    $('#loadingScreen').remove();
+    $('body').removeClass('modal-open');
+  });
+  if ($(window).width() <= 800) {
+    $('#themeSwitcherContainer').tooltip('disable');
+    $('#logout').html('<i style="display: inline;" class="fas fa-sign-out-alt"></i>');
+  };
   $(".theme-btn").focus(function(){
     if (localStorage.getItem('theme') === 'light') {
       $(this).css("box-shadow", "0 0 0 0.2rem rgba(38,143,255,.5)");
@@ -192,12 +191,6 @@ function switchTheme() {
     }
   });
   $(".theme-btn").blur(function(){
-    if (localStorage.getItem('theme') === 'dark') {
-      $(this).css("box-shadow", "none");
-    }else if (localStorage.getItem('theme') === 'light') {
-      $(this).css("box-shadow", "none");
-    }
+    $(this).css("box-shadow", "none");
   });
-  var loadingScreen = $('#loadingScreen');
-  setTimeout(function(){if (loadingScreen){loadingScreen.remove();}}, 500);
-};
+}

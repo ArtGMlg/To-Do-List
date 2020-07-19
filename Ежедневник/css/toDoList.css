@@ -19,6 +19,7 @@ html{
 
 #bgBlur img{
   filter: blur(40px) saturate(150%) opacity(1);
+  opacity: 0;
   transform: scale(1.1);
   transition: inherit;
 }
@@ -32,16 +33,17 @@ body{
 }
 
 #loadingScreen{
-  position: fixed;
+  position: fixed!important;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
   z-index: 100;
-  background-color: rgba(255,255,255,.96);
+  background-color: rgba(255,255,255,.85);
   backdrop-filter: blur(15px);
-  transition: all .3s linear;
+  transition: background-color .3s linear, color .3s linear;
 }
 
 nav{
@@ -69,7 +71,7 @@ nav{
 .list-group-item{
   background-color: rgba(255,255,255, .5);
   color: black;
-  transition: all .3s linear;
+  transition: background-color .3s linear, color .3s linear;
 }
 
 .complited-task{
@@ -120,7 +122,7 @@ h3{
   height: fit-content;
   position: absolute;
   right: 15%;
-  top: 30px;
+  top: 25px;
   font-size: 30px;
   z-index: 80;
 }
@@ -145,26 +147,8 @@ label{
   border-color: #007bff;
 }
 
-.theme-btn:focus{
-  box-shadow: 0 0 0 0.2rem rgba(38,143,255,.5);
-}
-
-.modal-content{
-  background-color: #fff;
-  color: black;
-}
-
-.form-control{
-  color: #495057;
-  background-color: white;
-}
-
 .tooltip{
   margin-top: 8px;
-}
-
-.close{
-  color: black;
 }
 
 .arrow{
@@ -249,10 +233,7 @@ div#weaContainer p {
   left: 5px;
   transition: all .3s linear;
   cursor: pointer;
-}
-
-#refresh:hover{
-  transform: rotate(180deg);
+  transform: rotate(0deg);
 }
 
 #settings:hover{
@@ -330,7 +311,23 @@ em{
   transition: all .3s linear;
 }
 
-@media all and (max-width: 1024px){
+.rotation{
+  animation-name: rotate;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes rotate{
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+}
+
+@media all and (max-width: 1240px){
   #contentContainer{
     padding-top: 135px;
   }
@@ -340,6 +337,7 @@ em{
     height: auto;
     max-width: 100%;
     min-width: 210px;
+    margin-right: 5px;
   }
   #weaInf{
     display: inline-block;
