@@ -13,7 +13,7 @@
     "fs": "0.0.1-security",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "morgan": "~1.9.0",
     "path": "^0.12.7",
     "request": "^2.88.2",
