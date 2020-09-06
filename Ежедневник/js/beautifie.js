@@ -21,6 +21,10 @@ $(function () {
 window.addEventListener('resize', onResize, false);
 
 function onResize() {
+  $('#uploadImg').css({
+    'width': $('#avatar').width(),
+    'height': $('#avatar').height()
+  })
   if ($(window).width() >= 800) {
     $('#themeSwitcherContainer').tooltip('enable');
     $('#logout').html('<i style="display: inline;" class="fas fa-sign-out-alt"></i>Выйти');
@@ -74,10 +78,12 @@ function switchTheme() {
     $('body').css({
       'background-color': 'black'
     });
-    $('.list-group-item').css({
+    $('a.list-group-item').css({
       'background-color': 'rgba(118,120,122,.5)',
       'color': 'rgba(255,255,255,.85)'
     });
+    $('div#tasks li').css('color', 'white');
+    $('#tasks').css('background-color', 'transparent');
     $('.jumbotron').css({
       'background-color': 'rgb(37, 37, 39)',
       'color': 'white'
@@ -112,10 +118,9 @@ function switchTheme() {
       }
     );
     $('.progress').css('background-color', '#0c0c0d');
-  }else{
+  }else if ($('#themeSwitcher').prop('checked') === false){
     localStorage.setItem('theme', 'light');
     $('link[href="./css/darkCalendar.css"]').remove();
-    $('#loadingScreen').css('background-color', '');
     $('#dark').css("opacity", "0");
     $('#dark').css("visibility", "hidden");
     $('#light').css("visibility", "");
@@ -126,10 +131,12 @@ function switchTheme() {
     $('body').css({
       'background-color': '#181819'
     });
-    $('.list-group-item').css({
+    $('a.list-group-item').css({
       'background-color': 'rgba(255,255,255, .5)',
       'color': 'black'
     });
+    $('div#tasks li').css('color', 'black');
+    $('#tasks').css('background-color', 'rgba(255,255,255, .5)');
     $('.jumbotron').css({
       'background-color': 'rgba(233, 236, 239, .5)',
       'color': 'black'
@@ -156,13 +163,13 @@ function switchTheme() {
       'background-color': 'rgba(233, 236, 239, .5)',
       'color': 'black'
     });
-    $('.weaTools').css('color', '#b3b3b3');
+    $('.weaTools').css('color', '#6c757d');
     $('.weaTools').hover(
       function (){
         $(this).css('color', '#1c1c1c')
       },
       function (){
-        $(this).css('color', '#b3b3b3')
+        $(this).css('color', '#6c757d')
       }
     );
     $('.progress').css('background-color', '#e9ecef');
@@ -170,9 +177,6 @@ function switchTheme() {
 };
 
 window.onload = function(){
-  $('#bgBlurLt img, #bgBlur img').animate({
-    opacity: 1
-  }, 500, 'linear');
   $('#loadingScreen').animate({
     opacity: 0
   }, 500, 'linear', function(){
@@ -193,4 +197,23 @@ window.onload = function(){
   $(".theme-btn").blur(function(){
     $(this).css("box-shadow", "none");
   });
+  $('input, textarea, select').focus(function(){
+    localStorage.getItem('theme') === 'light' ? $(this).css({
+      'box-shadow': '0 0 0 0.2rem rgba(0,123,255,.25)',
+      'border-color': '#80bdff'
+    }) : $(this).css({
+      'box-shadow': '0 0 0 0.2rem #7950f240',
+      'border-color': '#7950f2'
+    })
+  });  
+  $('input, textarea, select').blur(function(){
+    $(this).css({
+      'box-shadow': 'none',
+      'border-color': ''
+    });
+  });
+  $('#uploadImg').css({
+    'width': $('#avatar').width() +'px',
+    'height': $('#avatar').height() +'px'
+  })
 }

@@ -29,63 +29,60 @@
     <div class="container">
 
     <!-- Outer Row -->
-    <div class="row justify-content-center">
+      <div class="row justify-content-center">
 
-      <div class="col-xl-10 col-lg-12 col-md-9">
+        <div class="col-xl-10 col-lg-12 col-md-9">
 
-        <div class="card o-hidden border-0 shadow-lg my-5">
-          <div class="card-body p-0">
-            <!-- Nested Row within Card Body -->
-            <div class="row">
-              <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-              <div class="col-lg-6">
-                <div class="p-5">
-                  <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Добро пожаловать!</h1>
-                  </div>
-                  <form class="user">
-                    <div class="form-group">
-                      <input type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email">
+          <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+              <!-- Nested Row within Card Body -->
+              <div class="row">
+                <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                <div class="col-lg-6">
+                  <div class="p-5">
+                    <div class="text-center">
+                      <h1 class="h4 text-gray-900 mb-4">Добро пожаловать!</h1>
                     </div>
-                    <div class="form-group">
-                      <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Пароль">
+                    <form class="user">
+                      <div class="form-group">
+                        <input type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email">
+                      </div>
+                      <div class="form-group">
+                        <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Пароль">
+                      </div>
+                      <div class="text-danger d-flex justify-content-center align-items-center" id="errorMessage"></div>
+                      <div class="form-group">
+                        <div class="custom-control custom-checkbox small">
+                          <input type="checkbox" class="custom-control-input" id="customCheck">
+                          <label class="custom-control-label" for="customCheck">Запомнить меня</label>
+                        </div>
+                      </div>
+                      <a class="btn btn-primary btn-user btn-block text-gray-100" onclick="auth()">
+                        Войти
+                      </a>
+                      <hr>
+                     <!-- <a href="index.html" class="btn btn-google btn-user btn-block">
+                        <i class="fab fa-google fa-fw"></i> Login with Google
+                      </a>
+                      <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                        <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+                      </a>-->
+                    </form>
+                    <!--  <hr>
+                    <div class="text-center">
+                      <a class="small" href="forgot-password.html">Forgot Password?</a>
+                    </div>-->
+                    <div class="text-center">
+                      <a class="small" href="registration.html">Зарегистрироваться</a>
                     </div>
-                    <div class="text-danger text-center" style="height: 0px" id="errorMessage"></div>
-                    <div class="form-group">
-                   <!--   <div class="custom-control custom-checkbox small">
-                        <input type="checkbox" class="custom-control-input" id="customCheck">
-                        <label class="custom-control-label" for="customCheck">Remember Me</label>
-                      </div>-->
-                    </div>
-                    <a class="btn btn-primary btn-user btn-block text-gray-100" onclick="auth()">
-                      Войти
-                    </a>
-                    <hr>
-                   <!-- <a href="index.html" class="btn btn-google btn-user btn-block">
-                      <i class="fab fa-google fa-fw"></i> Login with Google
-                    </a>
-                    <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                      <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
-                    </a>-->
-                  </form>
-                  <!--  <hr>
-                <div class="text-center">
-                    <a class="small" href="forgot-password.html">Forgot Password?</a>
-                  </div>-->
-                  <div class="text-center">
-                    <a class="small" href="registration.html">Зарегистрироваться</a>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
-
     </div>
-
-  </div>
     </script>
     <script src="./js/beautifie.js"></script>
   <SCRIPT>
@@ -113,7 +110,7 @@
       var cookie_string = name + "=" + String(value);
 
       var expires = new Date ();
-      expires.setDate(expires.getDate() + 7);
+      expires.setDate($('#customCheck').prop('checked') === true ? expires.getDate() + 31 : expires.getDate() + 7);
       cookie_string += "; expires=" + expires.toUTCString();
 
       document.cookie = cookie_string;
@@ -123,8 +120,8 @@
 
     function auth(){
       var user = {
-        userName: document.getElementById("exampleInputEmail").value,
-        password: document.getElementById("exampleInputPassword").value
+        userName: $("#exampleInputEmail").val(),
+        password: $("#exampleInputPassword").val()
       }
       $.ajax({
           url: "http://localhost:3000/users/login?userName=" + user.userName + "&password=" +  user.password,
@@ -133,15 +130,18 @@
           dataType: 'jsonp',
           contentType: 'application/json; charset=utf-8',
           success: function (data) {
-            setCookie('isLogIn', true);
-            setCookie('user', JSON.stringify(data));
-            localStorage.setItem('isLogIn', true);
             userData = {
               firstName: data.firstName,
               lastName: data.lastName,
               surName: data.surName,
-              email: data.email
-            }
+              birthDay: data.birthDay,
+              gender: data.gender,
+              email: data.email,
+              admin: data.admin
+            };
+            setCookie('isLogIn', 'true');
+            setCookie('user', JSON.stringify(userData));
+            localStorage.setItem('isLogIn', true);
             localStorage.setItem('user', JSON.stringify(userData));
             var searchParams = new URLSearchParams(window.location.search);
             var location = searchParams.get('redirectedFrom');
@@ -156,7 +156,7 @@
             $('#exampleInputPassword').css('border-color', '#f80000');
             $('#errorMessage').text('Неверное имя пользователя или пароль!');
             $('#errorMessage').animate({
-              height: '24px'
+              height: '40px'
             }, 300, 'linear')
           }
       });

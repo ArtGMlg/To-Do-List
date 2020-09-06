@@ -4,17 +4,30 @@
     <TITLE>Регистрация</TITLE>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://kit.fontawesome.com/60c6536c6a.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <link href="css/mobiscroll.jquery.lite.min.css" rel="stylesheet">
     <style type="text/css">
       body{
         align-items: center;
       }
       .content-container{
         opacity: 1;
+      }
+      .mbsc-segmented label.mbsc-segmented-item:first-child span.mbsc-segmented-content{
+        border-top-left-radius: 10rem!important;
+        border-bottom-left-radius: 10rem!important;
+      }
+      .mbsc-segmented label.mbsc-segmented-item:last-child span.mbsc-segmented-content{
+        border-top-right-radius: 10rem!important;
+        border-bottom-right-radius: 10rem!important;
+      }
+      .mbsc-ios .mbsc-segmented-content{
+        background: rgba(255, 255, 255, .5);
+        transition: all .3s linear;
       }
     </style>
     <script>
@@ -46,19 +59,40 @@
                 </div>
                 <form class="user">
                   <div class="form-group row">
-                    <div class="col-sm-6 mb-3 mb-sm-0">
+                    <div class="col-sm-6 mb-3">
                       <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Фамилия">
                     </div>
-                    <div class="col-sm-6 mb-3 mb-sm-0">
+                    <div class="col-sm-6 mb-3">
                       <input type="text" class="form-control form-control-user" id="exampleLastName" placeholder="Имя">
                     </div>
-                    <div class="col-sm-6 mt-sm-3" style="flex: 0 0 100%; max-width: 100%">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
                       <input type="text" class="form-control form-control-user" id="exampleSurName" placeholder="Отчество">
+                    </div>
+                    <div class="input-group col-sm-6">
+                      <input type="text" class="form-control form-control-user" id="exampleBirthDay" placeholder="Дата рождения">
+                      <div class="input-group-append" data-toggle="tooltip" data-placement="bottom" data-html="true" title="Это поле не обязательно, но если мы будем знать Ваш день рождения, то сможем Вас поздравить <i class='emoji'>&#129395;</i>">
+                        <span class="input-group-text" style="border: 1px solid #ced4da;border-top-right-radius: 1rem;border-bottom-right-radius: 1rem;">
+                           <i class="fas fa-question-circle text-secondary"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-lg-12 text-center font-weight-bolder">Пол</div>
+                    <div class="mbsc-segmented mbsc-no-touch mbsc-ios mbsc-ltr p-0 py-3">
+                      <label class="mbsc-segmented-item mbsc-segmented-item-ready">
+                        <input mbsc-segmented="" type="radio" data-role="segmented" name="gender" id="male" class="mbsc-control">
+                        <span class="mbsc-segmented-content">Мужской</span>
+                      </label>
+                      <label class="mbsc-segmented-item mbsc-segmented-item-ready">
+                        <input mbsc-segmented="" type="radio" data-role="segmented" name="gender" id="female" class="mbsc-control">
+                        <span class="mbsc-segmented-content">Женский</span>
+                      </label>
                     </div>
                   </div>
                   <div class="form-group">
                     <input type="email" class="form-control form-control-user" id="exampleInputEmail" placeholder="Email">
-                    <div class="text-danger text-center" style="height: 0px" id="emailError"></div>
+                    <div class="text-danger d-flex justify-content-center align-items-center text-center" id="emailError"></div>
                   </div>
                   <div class="form-group row">
                     <div class="col-sm-6 mb-3 mb-sm-0">
@@ -67,7 +101,7 @@
                     <div class="col-sm-6">
                       <input type="password" class="form-control form-control-user" id="exampleRepeatPassword" placeholder="Повторите пароль">
                     </div>
-                    <div class="text-danger mx-auto" style="height: 0px" id="errorMessage"></div>
+                    <div class="text-danger text-center mx-auto d-flex align-items-center justify-content-center" id="errorMessage"></div>
                   </div>
                   <a class="btn btn-primary btn-user btn-block text-gray-100" onclick="reg()">
                     Зарегистрироваться
@@ -87,10 +121,28 @@
       </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="./js/mobiscroll.jquery.lite.min.js"></script>
+    <script src="./js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
     <script src="./js/beautifie.js"></script>
     <SCRIPT>
+      mobiscroll.settings = {
+        theme: 'ios',
+        themeVariant: 'light'
+      };
+      var res;
       $('document').ready(function(){
-        $('.form-control').focus(function(){
+        $('#exampleBirthDay').datepicker({
+          language: "ru",
+          format: "yyyy-mm-dd",
+          orientation: "bottom",
+          autoclose: true,
+          disableTouchKeyboard: true,
+          assumeNearbyYear: true
+        });
+        $('.form-control').not('#exampleInputEmail').focus(function(){
           $('.form-control').not('#exampleInputEmail').css('border-color', '');
           $('#errorMessage').animate({
             height: '0px'
@@ -112,12 +164,14 @@
           if (!this.value.includes('@') && this.value.length >= 1) {
             $('#emailError').text('Адрес должен содержать символ "@"');
             $('#emailError').animate({
-              height: '24px'
+              height: '40px'
             }, 300, 'linear', function(){
               $('#exampleInputEmail').css('border-color', "#f80000")
             })
           }
         })
+
+        JSON.parse(localStorage.getItem('confirmationStart')).state === true ? continueConfirmation(JSON.parse(localStorage.getItem('confirmationStart')).email) : '';
       })
       
       function reg(){
@@ -126,27 +180,39 @@
           $('#exampleRepeatPassword').css('border-color', '#f80000');
           $('#errorMessage').text('Пароли не совпадают!');
           $('#errorMessage').animate({
-            height: '24px'
+            height: '40px'
           }, 300, 'linear')
           return;
         }else if (!$('#exampleInputEmail').val().includes('@')) {
           $('#exampleInputEmail').css('border-color', "#f80000");
           $('#emailError').text('Введён неверный адрес!');
           $('#emailError').animate({
-            height: '24px'
-          }, 300, 'linear')
+            height: '40px'
+          }, 300, 'linear');
           return;
         }else if ($('#exampleInputPassword').val().length < 6) {
           $('#errorMessage').text('Пароль должен содержать как минимум 6 символов!');
           $('#errorMessage').animate({
-            height: '24px'
+            height: '40px'
           }, 300, 'linear')
           return;
+        }
+        $('.btn-user').toggleClass('disabled');
+        var gender = function(){
+          if ($('#male').prop('checked')===true) {
+            return 'Мужской'
+          }else if ($('#female').prop('checked')===true) {
+            return 'Женский'
+          }else {
+            return 'Не указан'
+          }
         }
         var user = {
           firstName: $('#exampleFirstName').val(),
           lastName: $('#exampleLastName').val(),
           surName: $('#exampleSurName').val(),
+          birthDay: $('#exampleBirthDay').val().length > 0 ? $('#exampleBirthDay').val() : 'Не указан',
+          gender: gender,
           email: $('#exampleInputEmail').val(),
           password: $('#exampleInputPassword').val()
         }
@@ -157,14 +223,94 @@
           crossDomain: true,
           data: user,
           success: function(response) {
-            if(response.success) {
-              window.location.replace("log in.html");
+            if(response.success === true) {
+              confirmation(response, user.email);
             } else {
-              alert(response.error);
+              $('#emailError').text(response.error);
+              $('#emailError').animate({
+                height: '40px'
+              }, 300, 'linear');
+            }
+          }
+        });
+      }
+
+      function confirmation(response, email) {
+        $.ajax({
+          type: 'POST',
+          url: 'http://localhost:3000/email/send/confirmMail',
+          crossDomain: true,
+          data: {
+            email: email,
+            num: response.uniqNum
+          },
+          success: function(response) {}
+        });
+        $('div.p-5').html(
+          '<form class="user">'+
+            '<div class="text-center">'+
+              '<h1 class="h4 text-gray-900 mb-4">Подтвердить e-mail</h1>'+
+            '</div>'+
+            '<div class="form-group">'+
+              '<input type="text" class="form-control form-control-user text-center font-weight-bold" style="font-size: 25px" id="exampleInputNum" maxlength="6" autocomplete="off">'+
+            '</div>'+
+            '<div class="text-center my-4">'+
+              'Письмо с уникальным номером для регистрации было отправлено на e-mail, который Вы указали при регистрации.'+
+            '</div>'+
+            '<button class="btn btn-primary btn-user btn-block text-gray-100" onclick="confirm(\''+email+'\')">Подтвердить</button>'+
+          '</form>'
+        );
+        res = response;
+        localStorage.setItem('confirmationStart', JSON.stringify({state: true, email: email}));
+      }
+
+      function continueConfirmation(email){
+        $('div.p-5').html(
+          '<form class="user">'+
+            '<div class="text-center">'+
+              '<h1 class="h4 text-gray-900 mb-4">Подтвердить e-mail</h1>'+
+            '</div>'+
+            '<div class="form-group">'+
+              '<input type="text" class="form-control form-control-user text-center font-weight-bold" style="font-size: 25px" id="exampleInputNum" maxlength="6" autocomplete="off">'+
+            '</div>'+
+            '<div class="text-center my-4">'+
+              'Письмо с уникальным номером для регистрации было отправлено на e-mail, который Вы указали при регистрации.'+
+            '</div>'+
+            '<button class="btn btn-primary btn-user btn-block text-gray-100" onclick="confirm(\''+email+'\')">Подтвердить</button>'+
+          '</form>'
+        );
+      }
+
+      function confirm(email) {
+        $('.btn-user').attr('disabled', 'true');
+        var num = $('#exampleInputNum').val();
+        $.ajax({
+          type: 'POST',
+          url: 'http://localhost:3000/users/reg/confirm',
+          crossDomain: true,
+          data: {email: email, num: $('#exampleInputNum').val()},
+          success: function(response) {
+            if(response.success === true) {
+              localStorage.removeItem('confirmationStart');
+              window.location.replace('log in.html');
+            }else if (response.success === false) {
+              $('#exampleInputNum').after('<div class="wrong-num d-flex align-items-center justify-content-center text-danger" style="height: 0px"></div>').addClass('border-danger');
+              $('.wrong-num').text('Неверный номер!').animate({
+                height: 40
+              }, 300, 'linear');
+              $('.btn-user').removeAttr('disabled');
+              $('#exampleInputNum').focus(function(){
+                $(this).removeClass('border-danger');
+                $('.wrong-num').animate({
+                  height: 0
+                }, 300, 'linear', function(){
+                  $(this).text('').remove();
+                })
+              })
             }
           }
         });
       }
     </SCRIPT>
   </BODY>
-</HTML> 
+</HTML>

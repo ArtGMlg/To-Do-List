@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'NotoColorEmoji';
+  src: url(../fonts/NotoColorEmoji.ttf);
+}
+
+.emoji{
+  font-family: NotoColorEmoji;
+  font-style: normal;
+}
+
 .form-group{
   transition: all .3s linear;
 }
@@ -16,7 +26,7 @@
   background-color: rgba(255, 255, 255, .5);
   background-clip: border-box;
   border: 1px solid #e3e6f0;
-  border-radius: 0.35rem;
+  border-radius: 1rem;
 }
 
 .form-control {
@@ -28,7 +38,7 @@
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #6e707e;
+  color: black;
   background-clip: padding-box;
   border: 1px solid #d1d3e2;
   border-radius: .35rem;
@@ -69,7 +79,7 @@ form.user .btn-user {
 .bg-login-image{
   background: url(../img/undraw_authentication_fsn5.svg);
   background-position: center;
-  background-size: 95%;
+  background-size: 90%;
   background-repeat: no-repeat;
 }
 
@@ -80,14 +90,44 @@ form.user .btn-user {
   background-repeat: no-repeat;
 }
 
+form.user .custom-checkbox.small label {
+  line-height: 1.5rem;
+}
+
+.custom-control-label {
+  position: relative;
+  margin-bottom: 0;
+  vertical-align: top;
+}
+
+.custom-control{
+  padding-left: 2rem;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+#uploadImg:hover{
+  opacity: 1!important;
+}
+
 body{
-  transition: all .3s linear;
-  display: flex;
-  justify-content: center;
+  font-family: Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
 }
 
 .card-body{
   box-shadow: rgb(8, 7, 7) 5px 16px 40px 0px;
+  border-radius: 1rem;
+}
+
+li div{
+  display: inline;
 }
 
 #loadingScreen{
@@ -117,7 +157,74 @@ body{
 
 #bgBlurLt img{
   filter: blur(25px) saturate(150%);
-  opacity: 0;
-  transform: scale(1.5);
+  transform: scale(1.2);
   transition: inherit;
+}
+
+.datepicker{
+  -webkit-animation-name: growIn;
+  animation-name: growIn;
+  -webkit-animation-duration: .2s;
+  animation-duration: .2s;
+  -webkit-animation-timing-function: transform cubic-bezier(.18,1.25,.4,1),opacity cubic-bezier(0,1,.4,1);
+  animation-timing-function: transform cubic-bezier(.18,1.25,.4,1),opacity cubic-bezier(0,1,.4,1);
+}
+
+@-webkit-keyframes growIn {
+  0% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes growIn {
+  0% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.datepicker-dropdown{
+  box-shadow: rgb(8, 7, 7) 9px 9px 20px 2px;
+}
+
+.datepicker-dropdown{
+  transition: all .3s linear;
+}
+
+.datepicker-dropdown.datepicker-orient-bottom:after{
+  left: 13px;
+}
+
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover{
+  transition: all .3s linear;
+}
+
+.datepicker table tr td.day:hover,
+.datepicker table tr td.focused{
+  transition: all .3s linear;
+}
+
+.datepicker table tr td span.focused,
+.datepicker table tr td span:hover{
+  transition: all .3s linear;
+}
+
+.dropdown-menu{
+  border-radius: 0.8rem;
 }

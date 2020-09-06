@@ -1,0 +1,307 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/60c6536c6a.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css">
+    <script>
+      if (!localStorage.getItem('isLogIn')) {
+        window.location="log in.html";
+      };
+      $('head').append('<title>'+ JSON.parse(localStorage.getItem('user')).firstName +'</title>')
+    </script>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <style type="text/css">
+      .list-group{
+        background-color: transparent!important;
+      }
+      .list-group-item{
+        background-color: inherit!important;
+      }
+      .far{
+        cursor: pointer;
+      }
+      .font-weight-bold{
+        color: black;
+      }
+    </style>
+  </head>
+  <body class="modal-open">
+    <div id="bgBlurLt">
+      <img src="">
+    </div>
+    <div id="loadingScreen">
+      <div id="loadingContent">
+        <img id="loadingImage">
+      </div>
+    </div>
+
+    <div class="container">
+
+    <!-- Outer Row -->
+      <div class="row justify-content-center">
+
+        <div class="col-xl-10 col-lg-12 col-md-9">
+
+          <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+              <!-- Nested Row within Card Body -->
+              <div class="row">
+                
+                <div class="col-lg-12">
+                  <button type="button" id="back" onclick="window.location.replace('to do list.html')" class="btn btn-outline-dark" style="position: absolute; top: 10px; left: 25px; z-index: 1">
+                    <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                  </button>
+                  <div class="p-3 p-lg-5">
+                    <div class="d-lg-flex">
+                      <div class="col-lg-6 d-flex d-lg-inline-flex align-items-center justify-content-center mb-3">
+                        <img id="avatar" class="w-75" src="">
+                      </div>
+                      <div class="col-lg-6 d-flex d-lg-inline-flex align-items-center justify-content-center">
+                        <ul class="list-group list-group-flush w-100" style="background-color: transparent;">
+                          <div class="text-center text-lg-left font-weight-bold"><i class="fas fa-user-cog"></i> Данные пользователя:</div>
+                          <li class="list-group-item"><strong class="font-weight-bolder text-body">Фамилия:</strong><div id="lastName"></div><i onclick="pasteInput('lastName', this)" class="far fa-edit float-right" aria-hidden="true"></i></li>
+                          <li class="list-group-item"><strong class="font-weight-bolder text-body">Имя:</strong><div id="firstName"></div><i onclick="pasteInput('firstName', this)" class="far fa-edit float-right" aria-hidden="true"></i></li>
+                          <li class="list-group-item"><strong class="font-weight-bolder text-body">Отчество:</strong><div id="surName"></div><i onclick="pasteInput('surName', this)" class="far fa-edit float-right" aria-hidden="true"></i></li>
+                          <li class="list-group-item"><strong class="font-weight-bolder text-body">Пол:</strong><div id="gender"></div><i onclick="pasteInput('gender', this)" class="far fa-edit float-right" aria-hidden="true"></i></li>
+                          <li class="list-group-item"><strong class="font-weight-bolder text-body">Дата рождения:</strong><div id="birthDay"></div><i onclick="pasteInput('birthDay', this)" class="far fa-edit float-right" aria-hidden="true"></i></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <hr class="my-4">
+                    <div class="col-lg-12">
+                      <div class="text-center text-lg-left font-weight-bold"><i class="fas fa-users"></i> Группы:</div>
+                      <ul id="groupsList" class="list-group list-group-flush w-100">
+                        <li class="list-group-item"><strong class="font-weight-bolder text-body">K-16</strong></li>
+                        <li class="list-group-item"><strong class="font-weight-bolder text-body">Ученики</strong></li>
+                      </ul>
+                    </div>
+                    <hr class="my-4">
+                    <div class="col-lg-12">
+                      <div class="text-center text-lg-left font-weight-bold"><i class="fas fa-lock"></i> Безопасность:</div>
+                      <ul class="list-group list-group-flush w-100">
+                        <li class="list-group-item"><strong class="font-weight-bolder text-body"><i class="fas fa-envelope" aria-hidden="true"></i> e-mail: </strong><div id="email"></div><i onclick="pasteInput('email', this)" class="far fa-edit float-right" aria-hidden="true"></i></li>
+                        <li class="list-group-item"><strong class="font-weight-bolder text-body"><i class="fas fa-key" aria-hidden="true"></i> Пароль: </strong><button type="button" class="btn btn-link text-decoration-none" style="box-shadow: none;">Изменить</button></li></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/beautifie.js"></script>
+    <script>
+      var user = JSON.parse(localStorage.getItem('user'));
+      if (localStorage.getItem('theme')==='dark') {
+        $('#loadingScreen').css('background-color', 'rgba(0,0,0,.85)');
+        $('body').css('background-color','black');
+        $('#bgBlurLt img').css('filter', 'blur(25px) saturate(150%) opacity(0)');
+        $('.card').css('background-color', 'rgb(37, 37, 39)');
+        $('.list-group-item').addClass('text-white-50');
+        $('.list-group-item').css('border-color', '#f8f9fa1f');
+        $('strong').toggleClass('text-body');
+        $('strong').toggleClass('text-light');
+        $('.font-weight-bold').addClass('text-white');
+        $('#back').removeClass('btn-outline-dark');
+        $('#back').addClass('btn-outline-light');
+        $('hr.my-4').css('border-color', '#f8f9fa80');
+      }
+      fillData();
+      function fillData() {
+        $('#lastName').html(' '+user.lastName);
+        $('#firstName').html(' '+user.firstName);
+        $('#surName').html(' '+user.surName);
+        $('#email').html(user.email);
+        var month = new Date(user.birthDay).getMonth() + 1;
+        $('#birthDay').html(' '+ new Date(user.birthDay).getDate() + ' ' + pluralizeMonth(month) + ' ' + new Date(user.birthDay).getFullYear());
+        switch(user.gender){
+          case 'Женский':
+            $('img#avatar').attr('src', './img/undraw_female_avatar_w3jk.svg');
+            $('#gender').html(' Женский');
+            break;
+          case 'Мужской':
+            $('img#avatar').attr('src', './img/undraw_male_avatar_323b.svg');
+            $('#gender').html(' Мужской');
+            break;
+          case 'Не указан':
+            $('img#avatar').attr('src', './img/undraw_profile_pic_ic5t.svg');
+            $('#gender').html(' Не указан');
+            break;
+          default:
+            $('img#avatar').attr('src', './img/undraw_profile_pic_ic5t.svg');
+            $('#gender').html(' Не указан');
+            break;
+        };
+      };
+      function uploadImg(){
+        $('#avatarModal').modal('toggle');
+      };
+      function pluralizeMonth(month) {
+      switch(month){
+        case 1:
+          return 'Января';
+        case 2:
+          return 'Февраля';
+        case 3:
+          return 'Марта';
+        case 4:
+          return 'Апреля';
+        case 5:
+          return 'Мая';
+        case 6:
+          return 'Июня';
+        case 7:
+          return 'Июля';
+        case 8:
+          return 'Августа';
+        case 9:
+          return 'Сентября';
+        case 10:
+          return 'Октября';
+        case 11:
+          return 'Ноября';
+        case 12:
+          return 'Декабря';
+      }
+    }
+
+    function pasteInput(argument, target) {
+      child = $(target);
+      child.hide();
+      child.parent().css({
+        'display': 'flex',
+        'align-items': 'center',
+        'justify-content': 'space-between'
+      });
+      switch(argument){
+        case 'lastName':
+          $('#lastName').html(
+            '<div class="input-group" style="display: inline-flex;margin-left: 10px;">'+
+              '<input type="text" class="form-control" placeholder="Введите фамилию" aria-describedby="button-addon4" style="background-color: white!important;">'+
+              '<div class="input-group-append" id="button-addon4">'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="fillData()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+              '</div>'+
+            '</div>'
+          );
+          break;
+        case 'firstName':
+          $('#firstName').html(
+            '<div class="input-group" style="display: inline-flex;margin-left: 10px;">'+
+              '<input type="text" class="form-control" placeholder="Введите имя" aria-describedby="button-addon4" style="background-color: white!important;">'+
+              '<div class="input-group-append" id="button-addon4">'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="decline()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+              '</div>'+
+            '</div>'
+          );
+          break;
+        case 'surName':
+          $('#surName').html(
+            '<div class="input-group" style="display: inline-flex;margin-left: 10px;">'+
+              '<input type="text" class="form-control" placeholder="Введите отчество" aria-describedby="button-addon4" style="background-color: white!important;">'+
+              '<div class="input-group-append" id="button-addon4">'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="decline()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+              '</div>'+
+            '</div>'
+          );
+          break;
+        case 'gender':
+          $('#gender').html(
+            '<div class="input-group" style="display: inline-flex;margin-left: 10px;">'+
+              '<select class="form-control" id="exampleFormControlSelect1">'+
+                '<option>Не указан</option>'+
+                '<option>Мужской</option>'+
+                '<option>Женский</option>'+
+              '</select>'+
+              '<div class="input-group-append" id="button-addon4">'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="decline()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+              '</div>'+
+            '</div>'
+          );
+          break;
+        case 'birthDay':
+          $('#birthDay').html(
+            '<div class="input-group" style="display: inline-flex;margin-left: 10px;">'+
+              '<input type="text" class="form-control" placeholder="Введите дату рождения" onfocus="(this.type=\'date\')" onblur="(this.type=\'text\')" aria-describedby="button-addon4" style="background-color: white!important;">'+
+              '<div class="input-group-append" id="button-addon4">'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="decline()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+              '</div>'+
+            '</div>'
+          );
+          break;
+        case 'email':
+          $('#email').html(
+            '<div class="input-group" style="display: inline-flex;margin-left: 10px;">'+
+              '<input type="text" class="form-control" placeholder="Введите e-mail" aria-describedby="button-addon4" style="background-color: white!important;">'+
+              '<div class="input-group-append" id="button-addon4">'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="decline()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+              '</div>'+
+            '</div>'
+          );
+          break;
+      }      
+    }
+
+    function confirmName(data) {
+      switch(data){
+        case 'lastName':
+          user.lastName = $('#lastName').find('input').val();
+          localStorage.setItem('user', JSON.stringify(user));
+          break;
+        case 'firstName':
+          user.firstName = $('#firstName').find('input').val();
+          localStorage.setItem('user', JSON.stringify(user));
+          break;
+        case 'surName':
+          user.surName = $('#surName').find('input').val();
+          localStorage.setItem('user', JSON.stringify(user));
+          break;
+        case 'gender':
+          user.gender = $('#gender').find('select').val();
+          localStorage.setItem('user', JSON.stringify(user));
+          break;
+        case 'birthDay':
+          user.birthDay = $('#birthDay').find('input').val();
+          localStorage.setItem('user', JSON.stringify(user));
+          break;
+        case 'email':
+          user.email = $('#email').find('input').val();
+          localStorage.setItem('user', JSON.stringify(user));
+          break;
+      }
+      child.parent().css({
+        'display': 'block'
+      });
+      fillData();
+      child.show();
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/users/change',
+        crossDomain: true,
+        data: user,
+        success: function(response) {
+          
+        }
+      });
+    }
+    function decline() {
+      $('.list-group-item').css('display', '');
+      fillData();
+      $('.fa-edit').show();
+    }
+    </script>
+  </body>
+</html>

@@ -4,63 +4,73 @@ $('#breadCrumbToDoList .input-group.date').datepicker({
   format: "yyyy-mm-dd",
   autoclose: true,
   todayHighlight: true,
-  disableTouchKeyboard: true
+  disableTouchKeyboard: true,
+  todayBtn: 'linked'
 });
 
-var searchParams = new URLSearchParams(window.location.search);
-var chosenDate = searchParams.get('chosenDate');
+$('#exampleModal .modal-dialog .modal-content .modal-body .input-group .form-control').datepicker({
+  language: "ru",
+  orientation: "auto",
+  format: "yyyy-mm-dd",
+  autoclose: true,
+  todayHighlight: true,
+  disableTouchKeyboard: true,
+  assumeNearbyYear: true,
+  todayBtn: 'linked'
+});
 
-if (!chosenDate) {
-  var today = new Date();
-  var month = today.getMonth() + 1;
-  var pluralizedMonth = pluralizeMonth(month);
-  if(month < 10){
-    month = '0'+month;
-  }
-  var day = today.getDate();
-  if (day < 9) {
-    day = '0'+ day;
-  }
-  var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
-  chosenDate = today.getFullYear() + '-' + month + '-' + day;
-  var chosenDateString = days[today.getDay()] + ', ' + today.getDate() + ' ' + pluralizedMonth;
-}else{
-  var today = new Date();
-  var month = today.getMonth() + 1;
-  var pluralizedMonth = pluralizeMonth(month);
-  if(month < 10){
-    month = '0'+month;
-  }
-  var day = today.getDate();
-  if (day < 9) {
-    day = '0'+ day;
-  }
-  var todayDate = today.getFullYear() + '-' + month + '-' + day;
-  var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
-  if (chosenDate === todayDate) {
+var chosenDate = localStorage.getItem('date');
+
+setDate();
+
+function setDate () {
+  if (!chosenDate) {
+    var today = new Date();
+    var month = today.getMonth() + 1;
+    var pluralizedMonth = pluralizeMonth(month);
+    month < 10 ? month = '0'+month : "";
+    var day = today.getDate();
+    day < 9 ? day = '0'+day : "";
+    var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    chosenDate = today.getFullYear() + '-' + month + '-' + day;
     var chosenDateString = days[today.getDay()] + ', ' + today.getDate() + ' ' + pluralizedMonth;
-  }else if (new Date(chosenDate).getDate() - day === 1 && (new Date(chosenDate).getMonth()+1) === parseInt(month)) {
-    var chosenMonth = new Date(chosenDate).getMonth() + 1;
-    var chosenDateString = 'Завтра' + ', ' + new Date(chosenDate).getDate() + ' ' + pluralizeMonth(chosenMonth);
   }else{
-    var chosenDateString = new Date(chosenDate).toLocaleString('ru', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    var today = new Date();
+    var month = today.getMonth() + 1;
+    var pluralizedMonth = pluralizeMonth(month);
+    month < 10 ? month = '0'+month : "";
+    var day = today.getDate();
+    day < 9 ? day = '0'+day : "";
+    var todayDate = today.getFullYear() + '-' + month + '-' + day;
+    var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    if (chosenDate === todayDate) {
+      var chosenDateString = days[today.getDay()] + ', ' + today.getDate() + ' ' + pluralizedMonth;
+    }else if (new Date(chosenDate).getDate() - day === 1 && (new Date(chosenDate).getMonth()+1) === parseInt(month)) {
+      var chosenMonth = new Date(chosenDate).getMonth() + 1;
+      var chosenDateString = 'Завтра' + ', ' + new Date(chosenDate).getDate() + ' ' + pluralizeMonth(chosenMonth);
+    }else{
+      var chosenDateString = new Date(chosenDate).toLocaleString('ru', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
   }
+
+  $('#to-do-date').val(chosenDate);
+
+  localStorage.setItem('date', chosenDate);
+
+  $('#calendarIcon').html('<i style="padding-right: 10px;" class="fas fa-calendar-alt"></i><u id="dateText">' + chosenDateString + '</u>');
 }
 
-document.getElementById('to-do-date').value = chosenDate;
-
-$('#calendarIcon').append('<u id="dateText">' + chosenDateString + '</u>');
-
-var toDoItem = {
-};
-
-var admItem;
-
-var cPoints = [];
+var toDoItem = {},
+    admItem,
+    cPoints = 0,
+    iPoints = 0,
+    allTasks = 0,
+    complTasks = 0,
+    weaData;
 
 $('#updateToDoItemButton').hide();
 
@@ -68,7 +78,7 @@ getTasks();
 
 function getTasks () {
   $.ajax({
-    url: "http://localhost:3000/tasks/get",
+    url: "http://localhost:3000/tasks/get?id=" + JSON.parse(localStorage.getItem('user')).email + "&date=" + chosenDate,
     type: 'GET',
     crossDomain: true,
     dataType: 'jsonp',
@@ -84,7 +94,7 @@ function getTasks () {
           '<hr class="my-4">'+
           '<p>Если Вы столкнулись с этой проблемой, пожалуйста, сообщите об этом нам.</p>'+
           '<p class="lead">'+
-            '<a class="btn theme-btn btn-primary btn-lg" href="#" data-toggle="modal" data-target="#sendReportModal" data-whatever="Возникает ошибка." role="button">Отправить отчёт</a>'+
+            '<a class="btn theme-btn btn-primary btn-lg" data-toggle="modal" data-target="#sendReportModal" data-whatever="Возникает ошибка." role="button">Отправить отчёт</a>'+
           '</p>'+
         '</div>'
     )}
@@ -92,68 +102,152 @@ function getTasks () {
 }
 
 function addToDoItemsFromServer(data) {
-  $('#to-do-list-incomplite').empty();
-  $('#to-do-list-complite').empty();
+  $('#tasks').empty();
   $('.jumbotron').remove();
+  $('body').css('cursor', 'auto');
   var email = JSON.parse(localStorage.getItem('user')).email;
-  for (var x = 0; x < data.users.length; x++) {
-    if (data.users[x].email===email) {
-      admItem=data.users[x].admin;
-    }
-  };
-  for(i=0; i<data.tasks.length; i++){
-    if(chosenDate===data.tasks[i].date && email===data.tasks[i].userId && data.tasks[i].status === 'incomplite'){
-      toDoItem = {
-          title: data.tasks[i].title,
-        description: data.tasks[i].description,
-          timeHours: data.tasks[i].timeHours,
-        timeMinutes: data.tasks[i].timeMinutes,
-        points: data.tasks[i].points,
-        id: data.tasks[i].id
-      }
-      
-      var toDoList= $('#to-do-list-incomplite');
-      toDoList.append('<a id="'+ toDoItem.id +'" class="list-group-item list-group-item-action">'
-      + '<div class="d-flex w-100 justify-content-between">'
-      + '<h5 class="mb-1 item-title">'+ toDoItem.title +'</h5>'
-      + '<small>'+ '<span class="item-time-hours">' + toDoItem.timeHours +'</span>'+':'+ '<span class="item-time-minutes">' +toDoItem.timeMinutes+'</span>'+'</small>'
-      + '</div>'
-      + '<p class="mb-1 item-description">'+toDoItem.description+'</p>'
-      + '<small class="item-points">'+pluralize(toDoItem.points, ['балл', 'балла', 'баллов']) +'</small>'
-      + '<button type="button" class="btn btn-danger remove-btn float-right"><i class="far fa-trash-alt"></i></button>'
-      + '<button type="button" class="btn btn-primary theme-btn float-right" onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
-      + '<button type="button" class="btn btn-success float-right" onclick="compliteToDoItem(this)"><i class="far fa-check-circle"></i></button>'
-      + '</a>'
-      );
-    }else if (chosenDate===data.tasks[i].date && email===data.tasks[i].userId && data.tasks[i].status === 'complite') {
-      toDoItem = {
-        title: data.tasks[i].title,
-        description: data.tasks[i].description,
-        timeHours: data.tasks[i].timeHours,
-        timeMinutes: data.tasks[i].timeMinutes,
-        points: data.tasks[i].points,
-        id: data.tasks[i].id
-      }
-      cPoints.push(toDoItem.points);
-      $('#to-do-list-complite').append('<a id="'+ toDoItem.id +'" class="complited-task list-group-item list-group-item-action">'
-      + '<div class="d-flex w-100 justify-content-between">'
-      + '<h5 class="mb-1 item-title">'+ toDoItem.title +'</h5>'
-      + '<small>'+ '<span class="item-time-hours">' + toDoItem.timeHours +'</span>'+':'+ '<span class="item-time-minutes">' +toDoItem.timeMinutes+'</span>'+'</small>'
-      + '</div>'
-      + '<p class="mb-1 item-description">'+toDoItem.description+'</p>'
-      + '<small class="item-points">'+pluralize(toDoItem.points, ['балл', 'балла', 'баллов']) +'</small>'
-      + '<button type="button" class="btn btn-danger remove-btn float-right"><i class="far fa-trash-alt"></i></button>'
-      + '</a>'
-      );
+  cPoints = 0;
+  iPoints = 0;
+  complTasks = 0;
+  allTasks = data.length;
+  $('#incompleteProgressToday').css('width', '0%');
+  $('#completeProgressToday').css('width', '0%');
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].time >= "00:00" && data[i].time<"01:00") {
+      $('#0').length === 0 ? $('#tasks').append('<div id="0"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">00:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#0 .list-group').append(appendIncomplete(data[i])) : $('#0 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "01:00" && data[i].time<"02:00") {
+      $('#1').length === 0 ? $('#tasks').append('<div id="1"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">01:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#1 .list-group').append(appendIncomplete(data[i])) : $('#1 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "02:00" && data[i].time<"03:00") {
+      $('#2').length === 0 ? $('#tasks').append('<div id="2"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">02:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#2 .list-group').append(appendIncomplete(data[i])) : $('#2 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "03:00" && data[i].time<"04:00") {
+      $('#3').length === 0 ? $('#tasks').append('<div id="3"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">03:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#3 .list-group').append(appendIncomplete(data[i])) : $('#3 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "04:00" && data[i].time<"05:00") {
+      $('#4').length === 0 ? $('#tasks').append('<div id="4"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">04:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#4 .list-group').append(appendIncomplete(data[i])) : $('#4 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "05:00" && data[i].time<"06:00") {
+      $('#5').length === 0 ? $('#tasks').append('<div id="5"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">05:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#5 .list-group').append(appendIncomplete(data[i])) : $('#5 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "06:00" && data[i].time<"07:00") {
+      $('#6').length === 0 ? $('#tasks').append('<div id="6"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">06:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#6 .list-group').append(appendIncomplete(data[i])) : $('#6 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "07:00" && data[i].time<"08:00") {
+      $('#7').length === 0 ? $('#tasks').append('<div id="7"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">07:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#7 .list-group').append(appendIncomplete(data[i])) : $('#7 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "08:00" && data[i].time<"09:00") {
+      $('#8').length === 0 ? $('#tasks').append('<div id="8"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">08:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#8 .list-group').append(appendIncomplete(data[i])) : $('#8 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "09:00" && data[i].time<"10:00") {
+      $('#9').length === 0 ? $('#tasks').append('<div id="9"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">09:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#9 .list-group').append(appendIncomplete(data[i])) : $('#9 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "10:00" && data[i].time<"11:00") {
+      $('#10').length === 0 ? $('#tasks').append('<div id="10"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">10:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#10 .list-group').append(appendIncomplete(data[i])) : $('#10 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "11:00" && data[i].time<"12:00") {
+      $('#11').length === 0 ? $('#tasks').append('<div id="11"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">11:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#11 .list-group').append(appendIncomplete(data[i])) : $('#11 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "12:00" && data[i].time<"13:00") {
+      $('#12').length === 0 ? $('#tasks').append('<div id="12"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">12:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#12 .list-group').append(appendIncomplete(data[i])) : $('#12 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "13:00" && data[i].time<"14:00") {
+      $('#13').length === 0 ? $('#tasks').append('<div id="13"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">13:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#13 .list-group').append(appendIncomplete(data[i])) : $('#13 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "14:00" && data[i].time<"15:00") {
+      $('#14').length === 0 ? $('#tasks').append('<div id="14"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">14:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#14 .list-group').append(appendIncomplete(data[i])) : $('#14 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "15:00" && data[i].time<"16:00") {
+      $('#15').length === 0 ? $('#tasks').append('<div id="15"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">15:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#15 .list-group').append(appendIncomplete(data[i])) : $('#15 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "16:00" && data[i].time<"17:00") {
+      $('#16').length === 0 ? $('#tasks').append('<div id="16"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">16:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#16 .list-group').append(appendIncomplete(data[i])) : $('#16 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "17:00" && data[i].time<"18:00") {
+      $('#17').length === 0 ? $('#tasks').append('<div id="17"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">17:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#17 .list-group').append(appendIncomplete(data[i])) : $('#17 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "18:00" && data[i].time<"19:00") {
+      $('#18').length === 0 ? $('#tasks').append('<div id="18"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">18:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#18 .list-group').append(appendIncomplete(data[i])) : $('#18 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "19:00" && data[i].time<"20:00") {
+      $('#19').length === 0 ? $('#tasks').append('<div id="19"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">19:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#19 .list-group').append(appendIncomplete(data[i])) : $('#19 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "20:00" && data[i].time<"21:00") {
+      $('#20').length === 0 ? $('#tasks').append('<div id="20"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">20:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#20 .list-group').append(appendIncomplete(data[i])) : $('#20 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "21:00" && data[i].time<"22:00") {
+      $('#21').length === 0 ? $('#tasks').append('<div id="21"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">21:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#21 .list-group').append(appendIncomplete(data[i])) : $('#21 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "22:00" && data[i].time<"23:00") {
+      $('#22').length === 0 ? $('#tasks').append('<div id="22"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">22:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#22 .list-group').append(appendIncomplete(data[i])) : $('#22 .list-group').append(appendcomplete(data[i]));
+      continue;
+    } else if (data[i].time >= "23:00") {
+      $('#23').length === 0 ? $('#tasks').append('<div id="23"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">23:00</li></div></div>') : "";
+      data[i].status === 'incomplete' ? $('#23 .list-group').append(appendIncomplete(data[i])) : $('#23 .list-group').append(appendcomplete(data[i]));
+      continue;
     }
   }
   empty();
   switchTheme();
-  setOnClick();
+}
+
+function appendIncomplete(task) {
+  iPoints += parseInt(task.points);
+  return '<a id="'+ task.id +'" class="border-left-info list-group-item list-group-item-action">'
+  + '<div class="d-flex w-100 justify-content-between">'
+    + '<h5 class="mb-1 item-title">'+ task.title +'</h5>'
+    + '<small><span class="item-time">' + task.time +'</span></small>'
+  + '</div>'
+  + '<p class="mb-1 item-description">'+task.description+'</p>'
+  + '<small class="item-points">'+pluralize(task.points, ['балл', 'балла', 'баллов']) +'</small>'
+  + '<button type="button" class="btn btn-danger remove-btn float-right" onclick="deleteToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
+  + '<button type="button" class="btn btn-primary theme-btn float-right" onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
+  + '<button type="button" class="btn btn-success float-right" onclick="completeToDoItem(this)"><i class="far fa-check-circle"></i></button>'
+  + '</a>'
+}
+
+function appendcomplete(task) {
+  complTasks += 1;
+  cPoints += parseInt(task.points);
+  return '<a id="'+ task.id +'" class="border-left-success text-muted list-group-item list-group-item-action">'
+  +'<div class="d-flex w-100 justify-content-between">'
+    +'<h5 class="mb-1 item-title">'+ task.title +'</h5>'
+    +'<small><span class="item-time">' + task.time +'</span></small>'
+  +'</div>'
+  +'<div class="d-flex w-100 justify-content-between">'
+    +'<p class="mb-1 item-description">'+task.description+'</p>'
+    +'<nobr class="item-points text-center font-weight-bold ml-2" style="font-size: 1.5rem;">'+ task.points +' б.</nobr>'
+  +'</div>'
+  +'<button type="button" class="btn btn-danger remove-btn float-right" onclick="deleteToDoItem(this)"><i class="far fa-trash-alt" aria-hidden="true"></i></button>'
++'</a>'
 }
 
 function empty(){
-  if ($('#to-do-list-incomplite').children().length === 0 && $('#to-do-list-complite').children().length === 0) {
+  if ($('#tasks').children().length === 0) {
     $('#contentContainer').append(
       '<div class="jumbotron">'+
         '<h1 class="display-4">Похоже, здесь ничего нет <i class="emoji">&#129300;</i></h1>'+
@@ -161,11 +255,12 @@ function empty(){
         '<hr class="my-4">'+
         '<p>Если Вы уверены, что здесь что-то должно быть, отправьте нам, пожалуйста, отчёт об ошибке и мы постараемя её решить.</p>'+
         '<p class="lead">'+
-          '<a class="btn theme-btn btn-primary btn-lg" href="#" data-toggle="modal" data-target="#sendReportModal" data-whatever="Проблемы с отображением дел." role="button">Отправить отчёт</a>'+
+          '<button class="btn theme-btn btn-primary btn-lg" data-toggle="modal" data-target="#sendReportModal" data-whatever="Проблемы с отображением дел.">Отправить отчёт</button>'+
         '</p>'+
       '</div>'
     )
   }
+  switchTheme();
 }
 
 window.addEventListener('scroll', onScroll, false);
@@ -177,12 +272,12 @@ function onScroll() {
     $('.btn-block').css({
       "width": "50px",
       "height": "50px",
-      "border-radius": "100%"
+      "border-radius": "50%"
     });
     $('.btn-block').html('<i class="fas fa-plus"></i>');
     $('.stat-btn').css({
       "height": "50px",
-      "border-radius": "100%"
+      "border-radius": "50%"
     });
   }else{
     $('.btn-block').css({
@@ -200,49 +295,47 @@ function onScroll() {
 }
 
 function updateToDoItem(target) {
-  document.getElementById('to-do-tittle').value = target.parentElement.getElementsByClassName('item-title')[0].innerText;
-  document.getElementById('to-do-description').value = target.parentElement.getElementsByClassName('item-description')[0].innerText;
-  document.getElementById('to-do-points').value = parseInt(target.parentElement.getElementsByClassName('item-points')[0].innerText);
-  document.getElementById('to-do-time-hours').value = target.parentElement.getElementsByClassName('item-time-hours')[0].innerText; 
-  document.getElementById('to-do-time-minutes').value = target.parentElement.getElementsByClassName('item-time-minutes')[0].innerText; 
-  document.getElementById('to-do-date').value = chosenDate;
+  $('#to-do-tittle').val($(target).parent().find('.item-title').text());
+  $('#to-do-description').val($(target).parent().find('.item-description').text());
+  $('#to-do-points').val($(target).parent().find('.item-points').text().split(' ')[0]);
+  $('#to-do-time-hours').val($(target).parent().find('.item-time').text().split(':')[0]);
+  $('#to-do-time-minutes').val($(target).parent().find('.item-time').text().split(':')[1]);
+  $('#to-do-date').val(chosenDate);
 
   $('#addNewToDoItemButton').hide();
   $('#updateToDoItemButton').show();
-  $('#exampleModal').data( "to-do-item-id",  target.parentElement.id);
+  $('#exampleModal').data( "to-do-item-id", $(target).parent().attr('id'));
   $('#exampleModal').modal('show');
 }
 
 function updateToDoItemOnServer(target){
-  if (!document.getElementById('to-do-tittle').value) {
+  if ($('#to-do-tittle').val().length === 0) {
     alert('Введите заголовок');
     return;
   }
-  else if (!document.getElementById('to-do-points').value) {
+  else if ($('#to-do-points').val().length === 0) {
     alert('Введите количетсво баллов');
     return;
   } 
+  $('#exampleModal').find('.btn-primary').attr('disabled', 'true');
   var updatedToDoItem = {
-    id: $('#exampleModal').data( "to-do-item-id"),
-    title: document.getElementById('to-do-tittle').value,
-    description: document.getElementById('to-do-description').value,
-    timeHours: document.getElementById('to-do-time-hours').value,
-    timeMinutes: document.getElementById('to-do-time-minutes').value,
-    points: document.getElementById('to-do-points').value,
-    date: document.getElementById('to-do-date').value,
+    id: $('#exampleModal').data("to-do-item-id"),
+    title: $('#to-do-tittle').val(),
+    description: $('#to-do-description').val(),
+    time: $('#to-do-time-hours').val() + ':' + $('#to-do-time-minutes').val(),
+    points: $('#to-do-points').val(),
+    date: $('#to-do-date').val(),
     userId: JSON.parse(localStorage.getItem('user')).email,
-    status: "incomplite",
+    status: "incomplete",
     admin: admItem
   }
-  $.post( "http://localhost:3000/tasks/update", updatedToDoItem, function( data ) {}, "json");
-  $('#exampleModal').modal('hide');
-  var updatedTarget = document.getElementById(updatedToDoItem.id)
-  updatedTarget.getElementsByClassName('item-title')[0].innerText =document.getElementById('to-do-tittle').value ;
-  updatedTarget.getElementsByClassName('item-description')[0].innerText = document.getElementById('to-do-description').value;
-  updatedTarget.getElementsByClassName('item-points')[0].innerText = pluralize(document.getElementById('to-do-points').value, ['балл', 'балла', 'баллов']);
-  updatedTarget.getElementsByClassName('item-time-hours')[0].innerText =document.getElementById('to-do-time-hours').value ;  
-  updatedTarget.getElementsByClassName('item-time-minutes')[0].innerText =document.getElementById('to-do-time-minutes').value; 
+  $.post( "http://localhost:3000/tasks/update", updatedToDoItem, function( data ) {
+    getTasks();
+    $('body').css('cursor', 'progress');
+    $('#exampleModal').modal('hide');
+  }, "json");
   $('#exampleModal').on('hidden.bs.modal', function (e) {
+    $(this).find('.btn-primary').removeAttr('disabled');
     $('#addNewToDoItemButton').show();
     $('#updateToDoItemButton').hide();
   })
@@ -251,50 +344,53 @@ function updateToDoItemOnServer(target){
 
 var tasksCards = [];
 
-function setOnClick() {
-  $('.remove-btn').click(function(){
-    tasksCards.push($(this).parent().clone());
-    $(this).parent().replaceWith(
-      '<a class="list-group-item list-group-item-action countDownCard '+$(this).parent().attr('id')+'" style="'+ cardTheme() +'">'
-      +'<div id="'+$(this).parent().attr('id')+'"></div>'
-      +'<div class="text-center">До удаления <strong>5...</strong></div>'
-      +'<button type="button" class="btn btn-link" onclick="abortTheDeletion(\''+$(this).parent().attr('id')+'\')"><i class="fas fa-undo-alt" aria-hidden="true"></i> Отмена</button></a>'
-    );
-    $('#'+$(this).parent().attr('id')).on('circle-animation-progress', function(event, animationProgress, stepValue) {
-      switch (Math.floor(stepValue*10)){
-        case 8:
-          $(this).parent().find(".text-center strong").html('4&nbsp;..');
-          break;
-        case 6:
-          $(this).parent().find(".text-center strong").html('3&nbsp;&nbsp;.');
-          break;
-        case 4:
-          $(this).parent().find(".text-center strong").html('2&nbsp;&nbsp;&nbsp;');
-          break;
-        case 2:
-          $(this).parent().find(".text-center strong").html('1.&nbsp;&nbsp;');
-          break;
-        case 0:
-          $(this).parent().find(".text-center strong").html('0..&nbsp;');
-          break;
-      }
-    });
-    $('#'+$(this).parent().attr('id')).circleProgress({
-      startAngle: -Math.PI / 2,
-      animationStartValue: 1,
-      value: 0,
-      size: 50,
-      animation: {
-        duration: 5000,
-        easing: 'linear'
-      },
-      fill: {
-        color: localStorage.getItem('theme') === 'light' ? '#007bff' : '#7950f2'
-      },
-      emptyFill: "rgba(255,255,255,.3)"
-    }).on('circle-animation-end', function(event){
-      $(this).data('circle-progress').lastFrameValue === 0 ? deleteTaskOnServer($(this).attr('id')) : "";
-    });
+function deleteToDoItem(target) {
+  tasksCards.push($(target).parent().clone());
+  $(target).parent().replaceWith(
+    '<a class="list-group-item list-group-item-action px-2 countdown-card '+$(target).parent().attr('id')+'" style="'+ cardTheme() +'">'
+    +'<div class="circle-progress-bar position-relative" id="'+$(target).parent().attr('id')+'"><strong>5</strong></div>'
+    +'<nobr class="text-center">Дело удалено&nbsp;&nbsp;&nbsp;</nobr>'
+    +'<button type="button" class="btn btn-link" onclick="abortTheDeletion(\''+$(target).parent().attr('id')+'\')"><i class="fas fa-undo-alt" aria-hidden="true"></i> Отмена</button></a>'
+  );
+  $('#'+$(target).parent().attr('id')).on('circle-animation-progress', function(event, animationProgress, stepValue) {
+    switch (Math.floor(stepValue*10)){
+      case 8:
+        $(this).find("strong").html('4');
+        $('.countdown-card nobr').html('Дело удалено.&nbsp;&nbsp;');
+        break;
+      case 6:
+        $(this).find("strong").html('3');
+        $('.countdown-card nobr').html('Дело удалено..&nbsp;');
+        break;
+      case 4:
+        $(this).find("strong").html('2');
+        $('.countdown-card nobr').html('Дело удалено...');
+        break;
+      case 2:
+        $(this).find("strong").html('1');
+        $('.countdown-card nobr').html('Дело удалено&nbsp;&nbsp;&nbsp;');
+        break;
+      case 0:
+        $(this).find("strong").html('0');
+        $('.countdown-card nobr').html('Дело удалено.&nbsp;&nbsp;');
+        break;
+    }
+  });
+  $('#'+$(target).parent().attr('id')).circleProgress({
+    startAngle: -Math.PI / 2,
+    animationStartValue: 1,
+    value: 0,
+    size: 50,
+    animation: {
+      duration: 5000,
+      easing: 'linear'
+    },
+    fill: {
+      color: localStorage.getItem('theme') === 'light' ? '#007bff' : '#7950f2'
+    },
+    emptyFill: "rgba(255,255,255,.3)"
+  }).on('circle-animation-end', function(event){
+    $(this).data('circle-progress').lastFrameValue === 0 ? deleteTaskOnServer($(this).attr('id')) : "";
   });
 }
 
@@ -303,7 +399,6 @@ function abortTheDeletion(id){
   for (var i = 0; i < tasksCards.length; i++) {
     if (tasksCards[i][0].id===id) {
       $('.'+id).replaceWith(tasksCards[i]);
-      setOnClick();
       tasksCards.splice(i,1);
       return;
     }
@@ -324,47 +419,86 @@ function deleteTaskOnServer(id){
   }, 500, 'linear', function(){
     $('.'+id).nextAll().css('top', '0');
   });
+  $('.'+id).parents().eq(1).nextAll().css({'position': 'relative', 'top': '0'}).animate({
+    top: -112
+  }, 500, 'linear', function(){
+    $('.'+id).parents().eq(1).nextAll().css({'top': '0', 'position': ''});
+  });
+  var newHeight = $('#tasks').height() - 112;
+  $('#tasks').css('height', $('#tasks').height() + 'px').animate({
+    height: newHeight
+  }, 500, 'linear', function(){
+    $('#tasks').css('height', '')
+  });
   $({scale: 1, opacity: 1}).animate({
     opacity: 0,
-    scale: 0.5
+    scale: 0
   }, {
     duration: 500,
     step: function(now, fx) {
       $('.'+id).css('transform', 'scale(' + now + ')');
       $('.'+id).css('opacity', now);
-      $('.'+id).next().css('bottom', now);
     },
     complete: function(){
+      var parentDiv = $('.'+id).parents().eq(1);
       $('.'+id).remove();
-      empty();
+      parentDiv.children('div.list-group').children().length === 1 ? $({scale: 1, opacity: 1}).animate({
+        opacity: 0,
+        scale: 0
+      }, {
+        duration: 300,
+        easing: 'linear',
+        step: function (now, fx) {
+          parentDiv.children('div.list-group').css({
+            'transform': 'scale(' + now + ')',
+            'opacity': now
+          })
+        },
+        complete: function(){
+          parentDiv.animate({
+            height: 0
+          }, 300, 'linear', function(){
+            $(this).remove();
+            empty();
+          })
+        }
+      }, 'linear') : '';
+      allTasks -= 1;
+      for (var i = 0; i < tasksCards.length; i++) {
+        if(tasksCards[i][0].id === id && tasksCards[i][0].className.indexOf('border-left-success') !== -1){
+          complTasks -= 1;
+          cPoints -= parseInt($(tasksCards[i][0]).find('.item-points').text().split(' ')[0]);
+          break;
+        }else if (tasksCards[i][0].id === id && tasksCards[i][0].className.indexOf('border-left-info') !== -1) {
+          iPoints -= parseInt($(tasksCards[i][0]).find('.item-points').text().split(' ')[0]);
+        }
+      }
       $.post( "http://localhost:3000/tasks/delete", {"taskId": id}, function( data ) {}, "json");
     }
   }, 'linear');
 }
 
 function addToDoItem() {
-  if (!document.getElementById('to-do-tittle').value){
+  if ($('#to-do-tittle').val().length===0){
     alert('Введите заголовок!');
     return;
   }
-  else if (!document.getElementById('to-do-points').value) {
+  else if ($('#to-do-points').val().length===0) {
     alert('Введите количество баллов');
     return;
   }
   var restore = $('#exampleModal .modal-body form').clone();
   toDoItem = {
-    title: document.getElementById('to-do-tittle').value,
-    description: document.getElementById('to-do-description').value,
-    timeHours: document.getElementById('to-do-time-hours').value,
-    timeMinutes: document.getElementById('to-do-time-minutes').value,
-    points: document.getElementById('to-do-points').value,
-    date: document.getElementById('to-do-date').value,
+    title: $('#to-do-tittle').val(),
+    description: $('#to-do-description').val(),
+    time: $('#to-do-time-hours').val() + ':' + $('#to-do-time-minutes').val(),
+    points: $('#to-do-points').val(),
+    date: $('#to-do-date').val(),
     userId: JSON.parse(localStorage.getItem('user')).email,
-    status: "incomplite",
+    status: "incomplete",
     admin: admItem
   }
-  $('#exampleModal .modal-body form').css({'display': 'flex', 'justify-content': 'center'});
-  $('#exampleModal .modal-body form').html('<img src="./img/load.gif">');
+  $('#exampleModal .modal-body form').css({'display': 'flex', 'justify-content': 'center'}).html('<img src="./img/load_new.webp">');
   $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/tasks/save',
@@ -372,19 +506,25 @@ function addToDoItem() {
       data: toDoItem,
       success: function(response) {
         getTasks();
-        $('#exampleModal .modal-body form img').attr({
-          'style': 'width: 200px',
-          'src': './img/done.gif'
-        });
+        $('#exampleModal .modal-body form img').attr('src', './img/done_new.webp');
         setTimeout(function(){
+          $('body').css('cursor', 'progress');
           $('#exampleModal').modal('hide');
+        },1800);
+        $('#exampleModal').on('hidden.bs.modal', function (e) {
           $('#exampleModal .modal-body form').replaceWith(restore);
           $('#to-do-tittle').val('');
           $('#to-do-description').val('');
           $('#to-do-points').val('');
           $('#to-do-time-hours').val('0');
           $('#to-do-time-minutes').val('00');
-        },1000);
+        })
+      },
+      error: function(){
+        $('#exampleModal .modal-body form img').attr('src', './img/err_new.webp');
+        setTimeout(function(){
+          $('#exampleModal').modal('hide');
+        },1500);
         $('#exampleModal').on('hidden.bs.modal', function (e) {
           $('#exampleModal .modal-body form').replaceWith(restore);
           $('#to-do-tittle').val('');
@@ -397,48 +537,24 @@ function addToDoItem() {
   });
 }
 
-function compliteToDoItem(target) {
-  document.getElementById('to-do-tittle').value = target.parentElement.getElementsByClassName('item-title')[0].innerText;
-  document.getElementById('to-do-description').value = target.parentElement.getElementsByClassName('item-description')[0].innerText;
-  document.getElementById('to-do-points').value = parseInt(target.parentElement.getElementsByClassName('item-points')[0].innerText);
-  document.getElementById('to-do-time-hours').value = target.parentElement.getElementsByClassName('item-time-hours')[0].innerText; 
-  document.getElementById('to-do-time-minutes').value = target.parentElement.getElementsByClassName('item-time-minutes')[0].innerText; 
-  document.getElementById('to-do-date').value = chosenDate;
-  $('#exampleModal').data( "to-do-item-id",  target.parentElement.id);
-  $('#exampleModalLive').modal('show');
+function completeToDoItem(target) {
+  $('#exampleModalLive').data('id', $(target).parent().attr('id')).modal('show');
 }
 
-function compliteToDoItemOnServer(target){
-  var complitedToDoItem = {
-    id: $('#exampleModal').data( "to-do-item-id"),
-    title: document.getElementById('to-do-tittle').value,
-    description: document.getElementById('to-do-description').value,
-    timeHours: document.getElementById('to-do-time-hours').value,
-    timeMinutes: document.getElementById('to-do-time-minutes').value,
-    points: document.getElementById('to-do-points').value,
-    date: document.getElementById('to-do-date').value,
-    userId: JSON.parse(localStorage.getItem('user')).email,
-    status: "complite",
-    admin: admItem
-  }
-  $('#exampleModal').modal('hide');
+function completeToDoItemOnServer(){
+  $('#'+$('#exampleModalLive').data('id')).find('.btn-success').html('<img style="width: 16px" src="./img/stat_load.gif">');
+  var id = $('#exampleModalLive').data('id');
   $('#exampleModalLive').modal('hide');
-
-  $.post( "http://localhost:3000/tasks/complite", complitedToDoItem, function( data ) {getTasks()}, "json");
-
-  $('#exampleModal').on('hidden.bs.modal', function (e) {
-    $('#addNewToDoItemButton').show();
-    $('#updateToDoItemButton').hide();
-  })
-  restore();
+  $.post( "http://localhost:3000/tasks/complete", {taskId: id}, function( data ) {$('body').css('cursor', 'progress');getTasks()}, "json");
 }
 
 function restore(){
   document.getElementById('to-do-tittle').value = "";
   document.getElementById('to-do-description').value = "";
   document.getElementById('to-do-points').value = "";
-  document.getElementById('to-do-time-hours').value = "" ;
-  document.getElementById('to-do-time-minutes').value = "" ;
+  document.getElementById('to-do-time-hours').value = "00" ;
+  document.getElementById('to-do-time-minutes').value = "00" ;
+  $('#to-do-date').val(chosenDate);
   $('#exampleModal').on('hidden.bs.modal', function (e) {
     $('#addNewToDoItemButton').show();
     $('#updateToDoItemButton').hide();
@@ -481,20 +597,30 @@ function pluralizeMonth(month) {
 
 $('#sendReportModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget);
-  var recipient = button.data('whatever');
-  var modal = $(this);
-  modal.find('.modal-body input').val(recipient);
+  var subject = button.data('whatever');
+  $(this).find('.modal-body input#email-subject').val(subject);
 })
 
 function switchDate() {
-  chosenDate = $('#toInput').val();
-  window.location = 'to do list.html?chosenDate=' + chosenDate;
+  chosenDate = $('#tasksDatePicker').val();
+  setDate();
+  getTasks();
 }
 
 function send(){
-  var subject = $('#recipient-name').val();
-  var body = $('#message-text').val();
-  window.open('mailto:to-do-list-report-email@inbox.ru?subject=' + subject + '&body=' + body);
+  var user = JSON.parse(localStorage.getItem('user'));
+  $.ajax({
+    type: 'POST',
+    url: 'http://localhost:3000/email/send',
+    crossDomain: true,
+    data: {
+      name: user.firstName + ' ' + user.surName,
+      from: $('#from-email').val().length > 0 ? $('#from-email').val() : user.email,
+      subject: $('#email-subject').val(),
+      text: $('#message-text').val()
+    }
+  });
+  $('#sendReportModal').modal('hide');
 }
 
 function logout() {
@@ -508,10 +634,6 @@ function showStat() {
   $('#statBtn').html('<img src="./img/stat_load.gif">');
   var user = JSON.parse(localStorage.getItem('user'));
   var userId = user.email;
-  var tPoints = 0;
-  for (var i = 0; i < cPoints.length; i++) {
-    tPoints = tPoints + parseInt(cPoints[i]);
-  }
   $.ajax({
     url: "http://localhost:3000/tasks/getUserStat/:userId",
     type: 'GET',
@@ -523,28 +645,27 @@ function showStat() {
       $('#statBtn').html('<i class="far fa-chart-bar"></i>');
       $('#statModal').modal('toggle');
       $('#statModalLabel').text('Статистика пользователя ' + user.firstName);
-      $('#todayStat').html('Выполнено дел в этот день <em>' + $('#to-do-list-complite').children().length + '/' + ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length) + '</em> <br>' + 'Заработано баллов <em>' + tPoints + '</em>');
-      $('#incompliteProgressToday').css('width', ($('#to-do-list-incomplite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
-      $('#compliteProgressToday').css('width', ($('#to-do-list-complite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
-      $('#allTimeStat').html('Выполнено дел за всё время <em>' + data.complitedTasks + '/' + (data.incomplitedTasks + data.complitedTasks) + '</em> <br>' + 'Заработано баллов <em>' + data.points + '</em>');
-      $('#incompliteProgressAllTime').css('width', (data.incomplitedTasks / (data.incomplitedTasks + data.complitedTasks))*100 + '%');
-      $('#compliteProgressAllTime').css('width', (data.complitedTasks / (data.incomplitedTasks + data.complitedTasks))*100 + '%');
+      $('#todayStat').html('Выполнено дел в этот день <em>' + complTasks + '/' + allTasks + '</em> <br>' + 'Заработано баллов <em>' + cPoints + '/' + (iPoints + cPoints) + '</em>');
+      $('#incompleteProgressToday').css('width', ((allTasks - complTasks) / allTasks)*100 + '%');
+      $('#completeProgressToday').css('width', (complTasks / allTasks)*100 + '%');
+      $('#allTimeStat').html('Выполнено дел за всё время <em>' + data.completedTasks + '/' + (data.incompletedTasks + data.completedTasks) + '</em> <br>' + 'Заработано баллов <em>' + data.points + '</em>');
+      $('#incompleteProgressAllTime').css('width', (data.incompletedTasks / (data.incompletedTasks + data.completedTasks))*100 + '%');
+      $('#completeProgressAllTime').css('width', (data.completedTasks / (data.incompletedTasks + data.completedTasks))*100 + '%');
     },
     error: function(request,msg,error) {
       $('#statBtn').html('<i class="far fa-chart-bar"></i>');
       $('#statModal').modal('toggle');
       $('#statModalLabel').text('Статистика пользователя ' + user.firstName);
-      $('#todayStat').html('Выполнено дел в этот день <em>' + $('#to-do-list-complite').children().length + '/' + $('#to-do-list-incomplite').children().length + '</em> <br>' + 'Заработано баллов <em>' + tPoints + '</em>');
-      $('#incompliteProgressToday').css('width', ($('#to-do-list-incomplite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
-      $('#compliteProgressToday').css('width', ($('#to-do-list-complite').children().length / ($('#to-do-list-incomplite').children().length + $('#to-do-list-complite').children().length))*100 + '%');
+      $('#todayStat').html('Выполнено дел в этот день <em>' + complTasks + '/' + allTasks + '</em> <br>' + 'Заработано баллов <em>' + cPoints + '/' + (iPoints + cPoints) + '</em>');
+      $('#incompleteProgressToday').css('width', ($('#to-do-list-incomplete').children().length / ($('#to-do-list-incomplete').children().length + $('#to-do-list-complete').children().length))*100 + '%');
+      $('#completeProgressToday').css('width', ($('#to-do-list-complete').children().length / ($('#to-do-list-incomplete').children().length + $('#to-do-list-complete').children().length))*100 + '%');
       $('#allTimeStat').html('Упс! <i class="emoji">&#128561;</i><br>К сожалению, нам не удалось получить данные с сервера, но не волнуйтиесь, мы уже работаем над этим!');
-      $('#incompliteProgressAllTime').css('width', '0%');
-      $('#compliteProgressAllTime').css('width', '0%');
+      $('#incompleteProgressAllTime').css('width', '0%');
+      $('#completeProgressAllTime').css('width', '0%');
     }
   });
 }
 
-var weaData;
 getForecast();
 
 function getForecast(){
@@ -624,6 +745,7 @@ function setIcon(data) {
     case '21':
     case '22':
     case '25':
+    case '28':
       $('#skyImg').attr('src', './weatherIcons/26.png');
       break;
     case '29':
@@ -632,7 +754,6 @@ function setIcon(data) {
       $('#skyImg').attr('src', './weatherIcons/29.png');
       break;
     case '30':
-    case '28':
     case '34':
       $('#skyImg').attr('src', './weatherIcons/30.png');
       break;
@@ -670,7 +791,7 @@ function loadCitiesNames() {
     dataType: 'jsonp',
     contentType: 'application/json; charset=utf-8',
     success: function (data) {
-      setAutocomplite(data);
+      setAutocomplete(data);
     },
     error: function(request,msg,error){
       console.log(request + ' ' + msg + ' ' + error);
@@ -678,7 +799,7 @@ function loadCitiesNames() {
   });
 }
 
-function setAutocomplite(data){
+function setAutocomplete(data){
   $('#cityInput').autocomplete({source: data, appendTo: $('#weaModalBody')})
 }
 
