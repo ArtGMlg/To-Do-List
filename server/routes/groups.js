@@ -14,7 +14,7 @@ router.post('/create', function(req, res, next) {
 	res.contentType('json');
 	res.setHeader('Content-Type', 'application/json');
 	var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
-    for (i = 0; i < data.groups.length; i++) {
+  for (i = 0; i < data.groups.length; i++) {
 		if (group.name === data.groups[i].name) {
 			res.send(JSON.stringify({
 			  error: "Группа с таким именем уже существует!"
@@ -24,8 +24,6 @@ router.post('/create', function(req, res, next) {
 	}
   
   data.groups.push(group);	
-		
-    
 
   fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
   	res.contentType('json');
@@ -47,7 +45,7 @@ router.post('/update', function(req, res, next) {
 	res.contentType('json');
 	res.setHeader('Content-Type', 'application/json');
 	var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
-    for (i = 0; i < data.groups.length; i++) {
+  for (i = 0; i < data.groups.length; i++) {
 		if (group.name === data.groups[i].name) {
 			var newUsers = group.users.concat(JSON.parse(data.groups[i].users));
 			function onlyUnique(value, index, self) { 
@@ -186,7 +184,7 @@ router.get('/getTop', function(req, res, next) {
   for (i = 0; i < users.length; i++) {
     var userScore = 0;
     for(j=0; j< Tasks.length; j++){
-      if(Tasks[j].status === "complite" && Tasks[j].userId === users[i].email){
+      if(Tasks[j].status === "complete" && Tasks[j].userId === users[i].email){
         userScore = userScore + parseInt(Tasks[j].points);
       };
     };
