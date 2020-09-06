@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 const uuidv1 = require('uuid/v1');
+var _ = require('lodash');
 
 /* POST tasks listing. */
 router.post('/save', function(req, res, next) {
 	var task = req.body;
-
 
 	var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
 	task.id = uuidv1();
@@ -30,7 +30,7 @@ router.get('/check/:id', function(req, res, next) {
 		var id = req.params.id;
 		for (i = 0; i<tasks.length; i++){
 			if (id == tasks[i].id) 	{
-				tasks[i].status = req.query.status === "true" ? "complite" : "incomplite";
+				tasks[i].status = req.query.status === "true" ? "complete" : "incomplete";
 			}
 		}
 		data.tasks = tasks;
@@ -97,11 +97,24 @@ router.post('/update', function(req, res, next) {
 });
 
 router.get('/get', function(req, res, next) {
-  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
   res.setHeader('Content-Type', 'application/json');	
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.jsonp(data);
+
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8'),
+      tasks = data.tasks,
+      user = req.query,
+      requestedTasks = [];
+
+  for (var i = 0; i < tasks.length; i++) {
+    if (tasks[i].userId === user.id && tasks[i].date === user.date) {
+      requestedTasks.push(tasks[i]);
+    }
+  }
+
+  var sortedTasks = _.sortBy(requestedTasks, ['time']);
+
+  res.jsonp(sortedTasks);
 });
 
 router.get('/get-by-email/:email', function(req, res, next) {
@@ -120,26 +133,26 @@ router.get('/get-by-email/:email', function(req, res, next) {
   res.jsonp(userstasks);
 });
 
-router.post('/complite', function(req, res, next) {
+router.post('/complete', function(req, res, next) {
 	res.setHeader('Content-Type', 'application/json');	
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.contentType('json');
 	
-  var task = req.body;
-
+  var taskId = req.body.taskId;
 
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
-  for (i=0;i<data.tasks.length;i++) {
-    if (data.tasks[i].id === task.id) {
-      data.tasks[i]= task;
+
+  for (var i = 0; i < data.tasks.length; i++) {
+    if (data.tasks[i].id === taskId) {
+      data.tasks[i].status = 'complete';
       break;
     }
   }
   fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
-      res.contentType('json');
-      res.send(JSON.stringify({
-        message: "Запрос принят"
-      }));
+    res.send(JSON.stringify({
+      success: true
+    }));
   });
 });
 
@@ -158,20 +171,20 @@ router.get('/getUserStat/:userId', function(req, res, next) {
 			userTasks.push(tasks[i]);
 		}
 	}
-	var incomplite = 0;
-	var complite = 0;
+	var incomplete = 0;
+	var complete = 0;
 	var points = 0;
 	for (j = 0; j < userTasks.length; j++) {
-		if (userTasks[j].status === 'incomplite') {
-			incomplite = incomplite + 1;
-		}else if (userTasks[j].status === 'complite') {
-			complite = complite + 1;
+		if (userTasks[j].status === 'incomplete') {
+			incomplete = incomplete + 1;
+		}else if (userTasks[j].status === 'complete') {
+			complete = complete + 1;
 			points = points + parseInt(userTasks[j].points);
 		}
 	}
 	var status = {
-		complitedTasks: complite,
-		incomplitedTasks: incomplite,
+		completedTasks: complete,
+		incompletedTasks: incomplete,
 		points: points
 	}
 	res.jsonp(status);
