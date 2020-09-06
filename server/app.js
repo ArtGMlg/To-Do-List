@@ -13,6 +13,7 @@ var bodyParser = require('body-parser');
 var imageRouter = require('./routes/image');
 var weatherRouter = require('./routes/weather');
 var citiesRouter = require('./routes/cities');
+var sendEmailRouter = require('./routes/email');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use('/groups', groupsRouter);
 app.use('/image', imageRouter);
 app.use('/weather', weatherRouter);
 app.use('/cities', citiesRouter);
+app.use('/email', sendEmailRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
