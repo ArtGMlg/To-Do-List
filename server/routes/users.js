@@ -31,33 +31,63 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/reg', function(req, res, next) {
-  var user = req.body
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.contentType('json');
+  res.setHeader('Content-Type', 'application/json');
 
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	res.contentType('json');
-	res.setHeader('Content-Type', 'application/json');
+  var user = req.body;
+
+  user.uniqNum = Math.floor(100000 + Math.random() * 900000);
+
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
-    for (i = 0; i < data.users.length; i++) {
+
+  for (i = 0; i < data.users.length; i++) {
 		if (user.email === data.users[i].email) {
-			
 			res.send(JSON.stringify({
 			  error: "Пользователь с таким Email уже существует!"
 			}));
 			return;
 		}
-	}
+  }
   
-  data.users.push(user);	
-		
-    
+  data.unconfirmedUsers.push(user);	
 
   fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
-  	res.contentType('json');
     res.send(JSON.stringify({
-	  success: true,
-	  message: "Запрос принят"
-	}));
+  	  success: true,
+  	  message: "Запрос принят",
+      uniqNum: user.uniqNum
+  	}));
+  });
+});
+
+router.post('/reg/confirm', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.contentType('json');
+  res.setHeader('Content-Type', 'application/json');
+
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+
+  for (i = 0; i < data.unconfirmedUsers.length; i++) {
+    if (req.body.email === data.unconfirmedUsers[i].email && data.unconfirmedUsers[i].uniqNum === parseInt(req.body.num)) {
+      delete data.unconfirmedUsers[i].uniqNum;
+      data.users.push(data.unconfirmedUsers[i]);
+      data.unconfirmedUsers.splice(i,1);
+    }else{
+      res.send(JSON.stringify({
+        success: false
+      }));
+      return;
+    }
+  } 
+
+  fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
+    res.send(JSON.stringify({
+      success: true,
+      message: "Запрос принят"
+    }));
   });
 });
 
@@ -72,6 +102,7 @@ router.post('/regAdmin', function(req, res, next) {
     for (i = 0; i < data.adminUsers.length; i++) {
     if (adminUser.email === data.adminUsers[i].email) {      
       res.send(JSON.stringify({
+        success: false,
         error: "Пользователь с таким Email уже существует!"
       }));
       return;
@@ -79,8 +110,6 @@ router.post('/regAdmin', function(req, res, next) {
   }
   
   data.adminUsers.push(adminUser);  
-    
-    
 
   fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
     res.contentType('json');
@@ -141,7 +170,7 @@ router.get('/getTop', function(req, res, next) {
   for (i = 0; i < users.length; i++) {
     var userScore = 0;
 	for(j=0; j< Tasks.length; j++){
-		if(Tasks[j].status === "complite" && Tasks[j].userId === users[i].email){
+		if(Tasks[j].status === "complete" && Tasks[j].userId === users[i].email){
 			userScore = userScore + parseInt(Tasks[j].points);
 		};
 	};
@@ -152,6 +181,32 @@ router.get('/getTop', function(req, res, next) {
   var revercedSort  = _.reverse(sortedUsers);
   
   res.jsonp(revercedSort);
+});
+
+router.post('/change', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.contentType('json');
+  res.setHeader('Content-Type', 'application/json');
+
+  var updatedUser = req.body;
+
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+
+  for (i = 0; i < data.users.length; i++) {
+    if (updatedUser.email === data.users[i].email) {
+      updatedUser.password = data.users[i].password;
+      updatedUser.admin = data.users[i].admin;
+      data.users[i] = updatedUser;
+    }
+  }
+
+  fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
+    res.send(JSON.stringify({
+      success: true,
+      message: "Запрос принят"
+    }));
+  });
 });
 
 module.exports = router;
