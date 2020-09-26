@@ -28,9 +28,9 @@ router.post('/create', function(req, res, next) {
   fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
   	res.contentType('json');
     res.send(JSON.stringify({
-	  success: true,
-	  message: "Запрос принят"
-	}));
+  	  success: true,
+  	  message: "Запрос принят"
+  	}));
   });
 });
 
@@ -209,4 +209,27 @@ router.get('/getTop', function(req, res, next) {
   
   res.jsonp(revercedSort);
 });
+
+router.get('/getUserGroups/:userId', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.contentType('json');
+  res.setHeader('Content-Type', 'application/json');
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+  var groups = data.groups;
+  var userGroups = [];
+  var id = req.query.userId;
+  allGroupsLoop:
+  for (i = 0; i < groups.length; i++){
+    groupLoop:
+    for (j = 0; j < JSON.parse(groups[i].users).length; j++) {
+      if (JSON.parse(groups[i].users)[j] === id) {
+        userGroups.push(groups[i].name);
+        break groupLoop;
+      }
+    }
+  };
+  res.jsonp(userGroups);
+});
+
 module.exports = router;
