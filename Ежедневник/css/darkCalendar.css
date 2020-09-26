@@ -4,7 +4,7 @@
 }
 
 .datepicker-dropdown{
-	background-color: #252527;
+	background-color: #121212;
 	transition: all .3s linear;
 }
 
@@ -29,5 +29,5 @@
 }
 
 .datepicker-dropdown:after{
-	border-bottom-color: #252527;
+	border-bottom-color: #121212;
 }
