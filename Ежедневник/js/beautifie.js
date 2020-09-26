@@ -27,10 +27,8 @@ function onResize() {
   })
   if ($(window).width() >= 800) {
     $('#themeSwitcherContainer').tooltip('enable');
-    $('#logout').html('<i style="display: inline;" class="fas fa-sign-out-alt"></i>Выйти');
   }else if ($(window).width() <= 800) {
     $('#themeSwitcherContainer').tooltip('disable');
-    $('#logout').html('<i style="display: inline;" class="fas fa-sign-out-alt"></i>');
   }
 }
 
@@ -79,15 +77,15 @@ function switchTheme() {
       'background-color': 'black'
     });
     $('a.list-group-item').css({
-      'background-color': 'rgba(118,120,122,.5)',
+      'background-color': '#121212',
       'color': 'rgba(255,255,255,.85)'
     });
     $('div#tasks li').css('color', 'white');
     $('#tasks').css('background-color', 'transparent');
     $('.jumbotron').css({
-      'background-color': 'rgb(37, 37, 39)',
+      'background-color': '#121212',
       'color': 'white'
-    });
+    }).find('img').attr('src', './img/undraw_To_do_list_re_9nt7_dark.svg');
     $('.my-4').css('border-color', 'white');
     $('h3').css('color', 'white');
     $('.input-group-text').css('color', 'white');
@@ -96,7 +94,7 @@ function switchTheme() {
       'border-color': '#7950f2'
     });
     $('.modal-content').css({
-      'background-color': 'rgb(27, 27, 27)',
+      'background-color': '#121212',
       'color': 'white'
     });
     $('.form-control').css({
@@ -105,9 +103,22 @@ function switchTheme() {
     });
     $('.close').css('color', 'white');
     $('#weaContainer').css({
-      'background-color': 'rgb(37, 37, 39)',
+      'background-color': '#121212',
       'color': 'white'
     });
+    $('#loadingAnim').css('background-color', 'rgb(25 25 25 / .8)').find('img').css('filter', 'invert(100%)');
+    $('#linksContainer .dropdown-menu').css({
+      'color': '#dddfeb',
+      'background-color': '#121212'
+    }).addClass('border-0').find('.dropdown-divider').css('border-color', '#dddfeb');
+    $('#linksContainer .dropdown-menu .dropdown-item').hover(
+      function(){
+        $(this).css('background-color', '#3a3b45!important');
+      },
+      function(){
+        $(this).css('background-color', '');
+      }
+    );
     $('.weaTools').css('color', '#b3b3b3');
     $('.weaTools').hover(
       function (){
@@ -117,7 +128,8 @@ function switchTheme() {
         $(this).css('color', '#b3b3b3');
       }
     );
-    $('.progress').css('background-color', '#0c0c0d');
+    $('.progress').css('background-color', '#121212');
+    $('.mbsc-ios-dark .mbsc-switch-handle').html('<i class="fas fa-cloud-moon" style="color: #7950f2";font-size: 1.05em;"></i>')
   }else if ($('#themeSwitcher').prop('checked') === false){
     localStorage.setItem('theme', 'light');
     $('link[href="./css/darkCalendar.css"]').remove();
@@ -140,7 +152,7 @@ function switchTheme() {
     $('.jumbotron').css({
       'background-color': 'rgba(233, 236, 239, .5)',
       'color': 'black'
-    });
+    }).find('img').attr('src', './img/undraw_To_do_list_re_9nt7.svg');
     $('.my-4').css('border-color', 'black');
     $('h3').css('color', 'black');
     $('.input-group-text').css('color', 'black');
@@ -163,6 +175,19 @@ function switchTheme() {
       'background-color': 'rgba(233, 236, 239, .5)',
       'color': 'black'
     });
+    $('#loadingAnim').css('background-color', 'rgb(230 230 230 / .5)').find('img').css('filter', 'invert(0%)');
+    $('#linksContainer .dropdown-menu').css({
+      'color':' #858796',
+      'background-color': '#fff'
+    }).removeClass('border-0').find('.dropdown-divider').css('border-color', 'rgb(221, 223, 235)');
+    $('#linksContainer .dropdown-menu .dropdown-item').hover(
+      function(){
+        $(this).css('background-color', '#f8f9fa!important');
+      },
+      function(){
+        $(this).css('background-color', '');
+      }
+    );
     $('.weaTools').css('color', '#6c757d');
     $('.weaTools').hover(
       function (){
@@ -173,6 +198,7 @@ function switchTheme() {
       }
     );
     $('.progress').css('background-color', '#e9ecef');
+    $('.mbsc-ios-dark .mbsc-switch-handle').html('<i class="fas fa-cloud-sun" style="color: rgb(243, 159, 24);font-size: 1.05em;"></i>');
   };
 };
 
@@ -185,7 +211,6 @@ window.onload = function(){
   });
   if ($(window).width() <= 800) {
     $('#themeSwitcherContainer').tooltip('disable');
-    $('#logout').html('<i style="display: inline;" class="fas fa-sign-out-alt"></i>');
   };
   $(".theme-btn").focus(function(){
     if (localStorage.getItem('theme') === 'light') {
@@ -212,8 +237,31 @@ window.onload = function(){
       'border-color': ''
     });
   });
-  $('#uploadImg').css({
-    'width': $('#avatar').width() +'px',
-    'height': $('#avatar').height() +'px'
-  })
+  $('.mbsc-ios-dark .mbsc-switch-handle').html(localStorage.theme === 'light' ? '<i class="fas fa-cloud-sun" style="color: rgb(243, 159, 24);font-size: 1.05em;"></i>' : '<i class="fas fa-cloud-moon" style="color: #7950f2";font-size: 1.05em;"></i>');
+  if (window.location.href.includes('user.html')) {
+    if (localStorage.getItem('theme')==='dark') {
+      $('.list-group-item').addClass('text-white-50');
+      $('.list-group-item').css('border-color', '#f8f9fa1f');
+      $('strong').toggleClass('text-body');
+      $('strong').toggleClass('text-light');
+      $('.font-weight-bold').addClass('text-white');
+      $('#back').removeClass('btn-outline-dark');
+      $('#back').addClass('btn-outline-light');
+      $('hr.my-4').css('border-color', '#f8f9fa80');
+      $('label').addClass('text-light');
+      $('.modal-content').css({
+        'background-color': '#121212',
+        'color': 'white'
+      });
+      $('.form-control').css({
+        'background-color': 'rgba(0, 0, 0, .5)',
+        'color': 'white'
+      });
+      $('.theme-btn').css({
+        'background-color': '#7950f2',
+        'border-color': '#7950f2'
+      });
+      $('#loadingAnim').css('background-color', 'rgb(25 25 25 / .8)').find('img').css('filter', 'invert(100%)');
+    }
+  }
 }

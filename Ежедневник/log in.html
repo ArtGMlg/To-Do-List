@@ -27,6 +27,9 @@
     </div>
 
     <div class="container">
+      <div id="loadingAnim" class="position-fixed align-items-center justify-content-center" style="display: none;background-color: rgb(230 230 230 / .5)">
+        <img src="./img/preloader.webp">
+      </div>
 
     <!-- Outer Row -->
       <div class="row justify-content-center">
@@ -39,7 +42,7 @@
               <div class="row">
                 <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
                 <div class="col-lg-6">
-                  <div class="p-5">
+                  <div class="px-3 px-sm-5 py-5">
                     <div class="text-center">
                       <h1 class="h4 text-gray-900 mb-4">Добро пожаловать!</h1>
                     </div>
@@ -116,9 +119,8 @@
       document.cookie = cookie_string;
     }
 
-    var userData;
-
     function auth(){
+      $('#loadingAnim').css('display', 'flex');
       var user = {
         userName: $("#exampleInputEmail").val(),
         password: $("#exampleInputPassword").val()
@@ -130,7 +132,7 @@
           dataType: 'jsonp',
           contentType: 'application/json; charset=utf-8',
           success: function (data) {
-            userData = {
+            var userData = {
               firstName: data.firstName,
               lastName: data.lastName,
               surName: data.surName,
@@ -145,13 +147,10 @@
             localStorage.setItem('user', JSON.stringify(userData));
             var searchParams = new URLSearchParams(window.location.search);
             var location = searchParams.get('redirectedFrom');
-            if (location) {
-              window.location = String(location);
-            }else{
-              window.location.replace('to do list.html');
-            }
+            location ? window.location = String(location) : window.location.replace('to do list.html');
           },
           error: function () {
+            $('#loadingAnim').fadeOut();
             $('#exampleInputEmail').css('border-color', '#f80000');
             $('#exampleInputPassword').css('border-color', '#f80000');
             $('#errorMessage').text('Неверное имя пользователя или пароль!');

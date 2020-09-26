@@ -1,3 +1,7 @@
+mobiscroll.settings = {
+  theme: 'ios',
+  themeVariant: 'dark'
+};
 $('#breadCrumbToDoList .input-group.date').datepicker({
   language: "ru",
   orientation: "bottom auto",
@@ -31,7 +35,7 @@ function setDate () {
     month < 10 ? month = '0'+month : "";
     var day = today.getDate();
     day < 9 ? day = '0'+day : "";
-    var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среду', 'Четверг', 'Пятницу', 'Субботу'];
     chosenDate = today.getFullYear() + '-' + month + '-' + day;
     var chosenDateString = days[today.getDay()] + ', ' + today.getDate() + ' ' + pluralizedMonth;
   }else{
@@ -40,9 +44,9 @@ function setDate () {
     var pluralizedMonth = pluralizeMonth(month);
     month < 10 ? month = '0'+month : "";
     var day = today.getDate();
-    day < 9 ? day = '0'+day : "";
+    day < 10 ? day = '0'+day : "";
     var todayDate = today.getFullYear() + '-' + month + '-' + day;
-    var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среду', 'Четверг', 'Пятницу', 'Субботу'];
     if (chosenDate === todayDate) {
       var chosenDateString = days[today.getDay()] + ', ' + today.getDate() + ' ' + pluralizedMonth;
     }else if (new Date(chosenDate).getDate() - day === 1 && (new Date(chosenDate).getMonth()+1) === parseInt(month)) {
@@ -58,8 +62,6 @@ function setDate () {
   }
 
   $('#to-do-date').val(chosenDate);
-
-  localStorage.setItem('date', chosenDate);
 
   $('#calendarIcon').html('<i style="padding-right: 10px;" class="fas fa-calendar-alt"></i><u id="dateText">' + chosenDateString + '</u>');
 }
@@ -84,27 +86,26 @@ function getTasks () {
     dataType: 'jsonp',
     contentType: 'application/json; charset=utf-8',
     success: function (data) {
-      addToDoItemsFromServer(data);
+      addToDoItemsFromServer(data).then(showBoxes());
     },
     error: function(){
       $('#contentContainer').append(
-        '<div class="jumbotron">'+
-          '<h1 class="display-4">Упс, кажется, что-то пошло не так <i class="emoji">&#129301;</i></h1>'+
-          '<p class="lead">Похоже, что сервер не поделился с нами данными <i class="emoji">&#128546;</i></p>'+
-          '<hr class="my-4">'+
-          '<p>Если Вы столкнулись с этой проблемой, пожалуйста, сообщите об этом нам.</p>'+
-          '<p class="lead">'+
-            '<a class="btn theme-btn btn-primary btn-lg" data-toggle="modal" data-target="#sendReportModal" data-whatever="Возникает ошибка." role="button">Отправить отчёт</a>'+
-          '</p>'+
+        '<div class="jumbotron py-4 py-md-5 lazy-load-container" style="max-width: 545px;" data-speed="500">'+
+          '<div class="d-block">'+
+            '<div class="d-flex align-items-center justify-content-center h4 mb-4 text-center">Ой-ой, кажется, что-то пошло не так...</div>'+
+            '<div class="d-flex align-items-center justify-content-center mb-3 inactive">'+
+              '<img src="./img/undraw_server_down_s4lk.svg" style="width: -webkit-fill-available;">'+
+            '</div>'+
+          '</div>'+
         '</div>'
-    )}
+      );
+      showBoxes();
+    }
   });
 }
 
-function addToDoItemsFromServer(data) {
+async function addToDoItemsFromServer(data) {
   $('#tasks').empty();
-  $('.jumbotron').remove();
-  $('body').css('cursor', 'auto');
   var email = JSON.parse(localStorage.getItem('user')).email;
   cPoints = 0;
   iPoints = 0;
@@ -112,6 +113,13 @@ function addToDoItemsFromServer(data) {
   allTasks = data.length;
   $('#incompleteProgressToday').css('width', '0%');
   $('#completeProgressToday').css('width', '0%');
+  if (data.length < 1) {
+    empty();
+    $('#loadingAnim').fadeOut();
+    $('body').removeClass('inactive');
+    return;
+  };
+  $('.jumbotron').remove();
   for (var i = 0; i < data.length; i++) {
     if (data[i].time >= "00:00" && data[i].time<"01:00") {
       $('#0').length === 0 ? $('#tasks').append('<div id="0"><div class="list-group"><li class="list-group-item border-0 font-weight-bolder h3">00:00</li></div></div>') : "";
@@ -211,13 +219,14 @@ function addToDoItemsFromServer(data) {
       continue;
     }
   }
-  empty();
+  $('#loadingAnim').fadeOut();
+  $('body').removeClass('inactive');
   switchTheme();
 }
 
 function appendIncomplete(task) {
   iPoints += parseInt(task.points);
-  return '<a id="'+ task.id +'" class="border-left-info list-group-item list-group-item-action">'
+  return '<a id="'+ task.id +'" class="border-left-info list-group-item list-group-item-action for-anim lazy-load-box" data-speed="500">'
   + '<div class="d-flex w-100 justify-content-between">'
     + '<h5 class="mb-1 item-title">'+ task.title +'</h5>'
     + '<small><span class="item-time">' + task.time +'</span></small>'
@@ -233,7 +242,7 @@ function appendIncomplete(task) {
 function appendcomplete(task) {
   complTasks += 1;
   cPoints += parseInt(task.points);
-  return '<a id="'+ task.id +'" class="border-left-success text-muted list-group-item list-group-item-action">'
+  return '<a id="'+ task.id +'" class="border-left-success text-muted list-group-item list-group-item-action for-anim lazy-load-box" data-speed="500">'
   +'<div class="d-flex w-100 justify-content-between">'
     +'<h5 class="mb-1 item-title">'+ task.title +'</h5>'
     +'<small><span class="item-time">' + task.time +'</span></small>'
@@ -247,19 +256,16 @@ function appendcomplete(task) {
 }
 
 function empty(){
-  if ($('#tasks').children().length === 0) {
-    $('#contentContainer').append(
-      '<div class="jumbotron">'+
-        '<h1 class="display-4">Похоже, здесь ничего нет <i class="emoji">&#129300;</i></h1>'+
-        '<p class="lead">Хотите создать какое-нибудь дело?</p>'+
-        '<hr class="my-4">'+
-        '<p>Если Вы уверены, что здесь что-то должно быть, отправьте нам, пожалуйста, отчёт об ошибке и мы постараемя её решить.</p>'+
-        '<p class="lead">'+
-          '<button class="btn theme-btn btn-primary btn-lg" data-toggle="modal" data-target="#sendReportModal" data-whatever="Проблемы с отображением дел.">Отправить отчёт</button>'+
-        '</p>'+
-      '</div>'
-    )
-  }
+  $('#tasks').children().length === 0 && $('.jumbotron').length === 0 ? $('#contentContainer').append(
+    '<div class="jumbotron py-4 py-md-5 lazy-load-container" data-speed="200" style="max-width: 545px;">'+
+      '<div class="d-block">'+
+        '<div class="d-flex align-items-center justify-content-center h4 mb-4 text-center">Здесь будут отображаться задачи на выбранную дату</div>'+
+        '<div class="d-flex align-items-center justify-content-center mb-3 inactive">'+
+          '<img src="./img/undraw_To_do_list_re_9nt7.svg" style="width: -webkit-fill-available;">'+
+        '</div>'+
+      '</div>'+
+    '</div>'
+  ) : '';
   switchTheme();
 }
 
@@ -331,7 +337,8 @@ function updateToDoItemOnServer(target){
   }
   $.post( "http://localhost:3000/tasks/update", updatedToDoItem, function( data ) {
     getTasks();
-    $('body').css('cursor', 'progress');
+    $('#loadingAnim').css('display', 'flex');
+    $('body').addClass('inactive');
     $('#exampleModal').modal('hide');
   }, "json");
   $('#exampleModal').on('hidden.bs.modal', function (e) {
@@ -407,9 +414,9 @@ function abortTheDeletion(id){
 
 function cardTheme(){
   if (localStorage.getItem("theme") === "light") {
-    return 'background-color: rgba(255, 255, 255, 0.5); color: black; height: 112px;display: flex;align-items: center;justify-content: space-between;'
+    return 'background-color: rgba(255, 255, 255, 0.5); color: black; height: 112px;display: flex;align-items: center;justify-content: space-between;transform-origin: top;'
   }else{
-    return 'background-color: rgba(118, 120, 122, 0.5);color: rgba(255, 255, 255, 0.85);height: 112px;display: flex;align-items: center;justify-content: space-between;'
+    return 'background-color: #121212;color: rgba(255, 255, 255, 0.85);height: 112px;display: flex;align-items: center;justify-content: space-between;transform-origin: top;'
   }
 }
 
@@ -508,10 +515,11 @@ function addToDoItem() {
         getTasks();
         $('#exampleModal .modal-body form img').attr('src', './img/done_new.webp');
         setTimeout(function(){
-          $('body').css('cursor', 'progress');
           $('#exampleModal').modal('hide');
-        },1800);
+        },1600);
         $('#exampleModal').on('hidden.bs.modal', function (e) {
+          $('#loadingAnim').css('display', 'flex');
+          $('body').addClass('inactive');
           $('#exampleModal .modal-body form').replaceWith(restore);
           $('#to-do-tittle').val('');
           $('#to-do-description').val('');
@@ -545,7 +553,10 @@ function completeToDoItemOnServer(){
   $('#'+$('#exampleModalLive').data('id')).find('.btn-success').html('<img style="width: 16px" src="./img/stat_load.gif">');
   var id = $('#exampleModalLive').data('id');
   $('#exampleModalLive').modal('hide');
-  $.post( "http://localhost:3000/tasks/complete", {taskId: id}, function( data ) {$('body').css('cursor', 'progress');getTasks()}, "json");
+  $.post( "http://localhost:3000/tasks/complete", {taskId: id}, function( data ) {
+    $('#loadingAnim').css('display', 'flex');
+    getTasks()
+  }, "json");
 }
 
 function restore(){
@@ -602,6 +613,8 @@ $('#sendReportModal').on('show.bs.modal', function (event) {
 })
 
 function switchDate() {
+  $('#loadingAnim').css('display', 'flex');
+  $('body').addClass('inactive');
   chosenDate = $('#tasksDatePicker').val();
   setDate();
   getTasks();
@@ -784,6 +797,7 @@ function setIcon(data) {
 }
 
 function loadCitiesNames() {
+  $('#loadingAnim').css('display', 'flex');
   $.ajax({
     url: "http://localhost:3000/cities/get",
     type: 'GET',
@@ -800,6 +814,8 @@ function loadCitiesNames() {
 }
 
 function setAutocomplete(data){
+  $('#weaModal').modal('show');
+  $('#loadingAnim').fadeOut();
   $('#cityInput').autocomplete({source: data, appendTo: $('#weaModalBody')})
 }
 

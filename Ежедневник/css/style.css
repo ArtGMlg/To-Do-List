@@ -31,7 +31,7 @@
 
 .form-control {
   display: block;
-  background-color: rgba(255, 255, 255, .5)!important;
+  background-color: rgba(255, 255, 255, .5);
   width: 100%;
   height: calc(1.5em + .75rem + 2px);
   padding: .375rem .75rem;
@@ -58,7 +58,7 @@ form.user .btn-user {
 }
 
 .form-control:focus{
-  background-color: rgba(255, 255, 255, .8)!important;
+  background-color: rgba(255, 255, 255, .8);
 }
 
 .text-gray-100 {
@@ -124,6 +124,10 @@ body{
 .card-body{
   box-shadow: rgb(8, 7, 7) 5px 16px 40px 0px;
   border-radius: 1rem;
+}
+
+.o-hidden {
+  overflow: hidden!important;
 }
 
 li div{
@@ -196,6 +200,26 @@ li div{
   }
 }
 
+#loadingAnim{
+  display: none;
+  z-index: 81;
+  height: 125px;
+  width: 125px;
+  top: calc(50vh - 62.5px);
+  left: calc(50vw - 62.5px);
+  border-radius: 15px;
+  backdrop-filter: blur(3px);
+  z-index: 1051;
+}
+
+.modal-content{
+  border-radius: 1rem;
+}
+
+.modal-open .modal{
+  backdrop-filter: blur(5px);
+}
+
 .datepicker-dropdown{
   box-shadow: rgb(8, 7, 7) 9px 9px 20px 2px;
 }
@@ -227,4 +251,10 @@ li div{
 
 .dropdown-menu{
   border-radius: 0.8rem;
+}
+
+@media all and (max-width: 540px){
+  #bgBlur{
+    align-items: baseline;
+  } 
 }
