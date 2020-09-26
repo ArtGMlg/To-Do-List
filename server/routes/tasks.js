@@ -117,6 +117,16 @@ router.get('/get', function(req, res, next) {
   res.jsonp(sortedTasks);
 });
 
+router.get('/getAllTasks', function(req, res, next) {
+  res.setHeader('Content-Type', 'application/json');  
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+
+  res.jsonp(data);
+});
+
 router.get('/get-by-email/:email', function(req, res, next) {
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
   var tasks = data.tasks;
