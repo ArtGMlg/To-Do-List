@@ -106,7 +106,7 @@
             "points": "2",
             "date": "2019-02-22",
             "userId": "mail@mail.net",
-            "status": "incomplete",
+            "status": "complete",
             "id": "34eb3ff0-e6f5-11ea-9d88-3f5265865fc9"
         }
     ],
@@ -123,11 +123,10 @@
             "firstName": "Евгений",
             "lastName": "Литвинов",
             "surName": "Александрович",
-            "birthDay": "2003-01-20",
-            "email": "mail@mail.net",
+            "birthDay": "2005-07-15",
             "gender": "Мужской",
-            "password": "145",
-            "admin": "zigler@mail.net"
+            "email": "mail@mail.net",
+            "password": "145"
         },
         {
             "firstName": "Стас",
@@ -191,6 +190,15 @@
             "password": "159",
             "passwordConfirmation": "159",
             "admin": "zigler@mail.net"
+        },
+        {
+            "firstName": "Артём",
+            "lastName": "Мирошниченко",
+            "surName": "Олегович",
+            "birthDay": "2003-10-01",
+            "gender": "Мужской",
+            "email": "art6444.om@mail.ru",
+            "password": "147258"
         }
     ],
     "unconfirmedUsers": [],
