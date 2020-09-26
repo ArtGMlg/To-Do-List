@@ -209,4 +209,65 @@ router.post('/change', function(req, res, next) {
   });
 });
 
+router.post('/confirmNewEmail', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.contentType('json');
+  res.setHeader('Content-Type', 'application/json');
+
+  var email = req.body.id,
+      num = parseInt(req.body.num),
+      user;
+
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+
+  for (i = 0; i < data.users.length; i++) {
+    if (data.users[i].email === email) {
+      if (data.users[i].num === num) {
+        delete data.users[i].num;
+        data.users[i].email = data.users[i].newMail;
+        delete data.users[i].newMail;
+        user = data.users[i];
+        fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
+          delete user.password;
+          res.send(JSON.stringify(user));
+        });
+        break;
+      }
+    }
+  }
+});
+
+router.post('/changePassword', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.contentType('json');
+  res.setHeader('Content-Type', 'application/json');
+
+  var email = req.body.id,
+      password = req.body.pass,
+      newPassword = req.body.newPass;
+
+  var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
+
+  for (i = 0; i < data.users.length; i++) {
+    if (data.users[i].email === email) {
+      if (data.users[i].password === password) {
+        data.users[i].password = newPassword;
+        fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
+          res.send(JSON.stringify({
+            success: true
+          }));
+        });
+        break;
+      }else{
+        res.send(JSON.stringify({
+          success: false
+        }))
+        break;
+      }
+    }
+  }
+});
+
 module.exports = router;
