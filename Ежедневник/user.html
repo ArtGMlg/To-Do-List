@@ -15,6 +15,7 @@
       };
       $('head').append('<title>'+ JSON.parse(localStorage.getItem('user')).firstName +'</title>')
     </script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <style type="text/css">
       .list-group{
@@ -42,6 +43,9 @@
     </div>
 
     <div class="container">
+      <div id="loadingAnim" class="position-fixed align-items-center justify-content-center" style="display: none;background-color: rgb(230 230 230 / .5)">
+        <img src="./img/preloader.webp">
+      </div>
 
     <!-- Outer Row -->
       <div class="row justify-content-center">
@@ -77,16 +81,40 @@
                     <div class="col-lg-12">
                       <div class="text-center text-lg-left font-weight-bold"><i class="fas fa-users"></i> Группы:</div>
                       <ul id="groupsList" class="list-group list-group-flush w-100">
-                        <li class="list-group-item"><strong class="font-weight-bolder text-body">K-16</strong></li>
-                        <li class="list-group-item"><strong class="font-weight-bolder text-body">Ученики</strong></li>
+
                       </ul>
+                    </div>
+                    <hr class="my-4">
+                    <div class="col-lg-12">
+                      <div class="text-center text-lg-left font-weight-bold"><i class="fas fa-comment-alt"></i> Обратная связь:</div>
+                      <form class="needs-validation" novalidate>
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">Ваш e-mail: <i class="fas fa-question-circle text-secondary" data-toggle="tooltip" title="Если Вы не введёте e-mail, то будет указан тот адрес, который Вы вводили при регистрации."></i></label>
+                          <input type="text" class="form-control" id="from-email">
+                        </div>
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">Тема:</label>
+                          <input type="text" class="form-control" id="email-subject" required>
+                          <div class="invalid-feedback">
+                            Пожалуйста, введите тему обращения.
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">Обращение:</label>
+                          <textarea class="form-control" id="message-text" required></textarea>
+                          <div class="invalid-feedback">
+                            Пожалуйста, заполните это поле.
+                          </div>
+                        </div>
+                        <button type="submit" onclick="send()" class="btn theme-btn btn-primary">Отправить</button>
+                      </form>
                     </div>
                     <hr class="my-4">
                     <div class="col-lg-12">
                       <div class="text-center text-lg-left font-weight-bold"><i class="fas fa-lock"></i> Безопасность:</div>
                       <ul class="list-group list-group-flush w-100">
                         <li class="list-group-item"><strong class="font-weight-bolder text-body"><i class="fas fa-envelope" aria-hidden="true"></i> e-mail: </strong><div id="email"></div><i onclick="pasteInput('email', this)" class="far fa-edit float-right" aria-hidden="true"></i></li>
-                        <li class="list-group-item"><strong class="font-weight-bolder text-body"><i class="fas fa-key" aria-hidden="true"></i> Пароль: </strong><button type="button" class="btn btn-link text-decoration-none" style="box-shadow: none;">Изменить</button></li></ul>
+                        <li class="list-group-item"><strong class="font-weight-bolder text-body"><i class="fas fa-key" aria-hidden="true"></i> Пароль: </strong><button type="button" class="btn btn-link text-decoration-none" style="box-shadow: none;" data-toggle="modal" data-target="#changePasswordModal">Изменить</button></li></ul>
                     </div>
                   </div>
                 </div>
@@ -97,24 +125,108 @@
       </div>
     </div>
 
+    <div class="modal fade" id="confirmEmail" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Подтвердите новый e-mail адрес</h5>
+          </div>
+          <div class="modal-body">
+            <form class="user">
+              <div class="form-group">
+                <input type="text" class="form-control form-control-user text-center font-weight-bold" style="font-size: 25px" id="exampleInputNum" maxlength="6" autocomplete="off">
+              </div>
+              <div class="text-center my-4 h5">
+                Письмо с уникальным номером было отправлено на новый <nobr>e-mail <u id="modalEmail"></u></nobr>.
+              </div>
+              <div class="text-center my-4 h6">
+                <button type="button" class="btn btn-link" onclick="cancelNewEmail()">Указали неверный адрес?</button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="confirm()">Подтвердить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="changePasswordModalLabel">Изменение пароля</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clearFields()" style="outline: none;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="to-do-tittle" class="col-form-label">Введите старый пароль:</label>
+                <input type="password" class="form-control form-control-user" id="oldPassword" autocomplete="off">
+                <div class="text-danger d-flex align-items-center justify-content-center h6" id="wrongPass"></div>
+              </div>
+              <div class="form-group">
+                <label for="to-do-description" class="col-form-label">Введите новый пароль:</label>
+                <input type="password" class="form-control form-control-user" id="newPassword" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="to-do-points" class="col-form-label">Повторите новый пароль:</label>
+                <input type="password" class="form-control form-control-user" id="repeatNewPassword" autocomplete="off">
+                <div class="text-danger d-flex align-items-center justify-content-center h6" id="wrongNewPass"></div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clearFields()">Отмена</button>
+            <button type="button" class="btn btn-primary" onclick="changePassword()">Сохранить изменения</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="./js/beautifie.js"></script>
+    <script src="./js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
     <script>
-      var user = JSON.parse(localStorage.getItem('user'));
-      if (localStorage.getItem('theme')==='dark') {
-        $('#loadingScreen').css('background-color', 'rgba(0,0,0,.85)');
-        $('body').css('background-color','black');
-        $('#bgBlurLt img').css('filter', 'blur(25px) saturate(150%) opacity(0)');
-        $('.card').css('background-color', 'rgb(37, 37, 39)');
-        $('.list-group-item').addClass('text-white-50');
-        $('.list-group-item').css('border-color', '#f8f9fa1f');
-        $('strong').toggleClass('text-body');
-        $('strong').toggleClass('text-light');
-        $('.font-weight-bold').addClass('text-white');
-        $('#back').removeClass('btn-outline-dark');
-        $('#back').addClass('btn-outline-light');
-        $('hr.my-4').css('border-color', '#f8f9fa80');
-      }
-      fillData();
+      localStorage.getItem('theme')==='dark' ? $('#loadingScreen').css('background-color', 'rgba(0,0,0,.85)') && $('body').css('background-color','black') && $('#bgBlurLt img').css('filter', 'blur(25px) saturate(150%) opacity(0)') && $('.card').css('background-color', '#121212') && $('head').append('<link rel="stylesheet" type="text/css" href="./css/darkCalendar.css">') : '';
+      var user = JSON.parse(localStorage.getItem('user')),
+          groups;
+      $(document).ready(function(){
+        if (localStorage.getItem('newEmail')) {
+          $('#confirmEmail').modal('show')
+        }
+        (function() {
+          'use strict';
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              event.preventDefault();
+              event.stopPropagation();
+              form.classList.add('was-validated');
+            }, false);
+          });
+        })();       
+      });
+      $.ajax({
+        url: "http://localhost:3000/groups/getUserGroups/:userId",
+        type: 'GET',
+        data: {"userId": user.email},
+        crossDomain: true,
+        dataType: 'jsonp',
+        contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+          groups = data;
+          fillData();
+        }
+      });
       function fillData() {
         $('#lastName').html(' '+user.lastName);
         $('#firstName').html(' '+user.firstName);
@@ -140,9 +252,11 @@
             $('#gender').html(' Не указан');
             break;
         };
-      };
-      function uploadImg(){
-        $('#avatarModal').modal('toggle');
+        if ($('#groupsList').children().length === 0) {  
+          for (var i = 0; i < groups.length; i++) {
+            $('#groupsList').append('<li class="list-group-item"><strong class="font-weight-bolder text-body">'+groups[i]+'</strong></li>')
+          };
+        }
       };
       function pluralizeMonth(month) {
       switch(month){
@@ -188,7 +302,7 @@
               '<input type="text" class="form-control" placeholder="Введите фамилию" aria-describedby="button-addon4" style="background-color: white!important;">'+
               '<div class="input-group-append" id="button-addon4">'+
                 '<button class="btn btn-outline-secondary" type="button" onclick="fillData()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
-                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmChanges(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
               '</div>'+
             '</div>'
           );
@@ -199,7 +313,7 @@
               '<input type="text" class="form-control" placeholder="Введите имя" aria-describedby="button-addon4" style="background-color: white!important;">'+
               '<div class="input-group-append" id="button-addon4">'+
                 '<button class="btn btn-outline-secondary" type="button" onclick="decline()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
-                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmChanges(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
               '</div>'+
             '</div>'
           );
@@ -210,7 +324,7 @@
               '<input type="text" class="form-control" placeholder="Введите отчество" aria-describedby="button-addon4" style="background-color: white!important;">'+
               '<div class="input-group-append" id="button-addon4">'+
                 '<button class="btn btn-outline-secondary" type="button" onclick="decline()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
-                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmChanges(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
               '</div>'+
             '</div>'
           );
@@ -225,7 +339,7 @@
               '</select>'+
               '<div class="input-group-append" id="button-addon4">'+
                 '<button class="btn btn-outline-secondary" type="button" onclick="decline()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
-                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmChanges(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
               '</div>'+
             '</div>'
           );
@@ -233,13 +347,21 @@
         case 'birthDay':
           $('#birthDay').html(
             '<div class="input-group" style="display: inline-flex;margin-left: 10px;">'+
-              '<input type="text" class="form-control" placeholder="Введите дату рождения" onfocus="(this.type=\'date\')" onblur="(this.type=\'text\')" aria-describedby="button-addon4" style="background-color: white!important;">'+
+              '<input type="text" class="form-control" aria-describedby="button-addon4" style="background-color: white!important;">'+
               '<div class="input-group-append" id="button-addon4">'+
                 '<button class="btn btn-outline-secondary" type="button" onclick="decline()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
-                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmChanges(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
               '</div>'+
             '</div>'
           );
+          $('#birthDay .input-group input').datepicker({
+            language: "ru",
+            orientation: "bottom auto",
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            disableTouchKeyboard: true,
+            assumeNearbyYear: true
+          });
           break;
         case 'email':
           $('#email').html(
@@ -247,7 +369,7 @@
               '<input type="text" class="form-control" placeholder="Введите e-mail" aria-describedby="button-addon4" style="background-color: white!important;">'+
               '<div class="input-group-append" id="button-addon4">'+
                 '<button class="btn btn-outline-secondary" type="button" onclick="decline()"><i class="fas fa-ban" aria-hidden="true"></i></button>'+
-                '<button class="btn btn-outline-secondary" type="button" onclick="confirmName(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
+                '<button class="btn btn-outline-secondary" type="button" onclick="confirmChanges(\''+argument + '\')"><i class="fas fa-check" aria-hidden="true"></i></button>'+
               '</div>'+
             '</div>'
           );
@@ -255,7 +377,7 @@
       }      
     }
 
-    function confirmName(data) {
+    function confirmChanges(data) {
       switch(data){
         case 'lastName':
           user.lastName = $('#lastName').find('input').val();
@@ -278,29 +400,142 @@
           localStorage.setItem('user', JSON.stringify(user));
           break;
         case 'email':
-          user.email = $('#email').find('input').val();
-          localStorage.setItem('user', JSON.stringify(user));
-          break;
+          $('#modalEmail').text($('#email').find('input').val());
+          $('#confirmEmail').data({'userId': user.email, 'mail': $('#email').find('input').val()});
+          $('#loadingAnim').css('display', 'flex');
+          sendNewEmail();
+          $('.fa-edit').parent().css({
+            'display': 'block'
+          });
+          fillData();
+          $('.fa-edit').show();
+          return;
       }
-      child.parent().css({
+      $('.fa-edit').parent().css({
         'display': 'block'
       });
       fillData();
-      child.show();
+      $('.fa-edit').show();
       $.ajax({
         type: 'POST',
         url: 'http://localhost:3000/users/change',
         crossDomain: true,
         data: user,
-        success: function(response) {
-          
-        }
+        success: function(response) {}
       });
     }
     function decline() {
       $('.list-group-item').css('display', '');
       fillData();
       $('.fa-edit').show();
+    }
+    function sendNewEmail() {
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/email/send/sendNewEmail',
+        crossDomain: true,
+        data: {email: $('#confirmEmail').data('mail'), id: $('#confirmEmail').data('userId')},
+        success: function(data) {
+          if (data.success !== false) {
+            $('#loadingAnim').fadeOut();
+            $('#confirmEmail').delay(200).modal('show');
+            localStorage.setItem('newEmail', {state: true});
+          }else{
+            alert(data.message);
+            cancelNewEmail();
+          }
+        }
+      });
+    }
+    function confirm() {
+      $('#loadingAnim').css('display', 'flex');
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/users/confirmNewEmail',
+        crossDomain: true,
+        data: {id: user.email, num: $('#exampleInputNum').val()},
+        success: function(data) {
+          localStorage.setItem('user', JSON.stringify(data));
+          $('#email').html(data.email);
+          localStorage.removeItem('newEmail');
+          $('#confirmEmail').modal('hide');
+          $('#loadingAnim').fadeOut();
+          $('#confirmEmail').removeData(['num', 'userId', 'mail']);
+          localStorage.removeItem('newEmail');
+        }
+      });
+    }
+    function cancelNewEmail() {
+      $('#confirmEmail').modal('hide').removeData(['num', 'userId', 'mail']);
+      localStorage.removeItem('newEmail');
+    }
+    function changePassword() {
+      $('#changePasswordModal').on('hidden.bs.modal', function (e) {
+        clearFields()
+      });
+      $('#loadingAnim').css('display', 'flex');
+      if ($('#newPassword').val() !== $('#repeatNewPassword').val()) {
+        $('#loadingAnim').fadeOut();
+        $('#wrongNewPass').css('height', '0px').text('Пароли не совпадают!').animate({height: 40}, 300, 'linear');
+        $('#newPassword, #repeatNewPassword').addClass('border-danger').focus(function () {
+          $('#newPassword, #repeatNewPassword').removeClass('border-danger');
+          $('#wrongNewPass').animate({height: 0}, 300, 'linear', function(){
+            $(this).text('');
+          })
+        });
+        return;
+      }
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/users/changePassword',
+        crossDomain: true,
+        data: {id: user.email, newPass: $('#newPassword').val(), pass: $('#oldPassword').val()},
+        success: function(response) {
+          if (response.success === true){
+            $('#loadingAnim').fadeOut();
+            $('#changePasswordModal').find('.modal-body form').hide().parent().append('<div class="h3 text-success text-center my-3 font-weight-bold">Пароль успешно изменён!</div>');
+            setTimeout(function(){$('#changePasswordModal').modal('hide')}, 1000);
+            $('#changePasswordModal').on('hidden.bs.modal', function (e) {
+              $(this).find('.modal-body form').show().parent().find('div.text-success').remove();
+            })
+          } else {
+            $('#loadingAnim').fadeOut();
+            $('#wrongPass').css('height', '0px').text('Неверный пароль!').animate({height: 40}, 300, 'linear');
+            $('#oldPassword').addClass('border-danger').focus(function () {
+              $(this).removeClass('border-danger');
+              $('#wrongPass').animate({height: 0}, 300, 'linear', function(){
+                $(this).text('');
+              })
+            });
+            clearFields();
+          }
+        }
+      });
+    }
+    function clearFields() {
+      $('#oldPassword').val('');
+      $('#newPassword').val('');
+      $('#repeatNewPassword').val('');
+    }
+    function send(){
+      if ($('.form-control:invalid').length !== 0) {
+        return;
+      }
+      $('#loadingAnim').css('display', 'flex');
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/email/send',
+        crossDomain: true,
+        data: {
+          name: user.firstName + ' ' + user.surName,
+          from: $('#from-email').val().length > 0 && $('#from-email').val().includes('@') ? $('#from-email').val() : user.email,
+          subject: $('#email-subject').val(),
+          text: $('#message-text').val()
+        },
+        success: function(){
+          $('#loadingAnim').fadeOut();
+        }
+      });
     }
     </script>
   </body>

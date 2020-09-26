@@ -17,6 +17,8 @@
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.2/circle-progress.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/lazy-load.css">
+  <link href="css/mobiscroll.jquery.lite.min.css" rel="stylesheet">
   <script src="./js/addLink.js"></script>
 </head>
 <body class="modal-open">
@@ -30,19 +32,20 @@
     </div>
   </div>
 
+  <div id="loadingAnim" class="position-fixed align-items-center justify-content-center" style="display: none;">
+    <img src="./img/preloader.webp">
+  </div>
+
   <div id="contentContainer">
     <nav aria-label="breadcrumb">
       <h3>Список дел на:</h3>
       <div id="breadCrumbToDoList">
-        <div class="input-group date">
+        <div class="input-group date mr-2">
           <input type="text" id="tasksDatePicker" onchange="switchDate()" style="display: none;" class="form-control">
-          <div class="input-group-append" onclick="$('#tasksDatePicker').focus()">
-            <span id="calendarIcon" class="input-group-text"></span>
+          <div class="input-group-append" onclick="$('#tasksDatePicker').focus()" style="user-select: none;">
+            <span id="calendarIcon" class="input-group-text px-1"></span>
           </div>
         </div>
-        <button type="button" data-toggle="modal" data-target="#logoutModal" id="logout" class="btn btn-outline-danger">
-          <i style="display: inline;" class="fas fa-sign-out-alt"></i>Выйти
-        </button>
       </div>
     </nav>
     <div id="tasks"></div>
@@ -53,9 +56,9 @@
     <button type="button" class="btn btn-primary theme-btn btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Добавить</button>
   </div>
 
-  <div id="weaContainer">
+  <div id="weaContainer" class="px-2">
     <div id="refresh" onclick="getForecast()"><i class="fas fa-sync-alt weaTools"></i></div>
-    <i data-toggle="modal" data-target="#weaModal" onclick="loadCitiesNames()" id="settings" class="fas fa-cog weaTools"></i>
+    <i onclick="loadCitiesNames()" id="settings" class="fas fa-cog weaTools"></i>
     <div id="weaImg"> 
       <img style="width: 75px;" id="skyImg" src="./weatherIcons/32.png">
     </div>
@@ -67,14 +70,24 @@
     </div>
   </div>
 
-  <div id="linksContainer">
-    <div id="themeSwitcherContainer" data-toggle="tooltip" data-placement="left" title="Изменить тему оформления.">
-      <input style="display: none;" type="checkbox" onclick="switchTheme()" id="themeSwitcher" name="checkbox">
-      <label style="visibility: hidden; position: absolute; color: #7950f2" for="themeSwitcher" id="dark"><i class="fas fa-cloud-moon"></i></label>
-      <label style="position: absolute; color: #f39f18" for="themeSwitcher" id="light"><i class="far fa-sun"></i></label>
+  <nav class="navbar p-0" id="linksContainer">    
+    <div class="dropdown">
+      <a id="toUserPage" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fas fa-user-circle"></i></a>
+      <div class="dropdown-menu dropdown-menu-right animated--grow-in shadow" aria-labelledby="toUserPage">
+        <a class="dropdown-item text-reset" href="./user.html"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>Профиль</a>
+        <div class="dropdown-divider mx-3"></div>
+        <form class="m-0" data-toggle="tooltip" data-placement="left" title="Изменить тему оформления.">
+          <div class="form-group m-0">
+            <label class="py-2 pl-4">
+              <input mbsc-switch data-role="switch" type="checkbox" onchange="switchTheme()" id="themeSwitcher"> Тема:
+            </label>
+          </div>          
+        </form>
+        <div class="dropdown-divider mx-3"></div>
+        <a class="dropdown-item" id="logoutBtn" data-toggle="modal" data-target="#logoutModal"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>Выйти</a>
+      </div>
     </div>
-    <div id="toUserPage" onclick="window.location.replace('user.html')"><i class="fas fa-user-circle"></i></div>
-  </div>
+  </nav>
 
   <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -370,6 +383,9 @@
   <script src="./js/beautifie.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous"></script>
+  <script src="./js/mobiscroll.jquery.lite.min.js"></script>
+  <script src="./js/cherry.lazy-load.js"></script>
   <script src="./js/to-do-list.js"></script>
 </body>
 </html>

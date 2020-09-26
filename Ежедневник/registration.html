@@ -46,6 +46,9 @@
       </div>
     </div>
     <div class="container">
+      <div id="loadingAnim" class="position-fixed align-items-center justify-content-center" style="display: none;background-color: rgb(230 230 230 / .5)">
+        <img src="./img/preloader.webp">
+      </div>
 
       <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
@@ -53,17 +56,17 @@
           <div class="row">
             <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
             <div class="col-lg-7">
-              <div class="p-5">
+              <div class="py-5 px-3 p-md-5" style="min-width: 245px">
                 <div class="text-center">
-                  <h1 class="h4 text-gray-900 mb-4">Зарегистрироваться</h1>
+                  <h1 class="h4 text-gray-900 mb-4">За&shy;ре&shy;ги&shy;стри&shy;ро&shy;вать&shy;ся</h1>
                 </div>
                 <form class="user">
                   <div class="form-group row">
                     <div class="col-sm-6 mb-3">
-                      <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Фамилия">
+                      <input type="text" class="form-control form-control-user" id="exampleLastName" placeholder="Фамилия">
                     </div>
                     <div class="col-sm-6 mb-3">
-                      <input type="text" class="form-control form-control-user" id="exampleLastName" placeholder="Имя">
+                      <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Имя">
                     </div>
                     <div class="col-sm-6 mb-3 mb-sm-0">
                       <input type="text" class="form-control form-control-user" id="exampleSurName" placeholder="Отчество">
@@ -132,7 +135,6 @@
         theme: 'ios',
         themeVariant: 'light'
       };
-      var res;
       $('document').ready(function(){
         $('#exampleBirthDay').datepicker({
           language: "ru",
@@ -140,7 +142,8 @@
           orientation: "bottom",
           autoclose: true,
           disableTouchKeyboard: true,
-          assumeNearbyYear: true
+          assumeNearbyYear: true,
+          clearBtn: true
         });
         $('.form-control').not('#exampleInputEmail').focus(function(){
           $('.form-control').not('#exampleInputEmail').css('border-color', '');
@@ -171,7 +174,9 @@
           }
         })
 
-        JSON.parse(localStorage.getItem('confirmationStart')).state === true ? continueConfirmation(JSON.parse(localStorage.getItem('confirmationStart')).email) : '';
+        if(localStorage.getItem('confirmationStart')){
+          continueConfirmation(JSON.parse(localStorage.getItem('confirmationStart')).email)
+        }
       })
       
       function reg(){
@@ -198,6 +203,7 @@
           return;
         }
         $('.btn-user').toggleClass('disabled');
+        $('#loadingAnim').css('display', 'flex');
         var gender = function(){
           if ($('#male').prop('checked')===true) {
             return 'Мужской'
@@ -226,6 +232,7 @@
             if(response.success === true) {
               confirmation(response, user.email);
             } else {
+              $('#loadingAnim').fadeOut();
               $('#emailError').text(response.error);
               $('#emailError').animate({
                 height: '40px'
@@ -246,7 +253,7 @@
           },
           success: function(response) {}
         });
-        $('div.p-5').html(
+        $('div.p-md-5').html(
           '<form class="user">'+
             '<div class="text-center">'+
               '<h1 class="h4 text-gray-900 mb-4">Подтвердить e-mail</h1>'+
@@ -260,12 +267,13 @@
             '<button class="btn btn-primary btn-user btn-block text-gray-100" onclick="confirm(\''+email+'\')">Подтвердить</button>'+
           '</form>'
         );
-        res = response;
+        $('.bg-register-image').css('background', 'url("./img/undraw_confidential_letter_w6ux.svg") center /80% no-repeat');
+        $('#loadingAnim').fadeOut();
         localStorage.setItem('confirmationStart', JSON.stringify({state: true, email: email}));
       }
 
       function continueConfirmation(email){
-        $('div.p-5').html(
+        $('div.p-md-5').html(
           '<form class="user">'+
             '<div class="text-center">'+
               '<h1 class="h4 text-gray-900 mb-4">Подтвердить e-mail</h1>'+
@@ -283,6 +291,7 @@
 
       function confirm(email) {
         $('.btn-user').attr('disabled', 'true');
+        $('#loadingAnim').css('display', 'flex');
         var num = $('#exampleInputNum').val();
         $.ajax({
           type: 'POST',
@@ -292,8 +301,10 @@
           success: function(response) {
             if(response.success === true) {
               localStorage.removeItem('confirmationStart');
+              localStorage.city ? localStorage.removeItem('city') : '';
               window.location.replace('log in.html');
             }else if (response.success === false) {
+              $('#loadingAnim').fadeOut();
               $('#exampleInputNum').after('<div class="wrong-num d-flex align-items-center justify-content-center text-danger" style="height: 0px"></div>').addClass('border-danger');
               $('.wrong-num').text('Неверный номер!').animate({
                 height: 40
