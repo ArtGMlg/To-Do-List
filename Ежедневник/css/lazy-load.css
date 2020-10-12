@@ -5,11 +5,7 @@
 
 .lazy-load-box {
 	opacity: 0;
-	-moz-transform: scale(.5) rotate(0deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-	-webkit-transform: scale(.5) rotate(0deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-	-o-transform: scale(.5) rotate(0deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-	-ms-transform: scale(.5) rotate(0deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-	transform: scale(.5) rotate(0deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+	transform: scale(.5);
 }
 
 .lazy-load-container{

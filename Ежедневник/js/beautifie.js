@@ -35,7 +35,7 @@ function onResize() {
 var background;
 
 $.ajax({
-  url: "http://localhost:3000/image/get",
+  url: encodeURI("https://k16-omsk.ru/server_for_tasks/image/get"),
   type: 'GET',
   crossDomain: true,
   dataType: 'jsonp',
@@ -66,6 +66,7 @@ function switchTheme() {
   if ($('#themeSwitcher').prop('checked') === true) {
     localStorage.setItem('theme', 'dark'); 
     $('head').append('<link rel="stylesheet" type="text/css" href="./css/darkCalendar.css">');
+    $('link[href="./img/tdl-ico.ico"]').replaceWith('<link rel="shortcut icon" href="./img/tdl-ico-dark.ico" type="image/x-icon">');
     $('#light').css("opacity", "0");
     $('#light').css("visibility", "hidden");
     $('#dark').css("visibility", "");
@@ -81,12 +82,15 @@ function switchTheme() {
       'color': 'rgba(255,255,255,.85)'
     });
     $('div#tasks li').css('color', 'white');
-    $('#tasks').css('background-color', 'transparent');
-    $('.jumbotron').css({
-      'background-color': '#121212',
-      'color': 'white'
-    }).find('img').attr('src', './img/undraw_To_do_list_re_9nt7_dark.svg');
-    $('.my-4').css('border-color', 'white');
+    $('#contentContainer').css('background-color', 'transparent');
+    var ji = $('.jumbotron').find('img').attr('src').split('.')[1];
+    if (!$('.jumbotron').find('img').attr('src').split('.')[1].includes('_dark')) {
+      $('.jumbotron').css({
+        'background-color': '#121212',
+        'color': 'white'
+      }).find('img').attr('src', '.' + ji + '_dark.svg');
+    };
+    $('hr.mx-4').addClass('border-0');
     $('h3').css('color', 'white');
     $('.input-group-text').css('color', 'white');
     $('.theme-btn').css({
@@ -116,7 +120,7 @@ function switchTheme() {
         $(this).css('background-color', '#3a3b45!important');
       },
       function(){
-        $(this).css('background-color', '');
+        $(this).css('background-color', 'transparent');
       }
     );
     $('.weaTools').css('color', '#b3b3b3');
@@ -128,11 +132,16 @@ function switchTheme() {
         $(this).css('color', '#b3b3b3');
       }
     );
+    $('#toTop').css({
+      'background-color': 'rgba(255,255,255,.5)',
+      'color': 'black'
+    });
     $('.progress').css('background-color', '#121212');
     $('.mbsc-ios-dark .mbsc-switch-handle').html('<i class="fas fa-cloud-moon" style="color: #7950f2";font-size: 1.05em;"></i>')
   }else if ($('#themeSwitcher').prop('checked') === false){
     localStorage.setItem('theme', 'light');
     $('link[href="./css/darkCalendar.css"]').remove();
+    $('link[href="./img/tdl-ico-dark.ico"]').replaceWith('<link rel="shortcut icon" href="./img/tdl-ico.ico" type="image/x-icon">');
     $('#dark').css("opacity", "0");
     $('#dark').css("visibility", "hidden");
     $('#light').css("visibility", "");
@@ -148,12 +157,14 @@ function switchTheme() {
       'color': 'black'
     });
     $('div#tasks li').css('color', 'black');
-    $('#tasks').css('background-color', 'rgba(255,255,255, .5)');
+    $('#contentContainer').css('background-color', 'rgba(255,255,255, .5)');
+    var ji = $('.jumbotron').find('img').attr('src').split('.')[1];
     $('.jumbotron').css({
-      'background-color': 'rgba(233, 236, 239, .5)',
+      'background-color': 'transparent',
       'color': 'black'
-    }).find('img').attr('src', './img/undraw_To_do_list_re_9nt7.svg');
-    $('.my-4').css('border-color', 'black');
+    }).find('img').attr('src', '.' + ji.replace('_dark','') + '.svg');
+    $('hr.my-4').css('border-color', 'black');
+    $('hr.mx-4').removeClass('border-0');
     $('h3').css('color', 'black');
     $('.input-group-text').css('color', 'black');
     $('.complited-task').css('color', '#6c757d');
@@ -185,30 +196,29 @@ function switchTheme() {
         $(this).css('background-color', '#f8f9fa!important');
       },
       function(){
-        $(this).css('background-color', '');
+        $(this).css('background-color', 'transparent');
       }
     );
-    $('.weaTools').css('color', '#6c757d');
-    $('.weaTools').hover(
+    $('.weaTools').css('color', '#343a40').hover(
       function (){
-        $(this).css('color', '#1c1c1c')
+        $(this).css('color', '#00000080')
       },
       function (){
-        $(this).css('color', '#6c757d')
+        $(this).css('color', '#343a40')
       }
     );
+    $('#toTop').css({
+      'background-color': 'rgba(0,0,0,.5)',
+      'color': 'white'
+    });
     $('.progress').css('background-color', '#e9ecef');
     $('.mbsc-ios-dark .mbsc-switch-handle').html('<i class="fas fa-cloud-sun" style="color: rgb(243, 159, 24);font-size: 1.05em;"></i>');
   };
 };
 
 window.onload = function(){
-  $('#loadingScreen').animate({
-    opacity: 0
-  }, 500, 'linear', function(){
-    $('#loadingScreen').remove();
-    $('body').removeClass('modal-open');
-  });
+  $('#loadingScreen').fadeOut(500);
+  $('body').removeClass('modal-open');
   if ($(window).width() <= 800) {
     $('#themeSwitcherContainer').tooltip('disable');
   };
@@ -222,8 +232,20 @@ window.onload = function(){
   $(".theme-btn").blur(function(){
     $(this).css("box-shadow", "none");
   });
+  /*if (localStorage.theme === 'dark' && !$('.jumbotron').find('img').attr('src').split('.')[1].includes('_dark')) {
+    $('.jumbotron').css({
+      'background-color': '#121212',
+      'color': 'white'
+    }).find('img').attr('src', '.' + $('.jumbotron').find('img').attr('src').split('.')[1] + '_dark.svg');
+    $('hr.mx-4').addClass('border-0');
+  }else{
+    $('.jumbotron').css({
+      'background-color': 'transparent',
+      'color': 'black'
+    }).find('img').attr('src', '.' + $('.jumbotron').find('img').attr('src').split('.')[1].replace('_dark','') + '.svg');
+  };*/
   $('input, textarea, select').focus(function(){
-    localStorage.getItem('theme') === 'light' ? $(this).css({
+    window.location.href.includes('user.html') ? '' : localStorage.getItem('theme') === 'light' ? $(this).css({
       'box-shadow': '0 0 0 0.2rem rgba(0,123,255,.25)',
       'border-color': '#80bdff'
     }) : $(this).css({
@@ -240,6 +262,7 @@ window.onload = function(){
   $('.mbsc-ios-dark .mbsc-switch-handle').html(localStorage.theme === 'light' ? '<i class="fas fa-cloud-sun" style="color: rgb(243, 159, 24);font-size: 1.05em;"></i>' : '<i class="fas fa-cloud-moon" style="color: #7950f2";font-size: 1.05em;"></i>');
   if (window.location.href.includes('user.html')) {
     if (localStorage.getItem('theme')==='dark') {
+      $('head').append('<link rel="shortcut icon" href="./img/tdl-ico-dark.ico" type="image/x-icon">');
       $('.list-group-item').addClass('text-white-50');
       $('.list-group-item').css('border-color', '#f8f9fa1f');
       $('strong').toggleClass('text-body');
@@ -261,7 +284,10 @@ window.onload = function(){
         'background-color': '#7950f2',
         'border-color': '#7950f2'
       });
+      $('.h3').css('color', 'white');
       $('#loadingAnim').css('background-color', 'rgb(25 25 25 / .8)').find('img').css('filter', 'invert(100%)');
+    } else {
+      $('head').append('<link rel="shortcut icon" href="./img/tdl-ico.ico" type="image/x-icon">');      
     }
   }
 }

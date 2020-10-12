@@ -94,7 +94,7 @@ router.get('/users/:groupName', function(req, res, next) {
       group = groups[i];
     };
   };
-var groupUsers = [];
+  var groupUsers = [];
   for(i=0; i<group.users.length; i++){
     for(j=0; j<users.length; j++){
       if(JSON.parse(group.users)[i]===users[j].email){

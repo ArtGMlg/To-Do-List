@@ -32,11 +32,8 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
   z-index: 100;
   background-color: rgba(255,255,255,.85);
-  backdrop-filter: blur(15px);
   transition: background-color .3s linear, color .3s linear;
 }
 
@@ -51,10 +48,11 @@ div.input-group.date{
 #contentContainer{
   min-width: 250px;
   max-width: 50%;
-  height: auto;
-  background-color: transparent;
+  height: fit-content;
   transition: all .3s linear;
-  padding-top: 80px;
+  margin-top: 80px;
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.5);
  }
 
 #to-do-list a.active small.text-muted {
@@ -73,7 +71,7 @@ div#tasks li{
 .list-group-item{
   background-color: rgba(255,255,255, .5);
   color: black;
-  transition: background-color .3s linear, color .3s linear;
+  transition: background-color .3s linear, color .3s linear, opacity .5s cubic-bezier(0.16, 1, 0.3, 1), transform .5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .form-control{
@@ -83,7 +81,7 @@ div#tasks li{
 
 #buttonContainer{
   position: fixed;
-  top: 90%;
+  top: calc(100% - 60px);
   z-index: 10;
   display: flex;
   align-items: center;
@@ -142,7 +140,7 @@ h3{
 }
 
 .jumbotron{
-  background-color: rgba(233, 236, 239, .5);
+  background-color: transparent;
   transition: all .3s linear;
   border-radius: 1rem;
 }
@@ -235,7 +233,7 @@ div#weaContainer p {
   top: 5px;
   font-size: 15px;
   position: absolute;
-  color: #6c757d;
+  color: #00000080;
   transition: all .3s linear;
   cursor: pointer;
 }
@@ -416,11 +414,6 @@ em{
   border-left: .25rem solid #36b9cc!important;
 }
 
-div#tasks{
-  border-radius: 1rem;
-  transition: background-color .3s linear;
-}
-
 div#tasks .list-group a:nth-child(2){
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
@@ -512,9 +505,44 @@ div#tasks .list-group a:last-child{
   justify-content: center;
 }
 
+#toTop{
+  border-radius: 50%;
+  border-color: transparent;
+  color: white;
+  font-size: 20px;
+  position: fixed;
+  right: 3%;
+  background-color: rgba(0,0,0,.5);
+  display: none;
+  width: 35px;
+  height: 35px;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  cursor: pointer;
+  top: 80vh;
+  right: 18px;
+  transition: .3s linear;
+  animation-name: showToTop;
+  animation-iteration-count: 1;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.43,-0.06, 0.11, 2.21);
+}
+
+@keyframes showToTop{
+  0%{
+    transform: translateY(25px);
+    opacity: 0;
+  }
+  100%{
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
 @media all and (max-width: 1240px){
   #contentContainer{
-    padding-top: 135px;
+    margin-top: 150px;
   }
   #weaContainer{
     left: 5px;
@@ -529,6 +557,12 @@ div#tasks .list-group a:last-child{
   }
   #settings{
     top: 80%;
+  }
+}
+
+@media all and (min-width: 1200px){
+  #bgBlur img{
+    transform: scale(1.5);
   }
 }
 
@@ -550,5 +584,8 @@ div#tasks .list-group a:last-child{
 @media all and (max-width: 291px){
   #weaImg img{
     width: 60px
+  }
+  #contentContainer{
+    margin-top: 185px;
   }
 }

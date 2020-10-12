@@ -54,8 +54,9 @@ div.input-group.date{
   max-width: 50%;
   height: auto;
   background-color: transparent;
-  padding-top: 80px;
+  margin-top: 80px;
   transition: all .3s linear;
+  border-radius: 1rem;
 }
 
 #to-do-list a.active small.text-muted {
@@ -70,7 +71,7 @@ div.input-group.date{
 .list-group-item{
   background-color: #121212;
   color: rgba(255,255,255,.85);
-  transition: background-color .3s linear, color .3s linear;
+  transition: background-color .3s linear, color .3s linear, opacity .5s cubic-bezier(0.16, 1, 0.3, 1), transform .5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .form-control{
@@ -80,7 +81,7 @@ div.input-group.date{
 
 #buttonContainer{
   position: fixed;
-  top: 90%;
+  top: calc(100% - 60px);
   z-index: 10;
   display: flex;
   align-items: center;
@@ -431,11 +432,6 @@ em{
   border-left: .25rem solid #36b9cc!important;
 }
 
-div#tasks{
-  border-radius: 1rem;
-  transition: background-color .3s linear;
-}
-
 div#tasks .list-group a:nth-child(2){
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
@@ -496,7 +492,7 @@ div#tasks li {
 }
 
 #linksContainer .dropdown-menu .dropdown-item:hover{
-  background-color: #3a3b45!important;
+  background-color: #3a3b45;
 }
 
 #logoutBtn{
@@ -544,9 +540,44 @@ div#tasks li {
   justify-content: center;
 }
 
+#toTop{
+  border-radius: 50%;
+  border-color: transparent;
+  color: black;
+  font-size: 20px;
+  position: fixed;
+  right: 3%;
+  background-color: rgba(255,255,255,.5);
+  display: none;
+  width: 35px;
+  height: 35px;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  cursor: pointer;
+  top: 80vh;
+  right: 18px;
+  transition: .3s linear;
+  animation-name: showToTop;
+  animation-iteration-count: 1;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.43,-0.06, 0.11, 2.21);
+}
+
+@keyframes showToTop{
+  0%{
+    transform: translateY(25px);
+    opacity: 0;
+  }
+  100%{
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
 @media all and (max-width: 1240px){
   #contentContainer{
-    padding-top: 135px;
+    margin-top: 135px;
   }
   #weaContainer{
     left: 5px;
@@ -560,6 +591,12 @@ div#tasks li {
   }
   #settings{
     top: 75%;
+  }
+}
+
+@media all and (min-width: 1200px){
+  #bgBlur img{
+    transform: scale(1.5);
   }
 }
 

@@ -2,6 +2,7 @@
   <HEAD>
     <meta charset="utf-8">
     <TITLE>Регистрация</TITLE>
+    <link rel="shortcut icon" href="./img/tdl-ico.ico" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://kit.fontawesome.com/60c6536c6a.js" crossorigin="anonymous"></script>
@@ -225,12 +226,13 @@
 
         $.ajax({
           type: 'POST',
-          url: 'http://localhost:3000/users/reg',
+          url: encodeURI('https://k16-omsk.ru/server_for_tasks/users/reg'),
           crossDomain: true,
           data: user,
           success: function(response) {
             if(response.success === true) {
-              confirmation(response, user.email);
+              localStorage.city ? localStorage.removeItem('city') : '';
+              window.location.replace('log in.html');
             } else {
               $('#loadingAnim').fadeOut();
               $('#emailError').text(response.error);
@@ -242,10 +244,10 @@
         });
       }
 
-      function confirmation(response, email) {
+      /*function confirmation(response, email) {
         $.ajax({
           type: 'POST',
-          url: 'http://localhost:3000/email/send/confirmMail',
+          url: 'https://k16-omsk.ru/server_for_tasks/email/send/confirmMail',
           crossDomain: true,
           data: {
             email: email,
@@ -295,7 +297,7 @@
         var num = $('#exampleInputNum').val();
         $.ajax({
           type: 'POST',
-          url: 'http://localhost:3000/users/reg/confirm',
+          url: 'https://k16-omsk.ru/server_for_tasks/users/reg/confirm',
           crossDomain: true,
           data: {email: email, num: $('#exampleInputNum').val()},
           success: function(response) {
@@ -321,7 +323,7 @@
             }
           }
         });
-      }
+      }*/
     </SCRIPT>
   </BODY>
 </HTML>

@@ -38,7 +38,7 @@ router.post('/reg', function(req, res, next) {
 
   var user = req.body;
 
-  user.uniqNum = Math.floor(100000 + Math.random() * 900000);
+  //user.uniqNum = Math.floor(100000 + Math.random() * 900000);
 
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
 
@@ -51,13 +51,12 @@ router.post('/reg', function(req, res, next) {
 		}
   }
   
-  data.unconfirmedUsers.push(user);	
+  data.users.push(user);	
 
   fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
     res.send(JSON.stringify({
   	  success: true,
-  	  message: "Запрос принят",
-      uniqNum: user.uniqNum
+  	  message: "Запрос принят"
   	}));
   });
 });
@@ -217,25 +216,48 @@ router.post('/confirmNewEmail', function(req, res, next) {
 
   var email = req.body.id,
       num = parseInt(req.body.num),
-      user;
+      user,
+      groupU;
 
   var data = JSON.parse(fs.readFileSync('data.json'),'utf8');
 
   for (i = 0; i < data.users.length; i++) {
     if (data.users[i].email === email) {
       if (data.users[i].num === num) {
-        delete data.users[i].num;
         data.users[i].email = data.users[i].newMail;
-        delete data.users[i].newMail;
         user = data.users[i];
-        fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
-          delete user.password;
-          res.send(JSON.stringify(user));
-        });
+        for (var j = 0; j < data.tasks.length; j++) {
+          if (data.tasks[j].userId === email) {
+            data.tasks[j].userId = data.users[i].newMail;
+            continue;
+          }
+        };
+        delete data.users[i].num;
+        delete data.users[i].newMail;
         break;
+      } else {
+        res.status(500).jsonp({});
       }
     }
-  }
+  };
+
+  allGroupsLoop:
+  for (x = 0; x < data.groups.length; x++){
+    groupLoop:
+    for (y = 0; y < JSON.parse(data.groups[x].users).length; y++) {
+      groupU = JSON.parse(data.groups[x].users);
+      if (groupU[y] === email) {
+        groupU[y] = user.email;
+        data.groups[x].users = JSON.stringify(groupU);
+        break groupLoop;
+      }
+    }
+  };
+
+  fs.writeFile('data.json', JSON.stringify(data, null, 4), function () {
+    delete user.password;
+    res.send(JSON.stringify(user));
+  });
 });
 
 router.post('/changePassword', function(req, res, next) {

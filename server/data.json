@@ -7,7 +7,7 @@
             "time": "07:00",
             "points": "5",
             "date": "2019-02-22",
-            "userId": "mail@mail.net",
+            "userId": "art6444.om@mail.ru",
             "status": "incomplete",
             "admin": "zigler@mail.net"
         },
@@ -18,7 +18,7 @@
             "time": "07:15",
             "points": "10",
             "date": "2019-02-22",
-            "userId": "mail@mail.net",
+            "userId": "art6444.om@mail.ru",
             "status": "incomplete",
             "admin": "zigler@mail.net"
         },
@@ -29,7 +29,7 @@
             "time": "09:30",
             "points": "10",
             "date": "2019-02-20",
-            "userId": "mail@mail.net",
+            "userId": "art6444.om@mail.ru",
             "status": "complete",
             "admin": "zigler@mail.net"
         },
@@ -40,7 +40,7 @@
             "time": "07:30",
             "points": "10",
             "date": "2019-02-22",
-            "userId": "mail@mail.net",
+            "userId": "art6444.om@mail.ru",
             "status": "incomplete",
             "admin": "zigler@mail.net"
         },
@@ -51,7 +51,7 @@
             "time": "13:30",
             "points": "5",
             "date": "2019-02-22",
-            "userId": "mail@mail.net",
+            "userId": "art6444.om@mail.ru",
             "status": "incomplete",
             "admin": "zigler@mail.net"
         },
@@ -61,7 +61,7 @@
             "time": "14:00",
             "points": "5",
             "date": "2019-02-22",
-            "userId": "mail@mail.net",
+            "userId": "art6444.om@mail.ru",
             "status": "incomplete",
             "admin": "zigler@mail.net",
             "id": "f4a74670-8b71-11ea-8934-a57ab83b4b69"
@@ -73,7 +73,7 @@
             "time": "16:00",
             "points": "10",
             "date": "2019-02-22",
-            "userId": "mail@mail.net",
+            "userId": "art6444.om@mail.ru",
             "status": "complete",
             "admin": "zigler@mail.net"
         },
@@ -84,7 +84,7 @@
             "time": "18:00",
             "points": "15",
             "date": "2019-02-22",
-            "userId": "mail@mail.net",
+            "userId": "art6444.om@mail.ru",
             "status": "complete",
             "admin": "zigler@mail.net"
         },
@@ -94,7 +94,7 @@
             "time": "20:00",
             "points": "25",
             "date": "2019-02-22",
-            "userId": "mail@mail.net",
+            "userId": "art6444.om@mail.ru",
             "status": "incomplete",
             "admin": "zigler@mail.net",
             "id": "16c222d0-8ec3-11ea-8f8e-adb2bd6432ee"
@@ -105,7 +105,7 @@
             "time": "15:30",
             "points": "2",
             "date": "2019-02-22",
-            "userId": "mail@mail.net",
+            "userId": "art6444.om@mail.ru",
             "status": "complete",
             "id": "34eb3ff0-e6f5-11ea-9d88-3f5265865fc9"
         }
@@ -125,7 +125,7 @@
             "surName": "Александрович",
             "birthDay": "2005-07-15",
             "gender": "Мужской",
-            "email": "mail@mail.net",
+            "email": "art6444.om@mail.ru",
             "password": "145"
         },
         {
@@ -190,15 +190,6 @@
             "password": "159",
             "passwordConfirmation": "159",
             "admin": "zigler@mail.net"
-        },
-        {
-            "firstName": "Артём",
-            "lastName": "Мирошниченко",
-            "surName": "Олегович",
-            "birthDay": "2003-10-01",
-            "gender": "Мужской",
-            "email": "art6444.om@mail.ru",
-            "password": "147258"
         }
     ],
     "unconfirmedUsers": [],
@@ -215,7 +206,7 @@
     "groups": [
         {
             "name": "k-16",
-            "users": "[\"zigler@mail.net\",\"mail@mail.net\",\"mymail1@mail.ru\",\"Artem@mail.ru\",\"Nikitanot@mail.ru\"]"
+            "users": "[\"zigler@mail.net\",\"art6444.om@mail.ru\",\"mymail1@mail.ru\",\"Artem@mail.ru\",\"Nikitanot@mail.ru\"]"
         },
         {
             "name": "Преподаватели",
@@ -223,7 +214,7 @@
         },
         {
             "name": "Ученики",
-            "users": "[\"mail@mail.net\",\"mymail1@mail.ru\",\"Artem@mail.ru\",\"Nikitanot@mail.ru\"]"
+            "users": "[\"art6444.om@mail.ru\",\"mymail1@mail.ru\",\"Artem@mail.ru\",\"Nikitanot@mail.ru\"]"
         }
     ]
 }

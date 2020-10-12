@@ -80,7 +80,7 @@ getTasks();
 
 function getTasks () {
   $.ajax({
-    url: "http://localhost:3000/tasks/get?id=" + JSON.parse(localStorage.getItem('user')).email + "&date=" + chosenDate,
+    url: encodeURI("https://k16-omsk.ru/server_for_tasks/tasks/get?id=" + JSON.parse(localStorage.getItem('user')).email + "&date=" + chosenDate),
     type: 'GET',
     crossDomain: true,
     dataType: 'jsonp',
@@ -90,7 +90,7 @@ function getTasks () {
     },
     error: function(){
       $('#contentContainer').append(
-        '<div class="jumbotron py-4 py-md-5 lazy-load-container" style="max-width: 545px;" data-speed="500">'+
+        '<div class="jumbotron py-4 py-md-5 m-0 lazy-load-container" style="max-width: 545px;" data-speed="500">'+
           '<div class="d-block">'+
             '<div class="d-flex align-items-center justify-content-center h4 mb-4 text-center">Ой-ой, кажется, что-то пошло не так...</div>'+
             '<div class="d-flex align-items-center justify-content-center mb-3 inactive">'+
@@ -119,6 +119,8 @@ async function addToDoItemsFromServer(data) {
     $('body').removeClass('inactive');
     return;
   };
+  $('#loadingAnim').fadeOut();
+  $('body').removeClass('inactive');
   $('.jumbotron').remove();
   for (var i = 0; i < data.length; i++) {
     if (data[i].time >= "00:00" && data[i].time<"01:00") {
@@ -226,7 +228,7 @@ async function addToDoItemsFromServer(data) {
 
 function appendIncomplete(task) {
   iPoints += parseInt(task.points);
-  return '<a id="'+ task.id +'" class="border-left-info list-group-item list-group-item-action for-anim lazy-load-box" data-speed="500">'
+  return '<a id="'+ task.id +'" class="border-left-info list-group-item list-group-item-action lazy-load-box" data-speed="500">'
   + '<div class="d-flex w-100 justify-content-between">'
     + '<h5 class="mb-1 item-title">'+ task.title +'</h5>'
     + '<small><span class="item-time">' + task.time +'</span></small>'
@@ -242,7 +244,7 @@ function appendIncomplete(task) {
 function appendcomplete(task) {
   complTasks += 1;
   cPoints += parseInt(task.points);
-  return '<a id="'+ task.id +'" class="border-left-success text-muted list-group-item list-group-item-action for-anim lazy-load-box" data-speed="500">'
+  return '<a id="'+ task.id +'" class="border-left-success text-muted list-group-item list-group-item-action lazy-load-box" data-speed="500">'
   +'<div class="d-flex w-100 justify-content-between">'
     +'<h5 class="mb-1 item-title">'+ task.title +'</h5>'
     +'<small><span class="item-time">' + task.time +'</span></small>'
@@ -257,7 +259,7 @@ function appendcomplete(task) {
 
 function empty(){
   $('#tasks').children().length === 0 && $('.jumbotron').length === 0 ? $('#contentContainer').append(
-    '<div class="jumbotron py-4 py-md-5 lazy-load-container" data-speed="200" style="max-width: 545px;">'+
+    '<div class="jumbotron py-4 py-md-5 m-0 lazy-load-container" data-speed="200" style="max-width: 545px;">'+
       '<div class="d-block">'+
         '<div class="d-flex align-items-center justify-content-center h4 mb-4 text-center">Здесь будут отображаться задачи на выбранную дату</div>'+
         '<div class="d-flex align-items-center justify-content-center mb-3 inactive">'+
@@ -267,6 +269,7 @@ function empty(){
     '</div>'
   ) : '';
   switchTheme();
+  showBoxes();
 }
 
 window.addEventListener('scroll', onScroll, false);
@@ -298,6 +301,15 @@ function onScroll() {
     });
   };
   scrollNow = window.pageYOffset;
+  if(window.pageYOffset >= $('#bgBlur').height()){
+    $('#toTop').css("display", "flex");
+  }else{
+    $('#toTop').fadeOut();
+  };
+}
+
+function toTop() {
+  $('html, body').animate({scrollTop: 0}, 2000, "easeInOutExpo");
 }
 
 function updateToDoItem(target) {
@@ -335,7 +347,7 @@ function updateToDoItemOnServer(target){
     status: "incomplete",
     admin: admItem
   }
-  $.post( "http://localhost:3000/tasks/update", updatedToDoItem, function( data ) {
+  $.post( encodeURI("https://k16-omsk.ru/server_for_tasks/tasks/update"), updatedToDoItem, function( data ) {
     getTasks();
     $('#loadingAnim').css('display', 'flex');
     $('body').addClass('inactive');
@@ -480,7 +492,7 @@ function deleteTaskOnServer(id){
           iPoints -= parseInt($(tasksCards[i][0]).find('.item-points').text().split(' ')[0]);
         }
       }
-      $.post( "http://localhost:3000/tasks/delete", {"taskId": id}, function( data ) {}, "json");
+      $.post( encodeURI("https://k16-omsk.ru/server_for_tasks/tasks/delete"), {"taskId": id}, function( data ) {}, "json");
     }
   }, 'linear');
 }
@@ -508,18 +520,18 @@ function addToDoItem() {
   $('#exampleModal .modal-body form').css({'display': 'flex', 'justify-content': 'center'}).html('<img src="./img/load_new.webp">');
   $.ajax({
       type: 'POST',
-      url: 'http://localhost:3000/tasks/save',
+      url: encodeURI('https://k16-omsk.ru/server_for_tasks/tasks/save'),
       crossDomain: true,
       data: toDoItem,
       success: function(response) {
+        $('#loadingAnim').css('display', 'flex');
+        $('body').addClass('inactive');
         getTasks();
         $('#exampleModal .modal-body form img').attr('src', './img/done_new.webp');
         setTimeout(function(){
           $('#exampleModal').modal('hide');
         },1600);
         $('#exampleModal').on('hidden.bs.modal', function (e) {
-          $('#loadingAnim').css('display', 'flex');
-          $('body').addClass('inactive');
           $('#exampleModal .modal-body form').replaceWith(restore);
           $('#to-do-tittle').val('');
           $('#to-do-description').val('');
@@ -553,7 +565,7 @@ function completeToDoItemOnServer(){
   $('#'+$('#exampleModalLive').data('id')).find('.btn-success').html('<img style="width: 16px" src="./img/stat_load.gif">');
   var id = $('#exampleModalLive').data('id');
   $('#exampleModalLive').modal('hide');
-  $.post( "http://localhost:3000/tasks/complete", {taskId: id}, function( data ) {
+  $.post( encodeURI("https://k16-omsk.ru/server_for_tasks/tasks/complete"), {taskId: id}, function( data ) {
     $('#loadingAnim').css('display', 'flex');
     getTasks()
   }, "json");
@@ -624,7 +636,7 @@ function send(){
   var user = JSON.parse(localStorage.getItem('user'));
   $.ajax({
     type: 'POST',
-    url: 'http://localhost:3000/email/send',
+    url: encodeURI('https://k16-omsk.ru/server_for_tasks/email/send'),
     crossDomain: true,
     data: {
       name: user.firstName + ' ' + user.surName,
@@ -648,7 +660,7 @@ function showStat() {
   var user = JSON.parse(localStorage.getItem('user'));
   var userId = user.email;
   $.ajax({
-    url: "http://localhost:3000/tasks/getUserStat/:userId",
+    url: encodeURI("https://k16-omsk.ru/server_for_tasks/tasks/getUserStat/:userId"),
     type: 'GET',
     data: {"userId": userId},
     crossDomain: true,
@@ -692,7 +704,7 @@ function getForecast(){
   }
 
   $.ajax({
-    url: "http://localhost:3000/weather/get/:city",
+    url: encodeURI("https://k16-omsk.ru/server_for_tasks/weather/get/:city"),
     type: 'GET',
     crossDomain: true,
     data: {"city": cityName},
@@ -799,7 +811,7 @@ function setIcon(data) {
 function loadCitiesNames() {
   $('#loadingAnim').css('display', 'flex');
   $.ajax({
-    url: "http://localhost:3000/cities/get",
+    url: encodeURI("https://k16-omsk.ru/server_for_tasks/cities/get"),
     type: 'GET',
     crossDomain: true,
     dataType: 'jsonp',
