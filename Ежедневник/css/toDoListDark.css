@@ -51,8 +51,8 @@ div.input-group.date{
 
 #contentContainer{
   min-width: 250px;
-  max-width: 50%;
-  height: auto;
+  width: 50vw;
+  height: fit-content;
   background-color: transparent;
   margin-top: 80px;
   transition: all .3s linear;
@@ -349,31 +349,6 @@ em{
   background-color: #121212;
 }
 
-.datepicker .datepicker-switch:hover,
-.datepicker .next:hover,
-.datepicker .prev:hover,
-.datepicker tfoot tr th:hover{
-  transition: all .3s linear;
-}
-
-.datepicker table tr td.day:hover,
-.datepicker table tr td.focused{
-  transition: all .3s linear;
-}
-
-.datepicker table tr td span.focused,
-.datepicker table tr td span:hover{
-  transition: all .3s linear;
-}
-
-.datepicker-dropdown.datepicker-orient-bottom:after{
-  left: 13px;
-}
-
-.datepicker-dropdown.datepicker-orient-left:before {
-  left: 13px;
-}
-
 .dropdown-menu{
   border-radius: 0.8rem;
 }
@@ -555,7 +530,7 @@ div#tasks li {
   justify-content: center;
   outline: none;
   cursor: pointer;
-  top: 80vh;
+  bottom: 80px;
   right: 18px;
   transition: .3s linear;
   animation-name: showToTop;
@@ -572,6 +547,24 @@ div#tasks li {
   100%{
     transform: translateY(0px);
     opacity: 1;
+  }
+}
+
+@media all and (max-width: 460px){
+  #contentContainer{
+    width: 90vw;
+  }
+}
+
+@media all and (min-width: 460px) and (max-width: 576px){
+  #contentContainer{
+    width: 70vw;
+  }
+}
+
+@media all and (min-width: 576px){
+  #contentContainer{
+    width: auto;
   }
 }
 

@@ -2,26 +2,30 @@ mobiscroll.settings = {
   theme: 'ios',
   themeVariant: 'dark'
 };
-$('#breadCrumbToDoList .input-group.date').datepicker({
-  language: "ru",
-  orientation: "bottom auto",
-  format: "yyyy-mm-dd",
-  autoclose: true,
-  todayHighlight: true,
-  disableTouchKeyboard: true,
-  todayBtn: 'linked'
-});
+$(function(){
+  $('#breadCrumbToDoList .input-group.date').datepicker({
+    language: "ru",
+    orientation: "bottom auto",
+    format: "yyyy-mm-dd",
+    autoclose: true,
+    todayHighlight: true,
+    disableTouchKeyboard: true,
+    todayBtn: 'linked'
+  });
 
-$('#exampleModal .modal-dialog .modal-content .modal-body .input-group .form-control').datepicker({
-  language: "ru",
-  orientation: "auto",
-  format: "yyyy-mm-dd",
-  autoclose: true,
-  todayHighlight: true,
-  disableTouchKeyboard: true,
-  assumeNearbyYear: true,
-  todayBtn: 'linked'
-});
+  $('#exampleModal .modal-dialog .modal-content .modal-body .input-group .form-control').datepicker({
+    language: "ru",
+    orientation: "auto",
+    format: "yyyy-mm-dd",
+    autoclose: true,
+    todayHighlight: true,
+    disableTouchKeyboard: true,
+    assumeNearbyYear: true,
+    todayBtn: 'linked'
+  });
+
+  $('#userPageLink').append(JSON.parse(localStorage.user).firstName);
+})
 
 var chosenDate = localStorage.getItem('date');
 

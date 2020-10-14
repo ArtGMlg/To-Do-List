@@ -47,7 +47,7 @@ div.input-group.date{
 
 #contentContainer{
   min-width: 250px;
-  max-width: 50%;
+  width: 50vw;
   height: fit-content;
   transition: all .3s linear;
   margin-top: 80px;
@@ -511,7 +511,6 @@ div#tasks .list-group a:last-child{
   color: white;
   font-size: 20px;
   position: fixed;
-  right: 3%;
   background-color: rgba(0,0,0,.5);
   display: none;
   width: 35px;
@@ -520,7 +519,7 @@ div#tasks .list-group a:last-child{
   justify-content: center;
   outline: none;
   cursor: pointer;
-  top: 80vh;
+  bottom: 80px;
   right: 18px;
   transition: .3s linear;
   animation-name: showToTop;
@@ -565,6 +564,25 @@ div#tasks .list-group a:last-child{
     transform: scale(1.5);
   }
 }
+
+@media all and (max-width: 460px){
+  #contentContainer{
+    width: 90vw;
+  }
+}
+
+@media all and (min-width: 460px) and (max-width: 576px){
+  #contentContainer{
+    width: 70vw;
+  }
+}
+
+@media all and (min-width: 576px){
+  #contentContainer{
+    width: auto;
+  }
+}
+
 
 @media all and (max-width: 540px){
   #bgBlur{

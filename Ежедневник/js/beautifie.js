@@ -285,6 +285,7 @@ window.onload = function(){
         'border-color': '#7950f2'
       });
       $('.h3').css('color', 'white');
+      $('.close').css('color', 'white');
       $('#loadingAnim').css('background-color', 'rgb(25 25 25 / .8)').find('img').css('filter', 'invert(100%)');
     } else {
       $('head').append('<link rel="shortcut icon" href="./img/tdl-ico.ico" type="image/x-icon">');      

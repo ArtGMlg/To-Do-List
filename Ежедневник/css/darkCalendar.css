@@ -28,6 +28,21 @@
 	transition: all .3s linear;
 }
 
+.datepicker-dropdown.datepicker-orient-top:after{
+	border-top: 6px solid #121212!important;
+  	left: 13px!important;
+}
+
+.datepicker-dropdown.datepicker-orient-top:before{
+	border-top: 7px solid #121212!important;
+  	left: 13px!important;
+}
+
 .datepicker-dropdown:after{
-	border-bottom-color: #121212;
+	border-bottom-color: #121212!important;
+  	left: 13px!important;
+}
+
+.datepicker-dropdown:before {
+  	left: 13px!important;
 }
