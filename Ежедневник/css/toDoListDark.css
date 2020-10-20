@@ -14,7 +14,8 @@
 }
 
 #bgBlur img{
-  filter: blur(0px) saturate(150%) opacity(0);
+  -webkit-filter: blur(0px) saturate(150%) opacity(0);
+          filter: blur(0px) saturate(150%) opacity(0);
   transform: scale(1.2);
   transition: inherit;
 }
@@ -37,7 +38,8 @@ body{
   height: 100%;
   z-index: 100;
   background-color: rgba(0,0,0,.85);
-  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+          backdrop-filter: blur(15px);
   transition: background-color .3s linear, color .3s linear;
 }
 
@@ -392,7 +394,8 @@ em{
 }
 
 .modal-open .modal{
-  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
 }
 
 .progress{
@@ -438,7 +441,8 @@ div#tasks li {
   top: calc(50vh - 62.5px);
   left: calc(50vw - 62.5px);
   border-radius: 15px;
-  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
 }
 
 .inactive{
@@ -550,6 +554,22 @@ div#tasks li {
   }
 }
 
+@keyframes blink {
+  50% {
+    color: transparent;
+  }
+}
+
+.loader__dot {
+  animation: 1s blink infinite;
+}
+.loader__dot:nth-child(2) {
+  animation-delay: 250ms;
+}
+.loader__dot:nth-child(3) {
+  animation-delay: 500ms;
+}
+
 @media all and (max-width: 460px){
   #contentContainer{
     width: 90vw;
@@ -593,10 +613,10 @@ div#tasks li {
   }
 }
 
-@media all and (max-width: 540px){
+@media all and (max-width: 576px){
   #bgBlur{
     align-items: baseline;
-  } 
+  }
 }
 
 @media all and (max-width: 370px){

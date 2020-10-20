@@ -32,8 +32,8 @@
       }
     </style>
     <script>
-      if (localStorage.getItem('isLogIn')) {
-        window.location.replace('to do list.html');
+      if (document.cookie.match ( '(^|;) ?isLogIn=([^;]*)(;|$)' )) {
+        window.location="to do list.html";
       }
     </script>
   </HEAD>
@@ -41,7 +41,7 @@
     <div id="bgBlurLt">
       <img src="">
     </div>
-    <div id="loadingScreen" style="position: absolute; z-index: 100; height: 100vh; width: 100vw; backdrop-filter: blur(15px); display: flex;align-items: center;justify-content: center;">
+    <div id="loadingScreen" style="position: absolute; z-index: 100; height: 100vh; width: 100vw;-webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px); display: flex;align-items: center;justify-content: center;">
       <div id="loadingContent">
         <img id="loadingImage">
       </div>
@@ -74,7 +74,7 @@
                     </div>
                     <div class="input-group col-sm-6">
                       <input type="text" class="form-control form-control-user" id="exampleBirthDay" placeholder="Дата рождения">
-                      <div class="input-group-append" data-toggle="tooltip" data-placement="bottom" data-html="true" title="Это поле не обязательно, но если мы будем знать Ваш день рождения, то сможем Вас поздравить <i class='emoji'>&#129395;</i>">
+                      <div class="input-group-append" data-toggle="tooltip" data-placement="bottom" data-html="true" title="Это поле не обязательно, но если мы будем знать Ваш день рождения, то сможем Вас поздравить <i class='emoji'>&#128568;</i>">
                         <span class="input-group-text" style="border: 1px solid #ced4da;border-top-right-radius: 1rem;border-bottom-right-radius: 1rem;">
                            <i class="fas fa-question-circle text-secondary"></i>
                         </span>

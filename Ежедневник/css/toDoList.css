@@ -14,7 +14,8 @@
 }
 
 #bgBlur img{
-  filter: blur(40px) saturate(150%) opacity(1);
+  -webkit-filter: blur(40px) saturate(150%) opacity(1);
+          filter: blur(40px) saturate(150%) opacity(1);
   transform: scale(1.2);
   transition: inherit;
 }
@@ -399,7 +400,8 @@ em{
 }
 
 .modal-open .modal{
-  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
 }
 
 .progress{
@@ -440,7 +442,8 @@ div#tasks .list-group a:last-child{
   top: calc(50vh - 62.5px);
   left: calc(50vw - 62.5px);
   border-radius: 15px;
-  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
 }
 
 #linksContainer .dropdown-menu{
@@ -539,6 +542,22 @@ div#tasks .list-group a:last-child{
   }
 }
 
+@keyframes blink {
+  50% {
+    color: transparent;
+  }
+}
+
+.loader__dot {
+  animation: 1s blink infinite;
+}
+.loader__dot:nth-child(2) {
+  animation-delay: 250ms;
+}
+.loader__dot:nth-child(3) {
+  animation-delay: 500ms;
+}
+
 @media all and (max-width: 1240px){
   #contentContainer{
     margin-top: 150px;
@@ -584,10 +603,10 @@ div#tasks .list-group a:last-child{
 }
 
 
-@media all and (max-width: 540px){
+@media all and (max-width: 576px){
   #bgBlur{
     align-items: baseline;
-  } 
+  }
 }
 
 @media all and (max-width: 370px){

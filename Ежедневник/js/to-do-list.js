@@ -2,6 +2,23 @@ mobiscroll.settings = {
   theme: 'ios',
   themeVariant: 'dark'
 };
+
+//работа с cookies
+function get_cookie ( cookie_name ){
+  var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
+ 
+  if ( results )
+    return ( unescape ( results[2] ) );
+  else
+    return null;
+}
+function delete_cookie ( cookie_name )
+{
+  var cookie_date = new Date ( );  //Текущая дата и время
+  cookie_date.setTime ( cookie_date.getTime() - 1 );
+  document.cookie = cookie_name += "=; expires=" + cookie_date.toGMTString();
+}
+
 $(function(){
   $('#breadCrumbToDoList .input-group.date').datepicker({
     language: "ru",
@@ -24,7 +41,7 @@ $(function(){
     todayBtn: 'linked'
   });
 
-  $('#userPageLink').append(JSON.parse(localStorage.user).firstName);
+  $('#userPageLink').append(JSON.parse(get_cookie('user')).firstName);
 })
 
 var chosenDate = localStorage.getItem('date');
@@ -84,7 +101,7 @@ getTasks();
 
 function getTasks () {
   $.ajax({
-    url: encodeURI("https://k16-omsk.ru/server_for_tasks/tasks/get?id=" + JSON.parse(localStorage.getItem('user')).email + "&date=" + chosenDate),
+    url: encodeURI("https://k16-omsk.ru/server_for_tasks/tasks/get?id=" + JSON.parse(get_cookie('user')).email + "&date=" + chosenDate),
     type: 'GET',
     crossDomain: true,
     dataType: 'jsonp',
@@ -110,7 +127,7 @@ function getTasks () {
 
 async function addToDoItemsFromServer(data) {
   $('#tasks').empty();
-  var email = JSON.parse(localStorage.getItem('user')).email;
+  var email = JSON.parse(get_cookie('user')).email;
   cPoints = 0;
   iPoints = 0;
   complTasks = 0;
@@ -272,7 +289,7 @@ function empty(){
       '</div>'+
     '</div>'
   ) : '';
-  switchTheme();
+  switchTheme('empty');
   showBoxes();
 }
 
@@ -347,7 +364,7 @@ function updateToDoItemOnServer(target){
     time: $('#to-do-time-hours').val() + ':' + $('#to-do-time-minutes').val(),
     points: $('#to-do-points').val(),
     date: $('#to-do-date').val(),
-    userId: JSON.parse(localStorage.getItem('user')).email,
+    userId: JSON.parse(get_cookie('user')).email,
     status: "incomplete",
     admin: admItem
   }
@@ -372,30 +389,25 @@ function deleteToDoItem(target) {
   $(target).parent().replaceWith(
     '<a class="list-group-item list-group-item-action px-2 countdown-card '+$(target).parent().attr('id')+'" style="'+ cardTheme() +'">'
     +'<div class="circle-progress-bar position-relative" id="'+$(target).parent().attr('id')+'"><strong>5</strong></div>'
-    +'<nobr class="text-center">Дело удалено&nbsp;&nbsp;&nbsp;</nobr>'
+    +'<nobr class="text-center">Дело удалено<span class="loader__dot">.</span><span class="loader__dot">.</span><span class="loader__dot">.</span></nobr>'
     +'<button type="button" class="btn btn-link" onclick="abortTheDeletion(\''+$(target).parent().attr('id')+'\')"><i class="fas fa-undo-alt" aria-hidden="true"></i> Отмена</button></a>'
   );
   $('#'+$(target).parent().attr('id')).on('circle-animation-progress', function(event, animationProgress, stepValue) {
     switch (Math.floor(stepValue*10)){
       case 8:
         $(this).find("strong").html('4');
-        $('.countdown-card nobr').html('Дело удалено.&nbsp;&nbsp;');
         break;
       case 6:
         $(this).find("strong").html('3');
-        $('.countdown-card nobr').html('Дело удалено..&nbsp;');
         break;
       case 4:
         $(this).find("strong").html('2');
-        $('.countdown-card nobr').html('Дело удалено...');
         break;
       case 2:
         $(this).find("strong").html('1');
-        $('.countdown-card nobr').html('Дело удалено&nbsp;&nbsp;&nbsp;');
         break;
       case 0:
         $(this).find("strong").html('0');
-        $('.countdown-card nobr').html('Дело удалено.&nbsp;&nbsp;');
         break;
     }
   });
@@ -510,18 +522,17 @@ function addToDoItem() {
     alert('Введите количество баллов');
     return;
   }
-  var restore = $('#exampleModal .modal-body form').clone();
   toDoItem = {
     title: $('#to-do-tittle').val(),
     description: $('#to-do-description').val(),
     time: $('#to-do-time-hours').val() + ':' + $('#to-do-time-minutes').val(),
     points: $('#to-do-points').val(),
     date: $('#to-do-date').val(),
-    userId: JSON.parse(localStorage.getItem('user')).email,
+    userId: JSON.parse(get_cookie('user')).email,
     status: "incomplete",
     admin: admItem
   }
-  $('#exampleModal .modal-body form').css({'display': 'flex', 'justify-content': 'center'}).html('<img src="./img/load_new.webp">');
+  $('#exampleModal .modal-body form').hide().parent().css({'display': 'flex', 'justify-content': 'center', 'align-items': 'center'}).find('img#load').show();
   $.ajax({
       type: 'POST',
       url: encodeURI('https://k16-omsk.ru/server_for_tasks/tasks/save'),
@@ -531,12 +542,12 @@ function addToDoItem() {
         $('#loadingAnim').css('display', 'flex');
         $('body').addClass('inactive');
         getTasks();
-        $('#exampleModal .modal-body form img').attr('src', './img/done_new.webp');
+        $('#exampleModal .modal-body img#load').hide().parent().find('img#done').show();
         setTimeout(function(){
           $('#exampleModal').modal('hide');
-        },1600);
+        },1800);
         $('#exampleModal').on('hidden.bs.modal', function (e) {
-          $('#exampleModal .modal-body form').replaceWith(restore);
+          $('#exampleModal .modal-body img').hide().parent().find('form').show();
           $('#to-do-tittle').val('');
           $('#to-do-description').val('');
           $('#to-do-points').val('');
@@ -545,12 +556,12 @@ function addToDoItem() {
         })
       },
       error: function(){
-        $('#exampleModal .modal-body form img').attr('src', './img/err_new.webp');
+        $('#exampleModal .modal-body img#load').hide().parent().find('img#err').show();
         setTimeout(function(){
           $('#exampleModal').modal('hide');
         },1500);
         $('#exampleModal').on('hidden.bs.modal', function (e) {
-          $('#exampleModal .modal-body form').replaceWith(restore);
+         $('#exampleModal .modal-body img').hide().parent().find('form').show();
           $('#to-do-tittle').val('');
           $('#to-do-description').val('');
           $('#to-do-points').val('');
@@ -562,11 +573,16 @@ function addToDoItem() {
 }
 
 function completeToDoItem(target) {
-  $('#exampleModalLive').data('id', $(target).parent().attr('id')).modal('show');
+  var img = new Image(16,16);
+  img.src = './img/stat_load.gif';
+  $('#exampleModalLive').data({
+    'id': $(target).parent().attr('id'),
+    'img': img
+  }).modal('show');
 }
 
 function completeToDoItemOnServer(){
-  $('#'+$('#exampleModalLive').data('id')).find('.btn-success').html('<img style="width: 16px" src="./img/stat_load.gif">');
+  $('#'+$('#exampleModalLive').data('id')).find('.btn-success').html($('#exampleModalLive').data('img'));
   var id = $('#exampleModalLive').data('id');
   $('#exampleModalLive').modal('hide');
   $.post( encodeURI("https://k16-omsk.ru/server_for_tasks/tasks/complete"), {taskId: id}, function( data ) {
@@ -636,32 +652,18 @@ function switchDate() {
   getTasks();
 }
 
-function send(){
-  var user = JSON.parse(localStorage.getItem('user'));
-  $.ajax({
-    type: 'POST',
-    url: encodeURI('https://k16-omsk.ru/server_for_tasks/email/send'),
-    crossDomain: true,
-    data: {
-      name: user.firstName + ' ' + user.surName,
-      from: $('#from-email').val().length > 0 ? $('#from-email').val() : user.email,
-      subject: $('#email-subject').val(),
-      text: $('#message-text').val()
-    }
-  });
-  $('#sendReportModal').modal('hide');
-}
-
 function logout() {
-  localStorage.removeItem('isLogIn');
-  localStorage.removeItem('user');
   localStorage.setItem('theme', 'light');
-  window.location.replace('log in.html');
+  delete_cookie('isLogIn');
+  delete_cookie('user');  
+  window.location = 'log in.html';
 }
 
 function showStat() {
-  $('#statBtn').html('<img src="./img/stat_load.gif">');
-  var user = JSON.parse(localStorage.getItem('user'));
+  var img = new Image();
+  img.src = "./img/stat_load.gif";
+  $('#statBtn').html(img);
+  var user = JSON.parse(get_cookie('user'));
   var userId = user.email;
   $.ajax({
     url: encodeURI("https://k16-omsk.ru/server_for_tasks/tasks/getUserStat/:userId"),

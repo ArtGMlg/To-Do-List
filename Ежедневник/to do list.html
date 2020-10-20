@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>План на день</title>
   <script>
-    if (!localStorage.getItem('isLogIn')) {
+    if (!document.cookie.match ( '(^|;) ?isLogIn=([^;]*)(;|$)' )) {
       window.location="log in.html?redirectedFrom=to do list.html";
     }
   </script>
@@ -22,7 +22,7 @@
   <script src="./js/addLink.js"></script>
 </head>
 <body class="modal-open">
-  <div id="loadingScreen" style="position: absolute; z-index: 100; height: 100vh; width: 100vw; backdrop-filter: blur(15px); display: flex;align-items: center;justify-content: center;">
+  <div id="loadingScreen" style="position: absolute; z-index: 100; height: 100vh; width: 100vw; -webkit-backdrop-filter: blur(15px);backdrop-filter: blur(15px); display: flex;align-items: center;justify-content: center;">
     <div id="loadingContent">
       <img id="loadingImage">
     </div>
@@ -147,12 +147,12 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Уже уходите?</h5>
+          <h5 class="modal-title h4" id="exampleModalLabel">Уже уходите?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">Возвращайтесь скорей <i class="emoji">&#128521;</i></div>
+        <div class="modal-body h5">Возвращайтесь скорей <i class="emoji">&#128521;</i></div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Отмена</button>
           <a style="color: white" class="btn theme-btn btn-primary" onclick="logout()">Выйти</a>
@@ -370,6 +370,9 @@
               </div>
             </div>
           </form>
+          <img id="load" style="display: none;" src="./img/load_new.webp">
+          <img id="done" style="display: none;" src="./img/done_new.webp">
+          <img id="err" style="display: none;" src="./img/err_new.webp">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="restore()">Закрыть</button>

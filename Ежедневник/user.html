@@ -10,10 +10,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css">
     <script>
-      if (!localStorage.getItem('isLogIn')) {
-        window.location="log in.html";
-      };
-      $('head').append('<title>'+ JSON.parse(localStorage.getItem('user')).firstName +'</title>')
+      if (!document.cookie.match ( '(^|;) ?isLogIn=([^;]*)(;|$)' )) {
+        //window.location="log in.html?redirectedFrom=user.html";
+      }
     </script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" type="text/css" href="./css/style.css">
@@ -36,7 +35,7 @@
     <div id="bgBlurLt">
       <img src="">
     </div>
-    <div id="loadingScreen" style="position: absolute; z-index: 100; height: 100vh; width: 100vw; backdrop-filter: blur(15px); display: flex;align-items: center;justify-content: center;">
+    <div id="loadingScreen" style="position: absolute; z-index: 100; height: 100vh; width: 100vw;-webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px); display: flex;align-items: center;justify-content: center;">
       <div id="loadingContent">
         <img id="loadingImage">
       </div>
@@ -90,7 +89,7 @@
                         <i class="fas fa-comment-alt"></i> Обратная связь:
                       </div>
                       <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center h3 text-center pl-0 pr-3 pr-lg-5" style="z-index: 1">Данный раздел временно недоступен, приносим свои извенения.</div>
-                      <form class="needs-validation inactive" style="filter: blur(5px);" novalidate>
+                      <form class="needs-validation inactive" style="-webkit-filter: blur(5px);filter: blur(5px);" novalidate>
                         <div class="form-group">
                           <label for="recipient-name" class="col-form-label">Ваш e-mail: <i class="fas fa-question-circle text-secondary" data-toggle="tooltip" title="Если Вы не введёте e-mail, то будет указан тот адрес, который Вы вводили при регистрации."></i></label>
                           <input type="text" class="form-control" id="from-email">
@@ -121,7 +120,7 @@
                             <i class="fas fa-envelope" aria-hidden="true"></i>
                              e-mail: 
                           </strong>
-                          <div id="email"></div>
+                          <div class="p-2" id="email"></div>
                           <!--<i onclick="pasteInput('email', this)" class="far fa-edit float-right" aria-hidden="true"></i>-->
                         </li>
                         <li class="list-group-item">
@@ -209,7 +208,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
     <script>
       localStorage.getItem('theme')==='dark' ? $('#loadingScreen').css('background-color', 'rgba(0,0,0,.85)') && $('body').css('background-color','black') && $('#bgBlurLt img').css('filter', 'blur(25px) saturate(150%) opacity(0)') && $('.card').css('background-color', '#121212') && $('head').append('<link rel="stylesheet" type="text/css" href="./css/darkCalendar.css">') : '';
-      var user = JSON.parse(localStorage.getItem('user')),
+      $('head').append('<title>'+ JSON.parse(get_cookie('user')).firstName +'</title>')
+      var user = JSON.parse(get_cookie('user')),
           groups;
       /*$(document).ready(function(){
         if (localStorage.getItem('newEmail')) {
@@ -238,6 +238,30 @@
           });
         })();       
       });*/
+      //работа с cookies
+      function setCookie(name, value){
+        var cookie_string = name + "=" + String(value);
+
+        var expires = new Date ();
+        expires.setDate($('#customCheck').prop('checked') === true ? expires.getDate() + 31 : expires.getDate() + 7);
+        cookie_string += "; expires=" + expires.toGMTString() + "; secure";
+
+        document.cookie = cookie_string;
+      }
+      function get_cookie ( cookie_name ){
+        var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
+       
+        if ( results )
+          return ( unescape ( results[2] ) );
+        else
+          return null;
+      }
+      function delete_cookie ( cookie_name )
+      {
+        var cookie_date = new Date ( );  //Текущая дата и время
+        cookie_date.setTime ( cookie_date.getTime() - 1 );
+        document.cookie = cookie_name += "=; expires=" + cookie_date.toGMTString();
+      }
       $.ajax({
         url: encodeURI("https://k16-omsk.ru/server_for_tasks/groups/getUserGroups/:userId"),
         type: 'GET',
@@ -404,23 +428,23 @@
       switch(data){
         case 'lastName':
           user.lastName = $('#lastName').find('input').val();
-          localStorage.setItem('user', JSON.stringify(user));
+          setCookie('user', JSON.stringify(user));
           break;
         case 'firstName':
           user.firstName = $('#firstName').find('input').val();
-          localStorage.setItem('user', JSON.stringify(user));
+          setCookie('user', JSON.stringify(user));
           break;
         case 'surName':
           user.surName = $('#surName').find('input').val();
-          localStorage.setItem('user', JSON.stringify(user));
+          setCookie('user', JSON.stringify(user));
           break;
         case 'gender':
           user.gender = $('#gender').find('select').val();
-          localStorage.setItem('user', JSON.stringify(user));
+          setCookie('user', JSON.stringify(user));
           break;
         case 'birthDay':
           user.birthDay = $('#birthDay').find('input').val();
-          localStorage.setItem('user', JSON.stringify(user));
+          setCookie('user', JSON.stringify(user));
           break;
         /*case 'email':
           $('#modalEmail').text($('#email').find('input').val());

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script>
-      if (localStorage.getItem('isLogIn')) {
+      if (document.cookie.match ( '(^|;) ?isLogIn=([^;]*)(;|$)' )) {
         window.location="to do list.html";
       }
     </script>
@@ -21,7 +21,7 @@
     <div id="bgBlurLt">
       <img src="">
     </div>
-    <div id="loadingScreen" style="position: absolute; z-index: 100; height: 100vh; width: 100vw; backdrop-filter: blur(15px); display: flex;align-items: center;justify-content: center;">
+    <div id="loadingScreen" style="position: absolute; z-index: 100; height: 100vh; width: 100vw;-webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px); display: flex;align-items: center;justify-content: center;">
       <div id="loadingContent">
         <img id="loadingImage">
       </div>
@@ -115,7 +115,7 @@
 
       var expires = new Date ();
       expires.setDate($('#customCheck').prop('checked') === true ? expires.getDate() + 31 : expires.getDate() + 7);
-      cookie_string += "; expires=" + expires.toUTCString();
+      cookie_string += "; expires=" + expires.toGMTString() + "; secure";
 
       document.cookie = cookie_string;
     }
@@ -144,8 +144,8 @@
             };
             setCookie('isLogIn', 'true');
             setCookie('user', JSON.stringify(userData));
-            localStorage.setItem('isLogIn', true);
-            localStorage.setItem('user', JSON.stringify(userData));
+            //localStorage.setItem('isLogIn', true);
+            //localStorage.setItem('user', JSON.stringify(userData));
             var searchParams = new URLSearchParams(window.location.search);
             var location = searchParams.get('redirectedFrom');
             location ? window.location = String(location) : window.location.replace('to do list.html');
