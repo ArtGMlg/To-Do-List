@@ -8,7 +8,7 @@ function get_cookie ( cookie_name ){
   var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
  
   if ( results )
-    return ( unescape ( results[2] ) );
+    return ( decodeURI ( results[2] ) );
   else
     return null;
 }
@@ -88,7 +88,6 @@ function setDate () {
 }
 
 var toDoItem = {},
-    admItem,
     cPoints = 0,
     iPoints = 0,
     allTasks = 0,
@@ -256,9 +255,7 @@ function appendIncomplete(task) {
   + '</div>'
   + '<p class="mb-1 item-description">'+task.description+'</p>'
   + '<small class="item-points">'+pluralize(task.points, ['балл', 'балла', 'баллов']) +'</small>'
-  + '<button type="button" class="btn btn-danger remove-btn float-right" onclick="deleteToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
-  + '<button type="button" class="btn btn-primary theme-btn float-right" onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
-  + '<button type="button" class="btn btn-success float-right" onclick="completeToDoItem(this)"><i class="far fa-check-circle"></i></button>'
+  + incBtns(task)
   + '</a>'
 }
 
@@ -274,8 +271,26 @@ function appendcomplete(task) {
     +'<p class="mb-1 item-description">'+task.description+'</p>'
     +'<nobr class="item-points text-center font-weight-bold ml-2" style="font-size: 1.5rem;">'+ task.points +' б.</nobr>'
   +'</div>'
-  +'<button type="button" class="btn btn-danger remove-btn float-right" onclick="deleteToDoItem(this)"><i class="far fa-trash-alt" aria-hidden="true"></i></button>'
+  + cBtns(task)
 +'</a>'
+}
+
+function incBtns(task) {
+  if (task.byAdmin === 'true') {
+    return '<button type="button" class="btn btn-success float-right" onclick="completeToDoItem(this)"><i class="far fa-check-circle"></i></button>'
+  } else {
+    return '<button type="button" class="btn btn-danger remove-btn float-right" onclick="deleteToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
+           + '<button type="button" class="btn btn-primary theme-btn float-right" onclick="updateToDoItem(this)"><i class="far fa-edit"></i></button>'
+           + '<button type="button" class="btn btn-success float-right" onclick="completeToDoItem(this)"><i class="far fa-check-circle"></i></button>'
+  }
+}
+
+function cBtns(task) {
+  if (task.byAdmin !== 'true') {
+    return '<button type="button" class="btn btn-danger remove-btn float-right" onclick="deleteToDoItem(this)"><i class="far fa-trash-alt"></i></button>'
+  } else {
+    return ''
+  }
 }
 
 function empty(){
@@ -365,8 +380,7 @@ function updateToDoItemOnServer(target){
     points: $('#to-do-points').val(),
     date: $('#to-do-date').val(),
     userId: JSON.parse(get_cookie('user')).email,
-    status: "incomplete",
-    admin: admItem
+    status: "incomplete"
   }
   $.post( encodeURI("https://k16-omsk.ru/server_for_tasks/tasks/update"), updatedToDoItem, function( data ) {
     getTasks();
@@ -529,8 +543,7 @@ function addToDoItem() {
     points: $('#to-do-points').val(),
     date: $('#to-do-date').val(),
     userId: JSON.parse(get_cookie('user')).email,
-    status: "incomplete",
-    admin: admItem
+    status: "incomplete"
   }
   $('#exampleModal .modal-body form').hide().parent().css({'display': 'flex', 'justify-content': 'center', 'align-items': 'center'}).find('img#load').show();
   $.ajax({
@@ -547,7 +560,7 @@ function addToDoItem() {
           $('#exampleModal').modal('hide');
         },1800);
         $('#exampleModal').on('hidden.bs.modal', function (e) {
-          $('#exampleModal .modal-body img').hide().parent().find('form').show();
+          $('#exampleModal .modal-body img').hide().parent().find('form').show().parent().css('display','');
           $('#to-do-tittle').val('');
           $('#to-do-description').val('');
           $('#to-do-points').val('');
@@ -561,7 +574,7 @@ function addToDoItem() {
           $('#exampleModal').modal('hide');
         },1500);
         $('#exampleModal').on('hidden.bs.modal', function (e) {
-         $('#exampleModal .modal-body img').hide().parent().find('form').show();
+         $('#exampleModal .modal-body img').hide().parent().find('form').show().parent().css('display','');
           $('#to-do-tittle').val('');
           $('#to-do-description').val('');
           $('#to-do-points').val('');

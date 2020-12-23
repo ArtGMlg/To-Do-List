@@ -88,7 +88,7 @@
                       <div class="text-center text-lg-left font-weight-bold">
                         <i class="fas fa-comment-alt"></i> Обратная связь:
                       </div>
-                      <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center h3 text-center pl-0 pr-3 pr-lg-5" style="z-index: 1">Данный раздел временно недоступен, приносим свои извенения.</div>
+                      <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center h3 text-center pl-0 pr-3 pr-lg-5" style="z-index: 1">Данный раздел временно недоступен, приносим свои извинения.</div>
                       <form class="needs-validation inactive" style="-webkit-filter: blur(5px);filter: blur(5px);" novalidate>
                         <div class="form-group">
                           <label for="recipient-name" class="col-form-label">Ваш e-mail: <i class="fas fa-question-circle text-secondary" data-toggle="tooltip" title="Если Вы не введёте e-mail, то будет указан тот адрес, который Вы вводили при регистрации."></i></label>
@@ -180,16 +180,16 @@
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="to-do-tittle" class="col-form-label">Введите старый пароль:</label>
+                <label for="oldPassword" class="col-form-label">Введите старый пароль:</label>
                 <input type="password" class="form-control form-control-user" id="oldPassword" autocomplete="off">
                 <div class="text-danger d-flex align-items-center justify-content-center h6" id="wrongPass"></div>
               </div>
               <div class="form-group">
-                <label for="to-do-description" class="col-form-label">Введите новый пароль:</label>
+                <label for="newPassword" class="col-form-label">Введите новый пароль:</label>
                 <input type="password" class="form-control form-control-user" id="newPassword" autocomplete="off">
               </div>
               <div class="form-group">
-                <label for="to-do-points" class="col-form-label">Повторите новый пароль:</label>
+                <label for="repeatNewPassword" class="col-form-label">Повторите новый пароль:</label>
                 <input type="password" class="form-control form-control-user" id="repeatNewPassword" autocomplete="off">
                 <div class="text-danger d-flex align-items-center justify-content-center h6" id="wrongNewPass"></div>
               </div>
@@ -247,21 +247,21 @@
         cookie_string += "; expires=" + expires.toGMTString() + "; secure";
 
         document.cookie = cookie_string;
-      }
+      };
       function get_cookie ( cookie_name ){
         var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
        
         if ( results )
-          return ( unescape ( results[2] ) );
+          return ( decodeURI ( results[2] ) );
         else
           return null;
-      }
+      };
       function delete_cookie ( cookie_name )
       {
         var cookie_date = new Date ( );  //Текущая дата и время
         cookie_date.setTime ( cookie_date.getTime() - 1 );
         document.cookie = cookie_name += "=; expires=" + cookie_date.toGMTString();
-      }
+      };
       $.ajax({
         url: encodeURI("https://k16-omsk.ru/server_for_tasks/groups/getUserGroups/:userId"),
         type: 'GET',
@@ -283,19 +283,19 @@
         $('#birthDay').html(' '+ new Date(user.birthDay).getDate() + ' ' + pluralizeMonth(month) + ' ' + new Date(user.birthDay).getFullYear());
         switch(user.gender){
           case 'Женский':
-            $('img#avatar').attr('src', './img/undraw_female_avatar_w3jk.svg');
+            localStorage.theme === 'light' ? $('img#avatar').attr('src', './img/undraw_female_avatar_w3jk.svg') : $('img#avatar').attr('src', './img/undraw_female_avatar_w3jk_dark.svg');
             $('#gender').html(' Женский');
             break;
           case 'Мужской':
-            $('img#avatar').attr('src', './img/undraw_male_avatar_323b.svg');
+            localStorage.theme === 'light' ? $('img#avatar').attr('src', './img/undraw_male_avatar_323b.svg') : $('img#avatar').attr('src', './img/undraw_male_avatar_323b_dark.svg');
             $('#gender').html(' Мужской');
             break;
           case 'Не указан':
-            $('img#avatar').attr('src', './img/undraw_profile_pic_ic5t.svg');
+            localStorage.theme === 'light' ? $('img#avatar').attr('src', './img/undraw_profile_pic_ic5t.svg') : $('img#avatar').attr('src', './img/undraw_profile_pic_ic5t_dark.svg');
             $('#gender').html(' Не указан');
             break;
           default:
-            $('img#avatar').attr('src', './img/undraw_profile_pic_ic5t.svg');
+            localStorage.theme === 'light' ? $('img#avatar').attr('src', './img/undraw_profile_pic_ic5t.svg') : $('img#avatar').attr('src', './img/undraw_profile_pic_ic5t_dark.svg');
             $('#gender').html(' Не указан');
             break;
         };

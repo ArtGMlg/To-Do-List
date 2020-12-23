@@ -16,8 +16,9 @@
 #bgBlur img{
   -webkit-filter: blur(0px) saturate(150%) opacity(0);
           filter: blur(0px) saturate(150%) opacity(0);
-  transform: scale(1.2);
-  transition: inherit;
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+  transition: filter .3s linear;
 }
 
 body{
@@ -259,14 +260,16 @@ div#weaContainer p {
 
 #settings:hover{
   color: white;
-  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
 }
 
 #refresh{
   left: 5px;
   transition: all .3s linear;
   cursor: pointer;
-  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
 }
 
 em{
@@ -291,12 +294,12 @@ em{
 @-webkit-keyframes growIn {
   0% {
     -webkit-transform: scale(0.9);
-    transform: scale(0.9);
+            transform: scale(0.9);
     opacity: 0;
   }
   100% {
     -webkit-transform: scale(1);
-    transform: scale(1);
+            transform: scale(1);
     opacity: 1;
   }
 }
@@ -304,12 +307,12 @@ em{
 @keyframes growIn {
   0% {
     -webkit-transform: scale(0.9);
-    transform: scale(0.9);
+            transform: scale(0.9);
     opacity: 0;
   }
   100% {
     -webkit-transform: scale(1);
-    transform: scale(1);
+            transform: scale(1);
     opacity: 1;
   }
 }
@@ -364,10 +367,12 @@ em{
 
 @keyframes rotate{
   from{
-    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
   }
   to{
-    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
 }
 
@@ -545,11 +550,13 @@ div#tasks li {
 
 @keyframes showToTop{
   0%{
-    transform: translateY(25px);
+    -webkit-transform: translateY(25px);
+            transform: translateY(25px);
     opacity: 0;
   }
   100%{
-    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
     opacity: 1;
   }
 }
@@ -585,6 +592,7 @@ div#tasks li {
 @media all and (min-width: 576px){
   #contentContainer{
     width: auto;
+    min-width: 350px;
   }
 }
 
@@ -609,13 +617,8 @@ div#tasks li {
 
 @media all and (min-width: 1200px){
   #bgBlur img{
-    transform: scale(1.5);
-  }
-}
-
-@media all and (max-width: 576px){
-  #bgBlur{
-    align-items: baseline;
+    -webkit-transform: scale(1.5);
+            transform: scale(1.5);
   }
 }
 

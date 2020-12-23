@@ -20,9 +20,22 @@
   <link rel="stylesheet" type="text/css" href="./css/lazy-load.css">
   <link href="css/mobiscroll.jquery.lite.min.css" rel="stylesheet">
   <script src="./js/addLink.js"></script>
+  <style type="text/css">
+    #loadingScreen {
+      position: absolute;
+      z-index: 100;
+      height: 100vh;
+      width: 100vw;
+      -webkit-backdrop-filter: blur(15px);
+              backdrop-filter: blur(15px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    };
+  </style>
 </head>
 <body class="modal-open">
-  <div id="loadingScreen" style="position: absolute; z-index: 100; height: 100vh; width: 100vw; -webkit-backdrop-filter: blur(15px);backdrop-filter: blur(15px); display: flex;align-items: center;justify-content: center;">
+  <div id="loadingScreen">
     <div id="loadingContent">
       <img id="loadingImage">
     </div>
@@ -36,7 +49,7 @@
     <img src="./img/preloader.webp">
   </div>
 
-  <div id="contentContainer">
+  <div id="contentContainer" class="opacityOnLoad" style="opacity: 0">
     <nav aria-label="breadcrumb" class="py-4 px-2 px-sm-4">
       <h3>Список дел на:</h3>
       <div id="breadCrumbToDoList">
@@ -52,12 +65,12 @@
     <div id="tasks"></div>
   </div>
 
-  <div id="buttonContainer">
+  <div id="buttonContainer" class="opacityOnLoad" style="opacity: 0">
     <button style="margin-right: 10px" id="statBtn" class="btn stat-btn btn-primary theme-btn btn-lg" onclick="showStat()" role="button"><i class="far fa-chart-bar"></i></button>
     <button type="button" class="btn btn-primary theme-btn btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Добавить</button>
   </div>
 
-  <div id="weaContainer" class="px-2">
+  <div id="weaContainer" class="px-2 opacityOnLoad" style="opacity: 0">
     <div id="refresh" onclick="getForecast()"><i class="fas fa-sync-alt weaTools"></i></div>
     <i onclick="loadCitiesNames()" id="settings" class="fas fa-cog weaTools"></i>
     <div id="weaImg"> 
@@ -71,7 +84,7 @@
     </div>
   </div>
 
-  <nav class="navbar p-0" id="linksContainer">    
+  <nav class="navbar p-0 opacityOnLoad" id="linksContainer" style="opacity: 0">    
     <div class="dropdown">
       <a id="toUserPage" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fas fa-user-circle"></i></a>
       <div class="dropdown-menu dropdown-menu-right animated--grow-in shadow" aria-labelledby="toUserPage">
@@ -109,39 +122,6 @@
       </div>
     </div>
   </div>
-
-  <!--<div class="modal fade" id="sendReportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Создать отчёт об ошибке.</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Ваш e-mail: <i class="fas fa-question-circle text-secondary" data-toggle="tooltip" data-placement="right" title="Если Вы не введёте e-mail, то будет указан тот адресс, который Вы вводили при регистрации."></i></label>
-              <input type="text" class="form-control" id="from-email">
-            </div>
-            <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Тема:</label>
-              <input type="text" class="form-control" id="email-subject">
-            </div>
-            <div class="form-group">
-              <label for="message-text" class="col-form-label">Опишите, пожалуйста, свою проблему:</label>
-              <textarea class="form-control" id="message-text"></textarea>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-          <button type="button" onclick="send()" class="btn theme-btn btn-primary">Отправить</button>
-        </div>
-      </div>
-    </div>
-  </div>-->
 
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

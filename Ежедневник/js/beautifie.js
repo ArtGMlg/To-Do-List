@@ -343,7 +343,9 @@ async function switchTheme(arg) {
 
 window.onload = function(){
   $('#loadingScreen').fadeOut(500);
-  $('body').removeClass('modal-open');
+  $('body').removeClass('modal-open').find('.opacityOnLoad').animate({
+    opacity: 1
+  }, 300, 'linear');
   if ($(window).width() <= 800) {
     $('#themeSwitcherContainer').tooltip('disable');
   };
@@ -383,8 +385,7 @@ window.onload = function(){
       'box-shadow': '0 0 0 0.2rem #7950f240',
       'border-color': '#7950f2'
     })
-  });  
-  $('input, textarea, select').blur(function(){
+  }).blur(function(){
     $(this).css({
       'box-shadow': 'none',
       'border-color': ''
